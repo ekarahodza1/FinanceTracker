@@ -1,5 +1,6 @@
 package ba.unsa.etf.rma.moja_app;
 
+
 import java.util.Date;
 
 public class Transaction {
@@ -7,15 +8,16 @@ public class Transaction {
     private Date date;
     private String title;
     private double amount;
-    private enum type {INDIVIDUALPAYMENT, REGULARPAYMENT, PURCHASE, INDIVIDUALINCOME, REGULARINCOME};
+    private Type type;
     private String itemDescription;
     private int transactionInterval;
     private Date endDate;
 
-    public Transaction(Date date, String title, double amount, String itemDescription, int transactionInterval, Date endDate) {
+    public Transaction(Date date, String title, double amount, Type type, String itemDescription, int transactionInterval, Date endDate) {
         this.date = date;
         this.title = title;
         this.amount = amount;
+        this.type = type;
         this.itemDescription = itemDescription;
         this.transactionInterval = transactionInterval;
         this.endDate = endDate;
@@ -50,7 +52,8 @@ public class Transaction {
     }
 
     public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
+        if (type == Type.INDIVIDUALINCOME || type == Type.REGULARINCOME) this.itemDescription = null;
+        else this.itemDescription = itemDescription;
     }
 
     public int getTransactionInterval() {
@@ -58,7 +61,8 @@ public class Transaction {
     }
 
     public void setTransactionInterval(int transactionInterval) {
-        this.transactionInterval = transactionInterval;
+        if (type == Type.REGULARINCOME || type == Type.REGULARPAYMENT) this.transactionInterval = transactionInterval;
+        else return;
     }
 
     public Date getEndDate() {
@@ -66,6 +70,15 @@ public class Transaction {
     }
 
     public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+        if (type == Type.REGULARINCOME || type == Type.REGULARPAYMENT) this.endDate = endDate;
+        else this.endDate = null;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }
