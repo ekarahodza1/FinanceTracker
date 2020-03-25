@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class TransactionsModel {
-    public static ArrayList<Transaction> movies = new ArrayList<Transaction>() {
+    public static ArrayList<Transaction> transactions = new ArrayList<Transaction>() {
         {
             add(new Transaction(new Date(14,12,2020), "Shopping", 2000, Type.PURCHASE,
                     "new dress", 0, null));
