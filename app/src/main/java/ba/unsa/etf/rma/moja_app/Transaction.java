@@ -8,10 +8,12 @@ public class Transaction {
     private Date date;
     private String title;
     private double amount;
+    private String typeString;
     private Type type;
     private String itemDescription;
     private int transactionInterval;
     private Date endDate;
+    private int image;
 
     public Transaction(Date date, String title, double amount, Type type, String itemDescription, int transactionInterval, Date endDate) {
         this.date = date;
@@ -21,6 +23,27 @@ public class Transaction {
         this.itemDescription = itemDescription;
         this.transactionInterval = transactionInterval;
         this.endDate = endDate;
+    }
+
+    public Transaction(String type, int image) {
+        this.typeString = type;
+        this.image = image;
+    }
+
+    public String getTypeString() {
+        return typeString;
+    }
+
+    public void setTypeString(String typeString) {
+        this.typeString = typeString;
+    }
+
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
     }
 
     public Date getDate() {
