@@ -53,7 +53,7 @@ public class ListAdapter extends ArrayAdapter<Transaction> {
         amountView = newView.findViewById(R.id.amountView);
         imageView = newView.findViewById(R.id.imageView);
         titleView.setText(t.getTitle());
-        amountView.setText((int) t.getAmount());
+        amountView.setText(Double.toString(t.getAmount()));
 
         Type type = t.getType();
         try {
