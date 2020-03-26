@@ -26,6 +26,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ArrayList<Transaction> mTransactionList;
     private SpinnerAdapter mAdapter;
 
+    private ListAdapter listAdapter;
+
+    private IFinancePresenter financePresenter;
+    public IFinancePresenter getPresenter() {
+        if (financePresenter == null) {
+            financePresenter = new FinancePresenter(this, this);
+        }
+        return financePresenter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Spinner spinnerTransactions = findViewById(R.id.filterSpinner);
         mAdapter = new SpinnerAdapter(this, mTransactionList);
         spinnerTransactions.setAdapter(mAdapter);
+
+        listAdapter = new ListAdapter(getApplicationContext(), R.layout.list_view1, new ArrayList<Transaction>());
+        transactionList = (ListView) findViewById(R.id.transactionList);
+        transactionList.setAdapter(listAdapter);
+        getPresenter().refreshTransactions();
+
+
 
         spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -80,5 +96,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        listAdapter.setMovies(transactions);
+    }
+
+    @Override
+    public void notifyTransactionsListDataSetChanged() {
+        listAdapter.notifyDataSetChanged();
     }
 }
