@@ -28,6 +28,7 @@ public class ListAdapter extends ArrayAdapter<Transaction> {
         resource = _resource;
     }
 
+
     public void setMovies(ArrayList<Transaction> transactions) {
         this.addAll(transactions);
     }

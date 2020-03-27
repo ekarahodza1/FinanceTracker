@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         transactionList.setAdapter(listAdapter);
         getPresenter().refreshTransactions();
 
+        //calendarView.setMinDate((long) (System.currentTimeMillis()-2.592e+9));
+
 
 
         spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

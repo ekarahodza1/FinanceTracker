@@ -12,7 +12,14 @@ public class TransactionsModel {
                     null, 0, null));
             add(new Transaction(new Date(1,3,2020), "Salary", 2000, Type.REGULARINCOME,
                     null, 30, new Date(31, 12, 2020)));
-
+            add(new Transaction(new Date(2020, 3,1), "Meal allowance", 200, Type.REGULARINCOME,
+                     null, 30, new Date(2020, 12, 1)));
+         add(new Transaction(new Date(2020,2,2), "Shopping", 999, Type.INDIVIDUALPAYMENT,
+                "new washing machine", 0, null));
+            add(new Transaction(new Date(2020,3,13), "Utilities", 53, Type.REGULARPAYMENT,
+                    "electricity", 30, new Date(2020,12,1)));
+            add(new Transaction(new Date(2020,3,13), "Utilities", 123, Type.REGULARPAYMENT,
+                    "gas", 30, new Date(2020,12,1)));
         }
 
     };
