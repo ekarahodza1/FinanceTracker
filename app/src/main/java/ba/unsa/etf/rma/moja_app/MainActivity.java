@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Transaction clicked = (Transaction) parent.getItemAtPosition(position);
                 String clickedName = clicked.getTypeString();
-                //ovdje ce pozivat metodu
+                financePresenter.filterTransactions(clickedName);
+                notifyTransactionsListDataSetChanged();
             }
 
             @Override

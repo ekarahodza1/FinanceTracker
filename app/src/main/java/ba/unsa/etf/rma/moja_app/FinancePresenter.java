@@ -69,6 +69,31 @@ public class FinancePresenter implements IFinancePresenter {
 
     }
 
+    @Override
+    public void filterTransactions(String criteria){
+        ArrayList<Transaction> pomocne = new ArrayList<>();
+        for (int i = 0; i < transactions.size(); i++){
+            if (criteria.matches("Individual Payment") && transactions.get(i).getType() == Type.INDIVIDUALPAYMENT){
+                pomocne.add(transactions.get(i));
+            }
+            if (criteria.matches("Regular Payment") && transactions.get(i).getType() == Type.REGULARPAYMENT){
+                pomocne.add(transactions.get(i));
+            }
+            if (criteria.matches("Purchase") && transactions.get(i).getType() == Type.PURCHASE){
+                pomocne.add(transactions.get(i));
+            }
+            if (criteria.matches("Individual Income") && transactions.get(i).getType() == Type.INDIVIDUALINCOME){
+                pomocne.add(transactions.get(i));
+            }
+            if (criteria.matches("Regular Income") && transactions.get(i).getType() == Type.REGULARINCOME){
+                pomocne.add(transactions.get(i));
+            }
+        }
+        view.setTransactions(pomocne);
+
+
+    }
+
     private IFinanceView view;
     private IFinanceInteractor interactor;
     private Context context;
