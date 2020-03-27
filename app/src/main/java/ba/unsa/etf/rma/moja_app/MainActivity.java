@@ -1,7 +1,9 @@
 package ba.unsa.etf.rma.moja_app;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +15,7 @@ import android.widget.TextClock;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, IFinanceView {
     private TextView limitView;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         return financePresenter;
     }
+
+    private IFinanceInteractor interactor = new FinanceInteractor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void initList(){
         mTransactionList = new ArrayList<>();
+        mTransactionList.add(new Transaction("", R.drawable.white));
         mTransactionList.add(new Transaction("Individual Payment", R.drawable.individual_payment));
         mTransactionList.add(new Transaction("Regular Payment", R.drawable.regular_payment));
         mTransactionList.add(new Transaction("Purchase", R.drawable.purchase));
@@ -89,20 +95,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text  = parent.getItemAtPosition(position).toString();
-        FinancePresenter.sortTransactions(text);
+        financePresenter.sortTransactions(text);
+        notifyTransactionsListDataSetChanged();
+
+
+
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+
     }
 
     @Override
     public void setTransactions(ArrayList<Transaction> transactions) {
-        listAdapter.setMovies(transactions);
+        listAdapter.setTransaction(transactions);
     }
 
     @Override
