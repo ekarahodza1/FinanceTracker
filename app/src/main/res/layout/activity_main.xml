@@ -41,7 +41,7 @@
         app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.214" />
+        app:layout_constraintVertical_bias="0.198" />
 
     <Spinner
         android:id="@+id/sortSpinner"
@@ -77,15 +77,6 @@
         app:layout_constraintStart_toStartOf="@+id/sortSpinner"
         app:layout_constraintTop_toTopOf="@+id/sortSpinner" />
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="277dp"
-        android:layout_height="59dp"
-        app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterSpinner" />
-
     <ListView
         android:id="@+id/transactionList"
         android:layout_width="290dp"
@@ -95,5 +86,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortSpinner" />
+
+    <Button
+        android:id="@+id/leftButton"
+        android:layout_width="65dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="56dp"
+        android:text="<-"
+        app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
+        app:layout_constraintVertical_bias="0.517" />
+
+    <Button
+        android:id="@+id/rightButton"
+        android:layout_width="63dp"
+        android:layout_height="47dp"
+        android:layout_marginEnd="68dp"
+        android:text="->"
+        app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
+        app:layout_constraintVertical_bias="0.528" />
+
+    <TextView
+        android:id="@+id/monthView"
+        android:layout_width="116dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="45dp"
+        app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/rightButton"
+        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintStart_toEndOf="@+id/leftButton"
+        app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
+        app:layout_constraintVertical_bias="0.037" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

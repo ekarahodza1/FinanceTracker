@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ListView transactionList;
     private ArrayList<Transaction> mTransactionList;
     private SpinnerAdapter mAdapter;
+    private TextView monthView;
+    private Button left;
+    private Button right;
 
     private ListAdapter listAdapter;
 
@@ -61,6 +65,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         transactionList = (ListView) findViewById(R.id.transactionList);
         transactionList.setAdapter(listAdapter);
         getPresenter().refreshTransactions();
+
+        left.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+              financePresenter.previousMonth();
+            }
+    });
+
+        right.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                financePresenter.nextMonth();
+            }
+        });
 
         //calendarView.setMinDate((long) (System.currentTimeMillis()-2.592e+9));
 

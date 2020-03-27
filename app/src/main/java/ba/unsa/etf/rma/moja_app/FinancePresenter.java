@@ -104,9 +104,20 @@ public class FinancePresenter implements IFinancePresenter {
         this.context    = context;
         transactions = interactor.get();
     }
+
     @Override
     public void refreshTransactions() {
         view.setTransactions(interactor.get());
         view.notifyTransactionsListDataSetChanged();
+    }
+
+    @Override
+    public void previousMonth(){
+
+    }
+
+    @Override
+    public void nextMonth(){
+
     }
 }

@@ -10,4 +10,8 @@ public interface IFinancePresenter {
     void refreshTransactions();
     void filterTransactions(String clickedName);
     void sortTransactions(String text);
+
+    void previousMonth();
+
+    void nextMonth();
 }
