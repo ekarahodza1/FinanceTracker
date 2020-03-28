@@ -140,9 +140,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
         transactionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ListItemActivity.class);
+                Transaction t = listAdapter.getItem(position);
+                intent.putExtra("title", t.getTitle());
+                intent.putExtra("amount", t.getAmount());
+//                intent.putExtra("date", t.getDate());
+//                intent.putExtra("eDate", t.getEndDate());
+                intent.putExtra("interval", t.getTransactionInterval());
+                intent.putExtra("type", t.getType().toString());
+                intent.putExtra("description", t.getItemDescription());
                 startActivity(intent);
             }
 
