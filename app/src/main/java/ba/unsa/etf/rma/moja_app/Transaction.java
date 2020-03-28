@@ -1,21 +1,22 @@
 package ba.unsa.etf.rma.moja_app;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Transaction {
 
-    private Date date;
+    private LocalDate date;
     private String title;
     private double amount;
     private String typeString;
     private Type type;
     private String itemDescription;
     private int transactionInterval;
-    private Date endDate;
+    private LocalDate endDate;
     private int image;
 
-    public Transaction(Date date, String title, double amount, Type type, String itemDescription, int transactionInterval, Date endDate) {
+    public Transaction(LocalDate date, String title, double amount, Type type, String itemDescription, int transactionInterval, LocalDate endDate) {
         this.date = date;
         this.title = title;
         this.amount = amount;
@@ -46,11 +47,11 @@ public class Transaction {
         this.image = image;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -88,11 +89,11 @@ public class Transaction {
         else return;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         if (type == Type.REGULARINCOME || type == Type.REGULARPAYMENT) this.endDate = endDate;
         else this.endDate = null;
     }

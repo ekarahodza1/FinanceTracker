@@ -4,14 +4,12 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface IFinancePresenter {
     void refreshTransactions();
     void filterTransactions(String clickedName);
     void sortTransactions(String text);
-
-    void previousMonth();
-
-    void nextMonth();
+    void filterMonth(LocalDate current1);
 }

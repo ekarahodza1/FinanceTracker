@@ -5,6 +5,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,6 +46,7 @@ public class FinancePresenter implements IFinancePresenter {
                  public int compare(Transaction o1, Transaction o2) {
                      return o1.getTitle().compareTo(o2.getTitle());
                  }
+
              });
              Collections.reverse(transactions);
          }
@@ -52,7 +54,10 @@ public class FinancePresenter implements IFinancePresenter {
              Collections.sort(transactions, new Comparator<Transaction>() {
                  @Override
                  public int compare(Transaction o1, Transaction o2) {
-                     return (int) (o1.getDate().compareTo(o2.getDate()));
+                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                         return (int) (o1.getDate().compareTo(o2.getDate()));
+                     }
+                     return 0;
                  }
              });
          }
@@ -60,7 +65,10 @@ public class FinancePresenter implements IFinancePresenter {
              Collections.sort(transactions, new Comparator<Transaction>() {
                  @Override
                  public int compare(Transaction o1, Transaction o2) {
-                     return (int) (o2.getDate().compareTo(o1.getDate()));
+                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                         return (int) (o2.getDate().compareTo(o1.getDate()));
+                     }
+                     return 0;
                  }
              });
          }
@@ -111,13 +119,15 @@ public class FinancePresenter implements IFinancePresenter {
         view.notifyTransactionsListDataSetChanged();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void previousMonth(){
+    public void filterMonth(LocalDate current1){
+        ArrayList<Transaction> pomocne = new ArrayList<>();
+        for (Transaction t: transactions) {
+            if (t.getDate().getMonthValue() == current1.getMonthValue() ) pomocne.add(t);
 
-    }
+        }
 
-    @Override
-    public void nextMonth(){
-
+        view.setTransactions(pomocne);
     }
 }

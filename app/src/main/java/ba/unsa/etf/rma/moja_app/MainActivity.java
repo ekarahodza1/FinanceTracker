@@ -15,7 +15,10 @@ import android.widget.Spinner;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, IFinanceView {
@@ -30,8 +33,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ArrayList<Transaction> mTransactionList;
     private SpinnerAdapter mAdapter;
     private TextView monthView;
-    private Button left;
-    private Button right;
+    private Button leftButton;
+    private Button rightButton;
+    private LocalDate current = null;
+    private LocalDate current1 = null;
+    private String month = null;
+    private int year = 0;
+    private int month_value = 0;
 
     private ListAdapter listAdapter;
 
@@ -66,21 +74,52 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         transactionList.setAdapter(listAdapter);
         getPresenter().refreshTransactions();
 
-        left.setOnClickListener(new View.OnClickListener(){
+
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            current = LocalDate.now();
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            month = current.getMonth().toString();
+            month_value = current.getMonth().getValue();
+            year = current.getYear();
+        }
+        current1 = current;
+
+        monthView = (TextView) findViewById(R.id.monthView);
+        monthView.setText(month + " ," + year);
+
+        leftButton = (Button)findViewById(R.id.leftButton);
+        rightButton = (Button)findViewById(R.id.rightButton);
+
+        leftButton.setOnClickListener(new View.OnClickListener(){
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-              financePresenter.previousMonth();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        current = current.minusMonths(1);
+                    }
+
+                monthView.setText(current.getMonth().toString() + " ," + current.getYear());
+                financePresenter.filterMonth(current);
             }
     });
 
-        right.setOnClickListener(new View.OnClickListener(){
+        rightButton.setOnClickListener(new View.OnClickListener(){
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                financePresenter.nextMonth();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                   current = current.plusMonths(1);
+                }
+
+                monthView.setText(current.getMonth().toString() + " ," + current.getYear());
+                financePresenter.filterMonth(current);
             }
         });
 
-        //calendarView.setMinDate((long) (System.currentTimeMillis()-2.592e+9));
+
 
 
 
