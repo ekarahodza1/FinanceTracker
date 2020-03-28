@@ -9,10 +9,10 @@ import java.util.Date;
 public class TransactionsModel {
     public static ArrayList<Transaction> transactions = new ArrayList<Transaction>() {
         {
-          //  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2020, 2, 3), "Shopping", 2000, Type.PURCHASE,
                         "new dress", 0, null));
-           // }
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2019, 1, 24), "Insurance", 500, Type.INDIVIDUALINCOME,
@@ -38,6 +38,11 @@ public class TransactionsModel {
                 add(new Transaction(LocalDate.of(2020, 3, 13), "Utilities", 123, Type.REGULARPAYMENT,
                         "gas", 30, LocalDate.of(2020, 12, 1)));
             }
+
+            add(new Transaction(null, "Shopping", 2000, Type.PURCHASE,
+                    "new dress", 0, null));
+            add(new Transaction(null, "Insurance", 500, Type.INDIVIDUALINCOME,
+                    null, 0, null));
 
         }
 

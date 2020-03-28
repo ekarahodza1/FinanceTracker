@@ -3,6 +3,7 @@ package ba.unsa.etf.rma.moja_app;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -136,6 +137,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+        });
+
+        transactionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), ListItemActivity.class);
+                startActivity(intent);
+            }
+
         });
 
 
