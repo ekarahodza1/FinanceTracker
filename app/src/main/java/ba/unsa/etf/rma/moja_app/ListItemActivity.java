@@ -64,9 +64,8 @@ public class ListItemActivity extends AppCompatActivity {
         s = ""; s += b.getInt("interval");
         interval.setText(s);
         description.setText(getIntent().getStringExtra("description"));
-
-
-
+        date.setText(getIntent().getStringExtra("date"));
+        endDate.setText(getIntent().getStringExtra("eDate"));
 
 
     }

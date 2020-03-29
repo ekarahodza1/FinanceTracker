@@ -97,10 +97,10 @@ public class TransactionsModel {
 
 
 
-            add(new Transaction(null, "Shopping", 2000, Type.PURCHASE,
-                    "new dress", 0, null));
-            add(new Transaction(null, "Insurance", 500, Type.INDIVIDUALINCOME,
-                    null, 0, null));
+//            add(new Transaction(null, "Shopping", 2000, Type.PURCHASE,
+//                    "new dress", 0, null));
+//            add(new Transaction(null, "Insurance", 500, Type.INDIVIDUALINCOME,
+//                    null, 0, null));
 
         }
 

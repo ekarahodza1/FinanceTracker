@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Button rightButton;
     private LocalDate current = null;
     private LocalDate current1 = null;
+    private Button add;
     private String month = null;
     private int year = 0;
     private int month_value = 0;
@@ -152,18 +153,38 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Bundle b = new Bundle();
                 b.putDouble("amount", t.getAmount());
                 intent.putExtras(b);
-//                intent.putExtra("date", t.getDate());
-//                intent.putExtra("eDate", t.getEndDate());
+                intent.putExtra("date", t.getDate().toString());
+                if (t.getEndDate() == null) intent.putExtra("eDate", "");
+                else intent.putExtra("eDate", t.getEndDate().toString());
                 b.putInt("interval", t.getTransactionInterval());
                 intent.putExtra("type", t.getType().toString());
                 intent.putExtra("description", t.getItemDescription());
                 startActivity(intent);
+
+
             }
-
-
 
         });
 
+
+        add = (Button)findViewById(R.id.buttonAdd);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ListItemActivity.class);
+                intent.putExtra("title", "");
+                Bundle b = new Bundle();
+                b.putDouble("amount", 0);
+                intent.putExtras(b);
+                intent.putExtra("date", "");
+                intent.putExtra("eDate", "");
+                b.putInt("interval", 0);
+                intent.putExtra("type", "");
+                intent.putExtra("description", "");
+
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -175,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mTransactionList.add(new Transaction("Purchase", R.drawable.purchase));
         mTransactionList.add(new Transaction("Individual Income", R.drawable.individual_income));
         mTransactionList.add(new Transaction("Regular Income", R.drawable.regular_income));
-
     }
 
 
@@ -185,9 +205,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String text  = parent.getItemAtPosition(position).toString();
         financePresenter.sortTransactions(text);
         notifyTransactionsListDataSetChanged();
-
-
-
     }
 
     @Override
