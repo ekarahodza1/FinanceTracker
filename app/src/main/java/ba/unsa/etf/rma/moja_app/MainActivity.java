@@ -146,10 +146,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Intent intent = new Intent(getApplicationContext(), ListItemActivity.class);
                 Transaction t = listAdapter.getItem(position);
                 intent.putExtra("title", t.getTitle());
-                intent.putExtra("amount", t.getAmount());
+                Bundle b = new Bundle();
+                b.putDouble("amount", t.getAmount());
+                intent.putExtras(b);
 //                intent.putExtra("date", t.getDate());
 //                intent.putExtra("eDate", t.getEndDate());
-                intent.putExtra("interval", t.getTransactionInterval());
+                b.putInt("interval", t.getTransactionInterval());
                 intent.putExtra("type", t.getType().toString());
                 intent.putExtra("description", t.getItemDescription());
                 startActivity(intent);

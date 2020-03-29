@@ -35,17 +35,36 @@ public class ListItemActivity extends AppCompatActivity {
         type = findViewById(R.id.editType);
 
         String imageType = getIntent().getStringExtra("type");
-//        if (imageType.matches("Individual Payment")) image.setImageResource(R.drawable.individual_payment);
-//        if (imageType.matches("Regular Payment")) image.setImageResource(R.drawable.regular_payment);
-//        if (imageType.matches("Purchase")) image.setImageResource(R.drawable.purchase);
-//        if (imageType.matches("Individual Income")) image.setImageResource(R.drawable.individual_income);
-       // if (imageType.matches("Regular Income"))
+        if (imageType.matches("INDIVIDUALPAYMENT")) {
+            image.setImageResource(R.drawable.individual_payment);
+            type.setText("INDIVIDUAL PAYMENT");
+        }
+        if (imageType.matches("REGULARPAYMENT")) {
+            image.setImageResource(R.drawable.regular_payment);
+            type.setText("REGULAR PAYMENT");
+
+        }
+        if (imageType.matches("PURCHASE")) {
+            image.setImageResource(R.drawable.purchase);
+            type.setText("PURCHASE");
+        }
+        if (imageType.matches("INDIVIDUALINCOME")) {
+            image.setImageResource(R.drawable.individual_income);
+            type.setText("INDIVIDUAL INCOME");
+        }
+        if (imageType.matches("REGULARINCOME")) {
             image.setImageResource(R.drawable.regular_income);
+            type.setText("REGULAR INCOME");
+        }
 
         title.setText(getIntent().getStringExtra("title"));
-        amount.setText(getIntent().getStringExtra("type"));
-   //     amount.setText((int) getIntent().getDoubleExtra("amount", 0));
-       // date.setText(getIntent().getStringExtra("date"));
+        Bundle b = getIntent().getExtras();
+        String s = ""; s+=b.getDouble("amount");
+        amount.setText(s);
+        s = ""; s += b.getInt("interval");
+        interval.setText(s);
+        description.setText(getIntent().getStringExtra("description"));
+
 
 
     }
