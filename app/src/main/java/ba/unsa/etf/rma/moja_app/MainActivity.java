@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextClock;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private String month = null;
     private int year = 0;
     private int month_value = 0;
+
 
     private ListAdapter listAdapter;
 
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         transactionList = (ListView) findViewById(R.id.transactionList);
         transactionList.setAdapter(listAdapter);
         getPresenter().refreshTransactions();
+
 
 
 
@@ -156,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 intent.putExtra("description", t.getItemDescription());
                 startActivity(intent);
             }
+
+
 
         });
 
