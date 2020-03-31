@@ -16,15 +16,15 @@ public class TransactionsModel {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2019, 1, 24), "Insurance", 500, Type.INDIVIDUALINCOME,
-                        null, 0, null));
+                        "", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2020, 3, 1), "Salary", 2000, Type.REGULARINCOME,
-                        null, 30, LocalDate.of(2020, 12, 1)));
+                        "", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2020, 3, 1), "Meal allowance", 200, Type.REGULARINCOME,
-                        null, 30, LocalDate.of(2020, 12, 1)));
+                        "", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2020, 2, 2), "Shopping", 999, Type.INDIVIDUALPAYMENT,
@@ -72,7 +72,7 @@ public class TransactionsModel {
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2018, 12, 31), "Bonus", 100, Type.INDIVIDUALINCOME,
-                        null, 0, null));
+                        "", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2019, 8, 18), "Shopping", 39, Type.PURCHASE,
@@ -88,7 +88,7 @@ public class TransactionsModel {
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2019, 12, 31), "Bonus", 100, Type.INDIVIDUALINCOME,
-                        null, 0, null));
+                        "", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(new Transaction(LocalDate.of(2019, 1, 7), "Shopping", 29, Type.PURCHASE,

@@ -33,6 +33,7 @@ public class ListItemActivity extends AppCompatActivity {
 
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,12 @@ public class ListItemActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Transaction t = new Transaction(date1, getIntent().getStringExtra("title"), b.getDouble("amount"),
+                Transaction t = null;
+                t = new Transaction(date1, getIntent().getStringExtra("title"), b.getDouble("amount"),
                         type_, getIntent().getStringExtra("description"), b.getInt("interval"), date2);
+
+                setResult(2, getIntent());
+
 
                 finish();
             }

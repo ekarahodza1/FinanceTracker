@@ -115,7 +115,7 @@ public class FinancePresenter implements IFinancePresenter {
 
     @Override
     public void refreshTransactions() {
-        view.setTransactions(interactor.get());
+        view.setTransactions(transactions);
         view.notifyTransactionsListDataSetChanged();
     }
 
@@ -129,5 +129,25 @@ public class FinancePresenter implements IFinancePresenter {
         }
 
         view.setTransactions(pomocne);
+    }
+
+
+    public void addTransaction(Transaction t){
+        transactions.add(t);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void deleteTransaction(Transaction t){
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction t1 = transactions.get(i);
+            if (t1.getTitle().matches(t.getTitle()) && t1.getAmount() == t.getAmount()
+                    && t1.getTransactionInterval() == t.getTransactionInterval()
+                    && t1.getItemDescription().matches(t.getItemDescription())){
+                transactions.remove(t1);
+                view.setTransactions(transactions);
+                view.notifyTransactionsListDataSetChanged();
+                break;
+            }
+        }
     }
 }

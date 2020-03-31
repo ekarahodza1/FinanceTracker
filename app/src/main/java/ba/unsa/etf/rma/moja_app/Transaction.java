@@ -1,6 +1,8 @@
 package ba.unsa.etf.rma.moja_app;
 
 
+import androidx.annotation.Nullable;
+
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -105,4 +107,7 @@ public class Transaction {
     public void setType(Type type) {
         this.type = type;
     }
+
+
+
 }

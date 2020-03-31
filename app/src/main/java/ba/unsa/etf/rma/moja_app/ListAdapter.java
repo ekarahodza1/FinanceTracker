@@ -34,13 +34,6 @@ public class ListAdapter extends ArrayAdapter<Transaction> {
         this.addAll(transactions);
     }
 
-    public void addTransaction(Transaction t){
-        this.add(t);
-    }
-
-    public void deleteTransaction(Transaction t){
-        this.remove(t);
-    }
 
     @NonNull
     @Override

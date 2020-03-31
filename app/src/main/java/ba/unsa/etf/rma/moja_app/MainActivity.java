@@ -159,8 +159,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 b.putInt("interval", t.getTransactionInterval());
                 intent.putExtra("type", t.getType().toString());
                 intent.putExtra("description", t.getItemDescription());
-                startActivity(intent);
-
+                startActivityForResult(intent, 1);
 
             }
 
@@ -186,6 +185,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+            }
+            if (resultCode == RESULT_CANCELED) {
+
+            }
+            if (resultCode == 2){
+                Transaction t = null;
+                LocalDate date1 = null;
+                LocalDate date2 = null;
+                String s = data.getStringExtra("type");
+                Type type_ = null;
+                Bundle b = data.getExtras();
+                if (s.matches("INDIVIDUALPAYMENT")) type_ = Type.INDIVIDUALPAYMENT;
+                if (s.matches("REGULARPAYMENT")) type_ = Type.REGULARPAYMENT;
+                if (s.matches("PURCHASE")) type_ = Type.PURCHASE;
+                if (s.matches("INDIVIDUALINCOME")) type_ = Type.INDIVIDUALINCOME;
+                if (s.matches("REGULARINCOME")) type_ = Type.REGULARINCOME;
+
+                if (!data.getStringExtra("date").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    date1 = LocalDate.parse(data.getStringExtra("date"));
+                }
+                if (!data.getStringExtra("eDate").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    date2 = LocalDate.parse(data.getStringExtra("eDate"));
+                }
+                t = new Transaction(date1, data.getStringExtra("title"), b.getDouble("amount"),
+                        type_, data.getStringExtra("description"), b.getInt("interval"), date2);
+                financePresenter.deleteTransaction(t);
+            }
+        }
     }
 
     private void initList(){
