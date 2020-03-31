@@ -134,6 +134,8 @@ public class FinancePresenter implements IFinancePresenter {
 
     public void addTransaction(Transaction t){
         transactions.add(t);
+        view.setTransactions(transactions);
+        view.notifyTransactionsListDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

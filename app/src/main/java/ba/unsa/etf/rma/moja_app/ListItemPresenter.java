@@ -1,6 +1,15 @@
 package ba.unsa.etf.rma.moja_app;
 
+import android.content.Context;
+
 public class ListItemPresenter implements IListItemPresenter {
+    private IListItemView view;
+    private Context context;
+
+    public ListItemPresenter(IListItemView view, Context context) {
+        this.view = view;
+        this.context = context;
+    }
 
     @Override
     public boolean validateTitle(String title){

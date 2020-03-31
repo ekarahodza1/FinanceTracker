@@ -4,8 +4,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +18,7 @@ import android.widget.TextView;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ListItemActivity extends AppCompatActivity {
+public class ListItemActivity extends AppCompatActivity implements IListItemView{
 
     private ImageView image;
     private EditText title;
@@ -27,9 +30,22 @@ public class ListItemActivity extends AppCompatActivity {
     private EditText type;
     private Button delete;
     private Button OK;
-    private Type type_;
+    private String mTitle;
+    private double mAmount;
     private LocalDate date1;
     private LocalDate date2;
+    private Type type_;
+    private int mInterval;
+    private String mDescription;
+    private String imageType;
+    private IListItemPresenter presenter = new ListItemPresenter(this, this);
+    public IListItemPresenter getPresenter() {
+        if (presenter == null) {
+            presenter = new ListItemPresenter(this, this);
+        }
+        return presenter;
+    }
+
 
 
 
@@ -52,7 +68,7 @@ public class ListItemActivity extends AppCompatActivity {
         OK = (Button)findViewById(R.id.buttonOK);
 
 
-        String imageType = getIntent().getStringExtra("type");
+        imageType = getIntent().getStringExtra("type");
 
         if (imageType.matches("INDIVIDUALPAYMENT")) {
             image.setImageResource(R.drawable.individual_payment);
@@ -81,34 +97,127 @@ public class ListItemActivity extends AppCompatActivity {
             type_ = Type.REGULARINCOME;
         }
 
-        title.setText(getIntent().getStringExtra("title"));
+        mTitle = getIntent().getStringExtra("title");
         Bundle b = getIntent().getExtras();
-        String s = ""; s+=b.getDouble("amount");
+        mAmount = b.getDouble("amount");
+        mDescription = getIntent().getStringExtra("description");
+        if (!getIntent().getStringExtra("date").matches("")) date1 = LocalDate.parse(getIntent().getStringExtra("date"));
+        if (!getIntent().getStringExtra("eDate").matches("")) date2 = LocalDate.parse(getIntent().getStringExtra("eDate"));
+
+
+        title.setText(getIntent().getStringExtra("title"));
+        String s = ""; s += mAmount;
         amount.setText(s);
         s = ""; s += b.getInt("interval");
         interval.setText(s);
-        description.setText(getIntent().getStringExtra("description"));
+        description.setText(mDescription);
         date.setText(getIntent().getStringExtra("date"));
         endDate.setText(getIntent().getStringExtra("eDate"));
 
+        if (mTitle.matches("")){
+            delete.setEnabled(false);
+        }
 
 
-        if (!getIntent().getStringExtra("date").matches("")) date1 = LocalDate.parse(getIntent().getStringExtra("date"));
-        if (!getIntent().getStringExtra("eDate").matches("")) date2 = LocalDate.parse(getIntent().getStringExtra("eDate"));
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Transaction t = null;
-                t = new Transaction(date1, getIntent().getStringExtra("title"), b.getDouble("amount"),
-                        type_, getIntent().getStringExtra("description"), b.getInt("interval"), date2);
-
                 setResult(2, getIntent());
-
-
                 finish();
             }
 
+        });
+
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                title.setBackgroundColor(Color.GREEN);
+            }
+        });
+
+        description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                description.setBackgroundColor(Color.GREEN);
+            }
+        });
+
+        amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                amount.setBackgroundColor(Color.GREEN);
+            }
+        });
+
+        interval.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                interval.setBackgroundColor(Color.GREEN);
+            }
+        });
+
+        date.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                date.setBackgroundColor(Color.GREEN);
+            }
+        });
+
+        endDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                endDate.setBackgroundColor(Color.GREEN);
+            }
+        });
+
+        type.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                type.setBackgroundColor(Color.GREEN);
+            }
+        });
+
+
+       // if (!mTitle.matches(title.getText().toString())) title.setBackgroundColor(Color.GREEN);
+
+        OK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mTitle = title.getText().toString();
+//                if (!presenter.validateTitle(mTitle))  title.setBackgroundColor(Color.RED);
+//                if (!presenter.validateDescription(mDescription, imageType)) description.setBackgroundColor(Color.RED);
+
+            }
         });
 
 
