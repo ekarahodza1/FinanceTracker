@@ -133,6 +133,8 @@ public class FinancePresenter implements IFinancePresenter {
 
 
     public void addTransaction(Transaction t){
+//        t.setTypeString("Purchase");
+//        t.setImage(2);
         transactions.add(t);
         view.setTransactions(transactions);
         view.notifyTransactionsListDataSetChanged();

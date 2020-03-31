@@ -36,18 +36,10 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
     private LocalDate date2;
     private Type type_;
     private int mInterval;
+    private boolean dodavanje = false;
     private String mDescription;
     private String imageType;
     private IListItemPresenter presenter = new ListItemPresenter(this, this);
-    public IListItemPresenter getPresenter() {
-        if (presenter == null) {
-            presenter = new ListItemPresenter(this, this);
-        }
-        return presenter;
-    }
-
-
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -98,6 +90,7 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
         }
 
         mTitle = getIntent().getStringExtra("title");
+        if (mTitle.matches("")) dodavanje = true;
         Bundle b = getIntent().getExtras();
         mAmount = b.getDouble("amount");
         mDescription = getIntent().getStringExtra("description");
@@ -214,6 +207,31 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
             public void onClick(View v) {
 
                 mTitle = title.getText().toString();
+                mDescription = description.getText().toString();
+                date1 = LocalDate.parse(date.getText().toString());
+               // date2 = LocalDate.parse(endDate.getText().toString());
+                mAmount = Double.parseDouble(amount.getText().toString());
+                mInterval = Integer.parseInt(interval.getText().toString());
+                imageType = type.getText().toString();
+
+                Intent result = new Intent();
+
+                result.putExtra("title", mTitle);
+                Bundle b = new Bundle();
+                b.putDouble("amount", mAmount);
+                result.putExtras(b);
+                result.putExtra("date", date.getText().toString());
+                result.putExtra("eDate", endDate.getText().toString());
+                b.putInt("interval", mInterval);
+                result.putExtra("type", imageType);
+                result.putExtra("description", mDescription);
+
+                if (dodavanje) setResult(3, result);
+                else setResult(4, result);
+                finish();
+
+
+               // Transaction t = new Transaction()
 //                if (!presenter.validateTitle(mTitle))  title.setBackgroundColor(Color.RED);
 //                if (!presenter.validateDescription(mDescription, imageType)) description.setBackgroundColor(Color.RED);
 

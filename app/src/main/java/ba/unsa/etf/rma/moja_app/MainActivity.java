@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 b.putInt("interval", 0);
                 intent.putExtra("type", "");
                 intent.putExtra("description", "");
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             if (resultCode == 3){
                 financePresenter.addTransaction(t);
+                System.out.println("uslo");
             }
             if (resultCode == 4){
                 financePresenter.deleteTransaction(transaction);
