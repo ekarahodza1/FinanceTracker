@@ -120,8 +120,26 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(2, getIntent());
-                finish();
+                AlertDialog alertDialog2 = new AlertDialog.Builder(ListItemActivity.this)
+                        .setTitle("Delete")
+                        .setMessage("Are you sure you want to delete transaction?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                setResult(2, getIntent());
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                              //  alertDialog2.cancel();
+
+                            }
+                        })
+                        .show();
+//                setResult(2, getIntent());
+//                finish();
             }
 
         });
@@ -282,10 +300,6 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
                     finish();
                 }
 
-
-               // Transaction t = new Transaction()
-//                if (!presenter.validateTitle(mTitle))  title.setBackgroundColor(Color.RED);
-//                if (!presenter.validateDescription(mDescription, imageType)) description.setBackgroundColor(Color.RED);
 
             }
         });

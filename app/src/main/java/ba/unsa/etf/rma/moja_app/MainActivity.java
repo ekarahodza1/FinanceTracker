@@ -209,7 +209,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1) {
+        if (resultCode == RESULT_CANCELED) { }
+        else if (requestCode == 1) {
             Transaction t = null;
             LocalDate date1 = null;
             LocalDate date2 = null;
@@ -235,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             t = new Transaction(date1, data.getStringExtra("title"), b.getDouble("amount"),
                     type_, data.getStringExtra("description"), b.getInt("interval"), date2);
             if (resultCode == RESULT_OK) { }
-            if (resultCode == RESULT_CANCELED) { }
+
             if (resultCode == 2){
                 financePresenter.deleteTransaction(t);
             }
