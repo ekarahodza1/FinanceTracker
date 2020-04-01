@@ -117,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         financePresenter.filterMonth(current);
         notifyTransactionsListDataSetChanged();
 
-
-
         leftButton = (Button)findViewById(R.id.leftButton);
         rightButton = (Button)findViewById(R.id.rightButton);
 
@@ -134,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 financePresenter.filterMonth(current);
             }
     });
-
         rightButton.setOnClickListener(new View.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -147,10 +144,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 financePresenter.filterMonth(current);
             }
         });
-
-
-
-
 
         limitView = findViewById(R.id.limitView);
         globalAmountView = findViewById(R.id.globalAmountView);

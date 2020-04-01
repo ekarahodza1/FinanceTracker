@@ -1,6 +1,11 @@
 package ba.unsa.etf.rma.moja_app;
 
 import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import java.time.LocalDate;
 
 public class ListItemPresenter implements IListItemPresenter {
     private IListItemView view;
@@ -33,6 +38,19 @@ public class ListItemPresenter implements IListItemPresenter {
     @Override
     public boolean validateInterval(int interval, String type){
         if (!(type.matches("REGULAR PAYMENT") || type.matches("REGULAR INCOME")) && interval != 0) return false;
+        return true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public boolean validateDate(String date){
+        try {
+            LocalDate d = LocalDate.parse(date);
+
+        }
+        catch(Exception e){
+            return false;
+        }
         return true;
     }
 }

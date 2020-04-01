@@ -5,7 +5,7 @@ public interface IListItemPresenter {
     boolean validateType(String type);
     boolean validateDescription(String description, String type);
     boolean validateInterval(int interval, String type);
-    //validate date
-    //validate end date
+    boolean validateDate(String toString);
+
 
 }

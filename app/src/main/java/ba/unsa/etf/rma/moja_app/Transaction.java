@@ -78,8 +78,7 @@ public class Transaction {
     }
 
     public void setItemDescription(String itemDescription) {
-        if (type == Type.INDIVIDUALINCOME || type == Type.REGULARINCOME) this.itemDescription = null;
-        else this.itemDescription = itemDescription;
+        this.itemDescription = itemDescription;
     }
 
     public int getTransactionInterval() {
@@ -87,8 +86,8 @@ public class Transaction {
     }
 
     public void setTransactionInterval(int transactionInterval) {
-        if (type == Type.REGULARINCOME || type == Type.REGULARPAYMENT) this.transactionInterval = transactionInterval;
-        else return;
+        this.transactionInterval = transactionInterval;
+
     }
 
     public LocalDate getEndDate() {
@@ -96,8 +95,8 @@ public class Transaction {
     }
 
     public void setEndDate(LocalDate endDate) {
-        if (type == Type.REGULARINCOME || type == Type.REGULARPAYMENT) this.endDate = endDate;
-        else this.endDate = null;
+        this.endDate = endDate;
+
     }
 
     public Type getType() {

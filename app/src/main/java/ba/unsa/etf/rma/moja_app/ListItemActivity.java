@@ -217,13 +217,33 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
 
                 mTitle = title.getText().toString();
                 mDescription = description.getText().toString();
-                date1 = LocalDate.parse(date.getText().toString());
-                if (!endDate.getText().toString().matches(""))  date2 = LocalDate.parse(endDate.getText().toString());
+                if (presenter.validateDate(date.getText().toString())) date1 = LocalDate.parse(date.getText().toString());
+                if (presenter.validateDate(endDate.getText().toString()))  date2 = LocalDate.parse(endDate.getText().toString());
                 mAmount = Double.parseDouble(amount.getText().toString());
                 mInterval = Integer.parseInt(interval.getText().toString());
                 imageType = type.getText().toString();
-
                 Intent result = new Intent();
+
+                if (presenter.validateDescription(mDescription, imageType) == false || presenter.validateTitle(mTitle) == false
+                || presenter.validateInterval(mInterval, imageType) == false || presenter.validateType(imageType) == false || date1 == null) {
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(ListItemActivity.this)
+                            .setTitle("Incorrect data")
+                            .setMessage("Some fields have incorrect inputs")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    setResult(RESULT_CANCELED, result);
+                                    finish();
+                                }
+                            })
+                          .show();
+
+                    setResult(RESULT_CANCELED, result);
+                    finish();
+                }
+
+
+
                 result.putExtra("title", mTitle);
                 Bundle b = new Bundle();
                 b.putDouble("amount", mAmount);
