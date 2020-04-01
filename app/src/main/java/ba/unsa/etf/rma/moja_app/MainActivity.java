@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private int year = 0;
     private int month_value = 0;
     private Transaction transaction;
+    private Account account = new Account(658,-1000,100);
 
 
 
@@ -145,6 +146,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+
+        limitView = findViewById(R.id.limitView);
+        globalAmountView = findViewById(R.id.globalAmountView);
+
+        String s = ""; s += account.getTotalLimit();
+        limitView.setText(s);
+
+        s = "";  s += account.getBudget();
+        globalAmountView.setText(s);
+
         transactionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -162,11 +173,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 b.putInt("interval", t.getTransactionInterval());
                 intent.putExtra("type", t.getType().toString());
                 intent.putExtra("description", t.getItemDescription());
+                b.putDouble("budget", account.getBudget());
                 startActivityForResult(intent, 1);
 
             }
 
         });
+
+
 
 
         add = (Button)findViewById(R.id.buttonAdd);
@@ -183,9 +197,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 b.putInt("interval", 0);
                 intent.putExtra("type", "");
                 intent.putExtra("description", "");
+                b.putDouble("budget", account.getBudget());
                 startActivityForResult(intent, 1);
             }
         });
+
+
 
 
     }
@@ -213,6 +230,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (!data.getStringExtra("eDate").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 date2 = LocalDate.parse(data.getStringExtra("eDate"));
             }
+            double d = account.getBudget();
+            account.setBudget(d + b.getDouble("amount"));
+            String s1 = "" + account.getBudget();
+            globalAmountView.setText(s1);
             t = new Transaction(date1, data.getStringExtra("title"), b.getDouble("amount"),
                     type_, data.getStringExtra("description"), b.getInt("interval"), date2);
             if (resultCode == RESULT_OK) { }
@@ -222,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             if (resultCode == 3){
                 financePresenter.addTransaction(t);
-                System.out.println("uslo");
             }
             if (resultCode == 4){
                 financePresenter.deleteTransaction(transaction);

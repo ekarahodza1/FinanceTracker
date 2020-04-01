@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/limitView"
+        android:id="@+id/label2"
         android:layout_width="110dp"
         android:layout_height="35dp"
         android:layout_marginLeft="8dp"
@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.077" />
 
     <TextView
-        android:id="@+id/globalAmountView"
+        android:id="@+id/label1"
         android:layout_width="110dp"
         android:layout_height="35dp"
         android:layout_marginLeft="8dp"
@@ -140,6 +140,26 @@
         app:layout_constraintHorizontal_bias="0.277"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/globalAmountView"
+        android:layout_width="110dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/limitView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.076"
+        app:layout_constraintStart_toEndOf="@+id/label1" />
+
+    <TextView
+        android:id="@+id/limitView"
+        android:layout_width="110dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.076"
+        app:layout_constraintStart_toEndOf="@+id/label2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

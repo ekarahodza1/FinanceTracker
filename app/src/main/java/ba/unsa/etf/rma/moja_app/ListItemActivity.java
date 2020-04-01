@@ -3,6 +3,8 @@ package ba.unsa.etf.rma.moja_app;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -39,6 +41,7 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
     private boolean dodavanje = false;
     private String mDescription;
     private String imageType;
+    private double budget;
     private IListItemPresenter presenter = new ListItemPresenter(this, this);
 
 
@@ -93,6 +96,7 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
         if (mTitle.matches("")) dodavanje = true;
         Bundle b = getIntent().getExtras();
         mAmount = b.getDouble("amount");
+        budget = b.getDouble("budget");
         mDescription = getIntent().getStringExtra("description");
         if (!getIntent().getStringExtra("date").matches("")) date1 = LocalDate.parse(getIntent().getStringExtra("date"));
         if (!getIntent().getStringExtra("eDate").matches("")) date2 = LocalDate.parse(getIntent().getStringExtra("eDate"));
@@ -213,6 +217,19 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
                 mAmount = Double.parseDouble(amount.getText().toString());
                 mInterval = Integer.parseInt(interval.getText().toString());
                 imageType = type.getText().toString();
+
+                if (budget - mAmount < -1000) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(ListItemActivity.this).create();
+                    alertDialog.setTitle("Alert");
+                    alertDialog.setMessage("You are going over your set limit!");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
 
                 Intent result = new Intent();
 
