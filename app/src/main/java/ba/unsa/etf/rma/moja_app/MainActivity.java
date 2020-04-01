@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void initList(){
         mTransactionList = new ArrayList<>();
-        mTransactionList.add(new Transaction("", R.drawable.white));
+        mTransactionList.add(new Transaction("All", R.drawable.white));
         mTransactionList.add(new Transaction("Individual Payment", R.drawable.individual_payment));
         mTransactionList.add(new Transaction("Regular Payment", R.drawable.regular_payment));
         mTransactionList.add(new Transaction("Purchase", R.drawable.purchase));

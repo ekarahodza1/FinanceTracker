@@ -15,7 +15,14 @@ public class FinancePresenter implements IFinancePresenter {
     @RequiresApi(api = Build.VERSION_CODES.N)
 
     @Override
-    public void sortTransactions(String criteria){
+    public void sortTransactions(String criteria) {
+
+        if (criteria.matches("Not sorted")){
+            view.setTransactions(new ArrayList<Transaction>());
+            view.setTransactions(transactions);
+            return;
+        }
+
          if (criteria.matches( "Price - Descending")) {
              Collections.sort(transactions, new Comparator<Transaction>() {
                  @Override
@@ -80,6 +87,10 @@ public class FinancePresenter implements IFinancePresenter {
     @Override
     public void filterTransactions(String criteria){
         ArrayList<Transaction> pomocne = new ArrayList<>();
+        if (criteria.matches("All")) {
+            view.setTransactions(transactions);
+            return;
+        }
         for (int i = 0; i < transactions.size(); i++){
             if (criteria.matches("Individual Payment") && transactions.get(i).getType() == Type.INDIVIDUALPAYMENT){
                 pomocne.add(transactions.get(i));
@@ -133,8 +144,6 @@ public class FinancePresenter implements IFinancePresenter {
 
 
     public void addTransaction(Transaction t){
-//        t.setTypeString("Purchase");
-//        t.setImage(2);
         transactions.add(t);
         view.setTransactions(transactions);
         view.notifyTransactionsListDataSetChanged();

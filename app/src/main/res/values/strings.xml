@@ -2,7 +2,7 @@
     <string name="app_name">moja_app</string>
 
     <string-array name="sorting">
-        <item> </item>
+        <item>Not sorted</item>
         <item>Price - Ascending</item>
         <item>Price - Descending</item>
         <item>Title - Ascending</item>
