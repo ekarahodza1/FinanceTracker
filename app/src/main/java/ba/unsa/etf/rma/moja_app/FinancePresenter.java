@@ -133,9 +133,15 @@ public class FinancePresenter implements IFinancePresenter {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void filterMonth(LocalDate current1){
-        ArrayList<Transaction> pomocne = new ArrayList<>();
+        ArrayList<Transaction> pomocne = new ArrayList<>();    //testirat
         for (Transaction t: transactions) {
-            if (t.getDate().getMonthValue() == current1.getMonthValue() ) pomocne.add(t);
+            if (t.getEndDate() != null) {
+                if (current1.getMonthValue() <= t.getDate().getMonthValue()
+                        && current1.getMonthValue() >= t.getEndDate().getMonthValue()){
+                    pomocne.add(t);
+                }
+            }
+            else if (t.getDate().getMonthValue() == current1.getMonthValue()) pomocne.add(t);
 
         }
 
