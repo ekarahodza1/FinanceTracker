@@ -17,11 +17,11 @@ public class FinancePresenter implements IFinancePresenter {
     @Override
     public void sortTransactions(String criteria) {
 
-        if (criteria.matches("Not sorted")){
-            view.setTransactions(new ArrayList<Transaction>());
-            view.setTransactions(transactions);
-            return;
-        }
+//        if (criteria.matches("Not sorted")){
+//            view.setTransactions(new ArrayList<Transaction>());
+//            view.setTransactions(transactions);
+//            return;
+//        }
 
          if (criteria.matches( "Price - Descending")) {
              Collections.sort(transactions, new Comparator<Transaction>() {
@@ -46,6 +46,7 @@ public class FinancePresenter implements IFinancePresenter {
                      return o1.getTitle().compareTo(o2.getTitle());
                  }
              });
+             Collections.reverse(transactions);
          }
          if (criteria.matches("Title - Ascending")) {
              Collections.sort(transactions, new Comparator<Transaction>() {
@@ -55,7 +56,7 @@ public class FinancePresenter implements IFinancePresenter {
                  }
 
              });
-             Collections.reverse(transactions);
+
          }
          if (criteria.matches("Date - Descending")) {
              Collections.sort(transactions, new Comparator<Transaction>() {
@@ -84,11 +85,13 @@ public class FinancePresenter implements IFinancePresenter {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void filterTransactions(String criteria){
         ArrayList<Transaction> pomocne = new ArrayList<>();
         if (criteria.matches("All")) {
-            view.setTransactions(transactions);
+            filterMonth(LocalDate.now());
+            //view.setTransactions(transactions);
             return;
         }
         for (int i = 0; i < transactions.size(); i++){
@@ -130,17 +133,15 @@ public class FinancePresenter implements IFinancePresenter {
         view.notifyTransactionsListDataSetChanged();
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void filterMonth(LocalDate current1){
         ArrayList<Transaction> pomocne = new ArrayList<>();    //testirat
         for (Transaction t: transactions) {
             if (t.getEndDate() != null) {
-                int a = current1.getMonthValue();
-                int b = t.getDate().getMonthValue();
-                int c = t.getEndDate().getMonthValue();
-                if (current1.getMonthValue() >= t.getDate().getMonthValue()
-                        && current1.getMonthValue() <= t.getEndDate().getMonthValue()){
+                if (current1.getMonthValue() >= t.getDate().getMonthValue() && current1.getMonthValue() <= t.getEndDate().getMonthValue()){
                     pomocne.add(t);
                 }
             }

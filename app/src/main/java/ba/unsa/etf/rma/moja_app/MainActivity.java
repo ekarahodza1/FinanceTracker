@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         listAdapter = new ListAdapter(getApplicationContext(), R.layout.list_view1, new ArrayList<Transaction>());
         transactionList = (ListView) findViewById(R.id.transactionList);
         transactionList.setAdapter(listAdapter);
+
         getPresenter().refreshTransactions();
 
 
@@ -92,13 +93,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             month_value = current.getMonth().getValue();
             year = current.getYear();
         }
+        spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Transaction clicked = (Transaction) parent.getItemAtPosition(position);
+                String clickedName = clicked.getTypeString();
+                financePresenter.filterTransactions(clickedName);
+                notifyTransactionsListDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        });
+
 
 
         monthView = (TextView) findViewById(R.id.monthView);
         monthView.setText(month + " ," + year);
 
         financePresenter.filterMonth(current);
-        getPresenter().refreshTransactions();
+        notifyTransactionsListDataSetChanged();
+
+
 
         leftButton = (Button)findViewById(R.id.leftButton);
         rightButton = (Button)findViewById(R.id.rightButton);
@@ -133,22 +152,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-        spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Transaction clicked = (Transaction) parent.getItemAtPosition(position);
-                String clickedName = clicked.getTypeString();
-                financePresenter.filterTransactions(clickedName);
-                notifyTransactionsListDataSetChanged();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
         limitView = findViewById(R.id.limitView);
         globalAmountView = findViewById(R.id.globalAmountView);
 
@@ -181,8 +184,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
 
         });
-
-
 
 
         add = (Button)findViewById(R.id.buttonAdd);

@@ -177,7 +177,10 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
-                date.setBackgroundColor(Color.GREEN);
+
+                    date.setBackgroundColor(Color.GREEN);
+
+
             }
         });
 
@@ -188,7 +191,9 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
-                endDate.setBackgroundColor(Color.GREEN);
+
+                    endDate.setBackgroundColor(Color.GREEN);
+
             }
         });
 
@@ -213,7 +218,7 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
                 mTitle = title.getText().toString();
                 mDescription = description.getText().toString();
                 date1 = LocalDate.parse(date.getText().toString());
-               // date2 = LocalDate.parse(endDate.getText().toString());
+                if (!endDate.getText().toString().matches(""))  date2 = LocalDate.parse(endDate.getText().toString());
                 mAmount = Double.parseDouble(amount.getText().toString());
                 mInterval = Integer.parseInt(interval.getText().toString());
                 imageType = type.getText().toString();
@@ -228,6 +233,8 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
                 b.putInt("interval", mInterval);
                 result.putExtra("type", imageType);
                 result.putExtra("description", mDescription);
+
+
 
                 if (budget + mAmount < -1000) {
                     AlertDialog alertDialog = new AlertDialog.Builder(ListItemActivity.this)
