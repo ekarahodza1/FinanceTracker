@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Button leftButton;
     private Button rightButton;
     private LocalDate current = null;
-    private LocalDate current1 = null;
     private Button add;
     private String month = null;
     private int year = 0;
@@ -93,10 +92,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             month_value = current.getMonth().getValue();
             year = current.getYear();
         }
-        current1 = current;
+
 
         monthView = (TextView) findViewById(R.id.monthView);
         monthView.setText(month + " ," + year);
+
+        financePresenter.filterMonth(current);
+        getPresenter().refreshTransactions();
 
         leftButton = (Button)findViewById(R.id.leftButton);
         rightButton = (Button)findViewById(R.id.rightButton);
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 b.putInt("interval", t.getTransactionInterval());
                 intent.putExtra("type", t.getType().toString());
                 intent.putExtra("description", t.getItemDescription());
-                b.putDouble("budget", account.getBudget());
+                intent.putExtra("budget", account.getBudget());
                 startActivityForResult(intent, 1);
 
             }
@@ -197,7 +199,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 b.putInt("interval", 0);
                 intent.putExtra("type", "");
                 intent.putExtra("description", "");
-                b.putDouble("budget", account.getBudget());
+                double d = account.getBudget();
+                Bundle b1 = new Bundle();
+                intent.putExtra("budget", d);
                 startActivityForResult(intent, 1);
             }
         });

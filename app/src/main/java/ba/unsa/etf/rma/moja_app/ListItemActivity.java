@@ -96,7 +96,7 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
         if (mTitle.matches("")) dodavanje = true;
         Bundle b = getIntent().getExtras();
         mAmount = b.getDouble("amount");
-        budget = b.getDouble("budget");
+        budget = getIntent().getDoubleExtra("budget", 0);
         mDescription = getIntent().getStringExtra("description");
         if (!getIntent().getStringExtra("date").matches("")) date1 = LocalDate.parse(getIntent().getStringExtra("date"));
         if (!getIntent().getStringExtra("eDate").matches("")) date2 = LocalDate.parse(getIntent().getStringExtra("eDate"));
@@ -218,21 +218,7 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
                 mInterval = Integer.parseInt(interval.getText().toString());
                 imageType = type.getText().toString();
 
-                if (budget - mAmount < -1000) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(ListItemActivity.this).create();
-                    alertDialog.setTitle("Alert");
-                    alertDialog.setMessage("You are going over your set limit!");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
-                }
-
                 Intent result = new Intent();
-
                 result.putExtra("title", mTitle);
                 Bundle b = new Bundle();
                 b.putDouble("amount", mAmount);
@@ -243,9 +229,31 @@ public class ListItemActivity extends AppCompatActivity implements IListItemView
                 result.putExtra("type", imageType);
                 result.putExtra("description", mDescription);
 
-                if (dodavanje) setResult(3, result);
-                else setResult(4, result);
-                finish();
+                if (budget + mAmount < -1000) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(ListItemActivity.this)
+                            .setTitle("Alert!")
+                            .setMessage("Are you sure you want to go over the limit?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (dodavanje) setResult(3, result);
+                                    else setResult(4, result);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    amount.setText("0.0");
+                                }
+                            }).show();
+                }
+                else {
+
+                    if (dodavanje) setResult(3, result);
+                    else setResult(4, result);
+                    finish();
+                }
 
 
                // Transaction t = new Transaction()

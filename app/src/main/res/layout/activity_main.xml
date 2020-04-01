@@ -155,7 +155,6 @@
         android:id="@+id/limitView"
         android:layout_width="110dp"
         android:layout_height="35dp"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.076"

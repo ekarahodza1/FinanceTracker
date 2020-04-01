@@ -79,7 +79,7 @@ public class TransactionsModel {
                         "pants", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2020, 3, 13), "Utilities", -15, Type.REGULARPAYMENT,
+                add(new Transaction(LocalDate.of(2020, 4, 13), "Utilities", -15, Type.REGULARPAYMENT,
                         "water bill", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
