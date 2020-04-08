@@ -226,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
 //        });
 
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClicked(Transaction transaction) {
 

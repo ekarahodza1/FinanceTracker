@@ -2,6 +2,7 @@ package ba.unsa.etf.rma.moja_app;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Parcelable;
 
 import androidx.annotation.RequiresApi;
 
@@ -10,10 +11,20 @@ import java.time.LocalDate;
 public class ListItemPresenter implements IListItemPresenter {
 
     private Context context;
+    private Transaction transaction;
 
     public ListItemPresenter(Context context) {
-
         this.context = context;
+    }
+
+    @Override
+    public void setTransaction(Parcelable transaction) {
+        this.transaction = (Transaction) transaction;
+    }
+
+    @Override
+    public Transaction getTransaction() {
+        return transaction;
     }
 
     @Override

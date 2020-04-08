@@ -65,6 +65,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         View fragmentView = inflater.inflate(R.layout.fragment_list, container, false);
 
 
+
         sortSpinner = fragmentView.findViewById(R.id.sortSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sorting, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -152,29 +153,35 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         s = "";  s += account.getBudget();
         globalAmountView.setText(s);
 
+
+        onItemClick = (OnItemClick) getActivity();
         transactionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), ListItemActivity.class);   //myb je trebalo kao prvi parametar getContext
-                Transaction t = listAdapter.getItem(position);
-                transaction = t;
-                intent.putExtra("title", t.getTitle());
-                Bundle b = new Bundle();
-                b.putDouble("amount", t.getAmount());
-                intent.putExtras(b);
-                intent.putExtra("date", t.getDate().toString());
-                if (t.getEndDate() == null) intent.putExtra("eDate", "");
-                else intent.putExtra("eDate", t.getEndDate().toString());
-                b.putInt("interval", t.getTransactionInterval());
-                intent.putExtra("type", t.getType().toString());
-                intent.putExtra("description", t.getItemDescription());
-                intent.putExtra("budget", account.getBudget());
-                startActivityForResult(intent, 1);
+//                Intent intent = new Intent(getActivity(), ListItemActivity.class);   //myb je trebalo kao prvi parametar getContext
+//                Transaction t = listAdapter.getItem(position);
+//                transaction = t;
+//                intent.putExtra("title", t.getTitle());
+//                Bundle b = new Bundle();
+//                b.putDouble("amount", t.getAmount());
+//                intent.putExtras(b);
+//                intent.putExtra("date", t.getDate().toString());
+//                if (t.getEndDate() == null) intent.putExtra("eDate", "");
+//                else intent.putExtra("eDate", t.getEndDate().toString());
+//                b.putInt("interval", t.getTransactionInterval());
+//                intent.putExtra("type", t.getType().toString());
+//                intent.putExtra("description", t.getItemDescription());
+//                intent.putExtra("budget", account.getBudget());
+//                startActivityForResult(intent, 1);
+                Transaction transaction = listAdapter.getItem(position);
+                onItemClick.onItemClicked(transaction);
+
 
             }
 
         });
+
+
 
 
         add = (Button)fragmentView.findViewById(R.id.buttonAdd);
@@ -201,6 +208,14 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
 
         return fragmentView;
         }
+
+//    private AdapterView.OnItemClickListener listItemClickListener = new AdapterView.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            Transaction transaction = listAdapter.getItem(position);
+//            onItemClick.onItemClicked(transaction);
+//        }
+//    };
 
 
     @Override

@@ -34,6 +34,8 @@ public class ListAdapter extends ArrayAdapter<Transaction> {
         this.addAll(transactions);
     }
 
+    public Transaction getTransaction(int position) {return this.getItem(position);}
+
 
     @NonNull
     @Override

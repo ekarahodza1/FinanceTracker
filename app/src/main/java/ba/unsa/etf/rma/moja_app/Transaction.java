@@ -47,6 +47,7 @@ public class Transaction implements Parcelable {
         amount = in.readDouble();
         transactionInterval = in.readInt();
         typeString = in.readString();
+      //  type = in.readString();
     }
 
     public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
@@ -151,7 +152,7 @@ public class Transaction implements Parcelable {
         dest.writeString(itemDescription);
         dest.writeDouble(amount);
         dest.writeInt(transactionInterval);
-        dest.writeString(typeString);
+        dest.writeString(type.toString());
 
 
     }

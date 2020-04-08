@@ -22,6 +22,7 @@ import java.time.LocalDate;
 
 import static android.app.Activity.RESULT_CANCELED;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class TransactionDetailFragment extends Fragment {
 
     private ImageView image;
@@ -47,87 +48,87 @@ public class TransactionDetailFragment extends Fragment {
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
     private Transaction trans;
 
+
     @Override
-    public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.transaction_detail, container, false);
 
-        if (getArguments() != null && getArguments().containsKey("transaction")){
-            trans = getArguments().getParcelable("movie");
-        }
+        if (getArguments() != null && getArguments().containsKey("transaction")) {
+            trans = getArguments().getParcelable("transaction");
 
 
-        image = view.findViewById(R.id.image1);
-        title = view.findViewById(R.id.editTitle);
-        amount = view.findViewById(R.id.editAmount);
-        date = view.findViewById(R.id.editDate);
-        endDate = view.findViewById(R.id.editEndDate);
-        description = view.findViewById(R.id.editDescription);
-        interval = view.findViewById(R.id.editInterval);
-        type = view.findViewById(R.id.editType);
-        delete = (Button)view.findViewById(R.id.buttonDelete);
-        OK = (Button)view.findViewById(R.id.buttonOK);
+            image = view.findViewById(R.id.image1);
+            title = view.findViewById(R.id.editTitle);
+            amount = view.findViewById(R.id.editAmount);
+            date = view.findViewById(R.id.editDate);
+            endDate = view.findViewById(R.id.editEndDate);
+            description = view.findViewById(R.id.editDescription);
+            interval = view.findViewById(R.id.editInterval);
+            type = view.findViewById(R.id.editType);
+            delete = (Button) view.findViewById(R.id.buttonDelete);
+            OK = (Button) view.findViewById(R.id.buttonOK);
 
 
-        imageType = trans.getTypeString();
+//        imageType = trans.getType().toString();
+//
+//        if (imageType.matches("INDIVIDUALPAYMENT")) {
+//            image.setImageResource(R.drawable.individual_payment);
+//            type.setText("INDIVIDUAL PAYMENT");
+//            type_ = Type.INDIVIDUALPAYMENT;
+//        }
+//        if (imageType.matches("REGULARPAYMENT")) {
+//            image.setImageResource(R.drawable.regular_payment);
+//            type.setText("REGULAR PAYMENT");
+//            type_ = Type.REGULARPAYMENT;
+//
+//        }
+//        if (imageType.matches("PURCHASE")) {
+//            image.setImageResource(R.drawable.purchase);
+//            type.setText("PURCHASE");
+//            type_ = Type.PURCHASE;
+//        }
+//        if (imageType.matches("INDIVIDUALINCOME")) {
+//            image.setImageResource(R.drawable.individual_income);
+//            type.setText("INDIVIDUAL INCOME");
+//            type_ = Type.INDIVIDUALINCOME;
+//        }
+//        if (imageType.matches("REGULARINCOME")) {
+//            image.setImageResource(R.drawable.regular_income);
+//            type.setText("REGULAR INCOME");
+//            type_ = Type.REGULARINCOME;
+//        }
 
-        if (imageType.matches("INDIVIDUALPAYMENT")) {
-            image.setImageResource(R.drawable.individual_payment);
-            type.setText("INDIVIDUAL PAYMENT");
-            type_ = Type.INDIVIDUALPAYMENT;
-        }
-        if (imageType.matches("REGULARPAYMENT")) {
-            image.setImageResource(R.drawable.regular_payment);
-            type.setText("REGULAR PAYMENT");
-            type_ = Type.REGULARPAYMENT;
+            mTitle = trans.getTitle();
+            if (mTitle.matches("")) dodavanje = true;
 
-        }
-        if (imageType.matches("PURCHASE")) {
-            image.setImageResource(R.drawable.purchase);
-            type.setText("PURCHASE");
-            type_ = Type.PURCHASE;
-        }
-        if (imageType.matches("INDIVIDUALINCOME")) {
-            image.setImageResource(R.drawable.individual_income);
-            type.setText("INDIVIDUAL INCOME");
-            type_ = Type.INDIVIDUALINCOME;
-        }
-        if (imageType.matches("REGULARINCOME")) {
-            image.setImageResource(R.drawable.regular_income);
+            mAmount = trans.getAmount();
+            budget = 600;                    //skontat kako slat budzet
+            mDescription = trans.getItemDescription();
+            if (!trans.getDate().toString().matches("")) date1 = trans.getDate();
+            if (!trans.getEndDate().toString().matches("")) date2 = trans.getEndDate();
+
+
             type.setText("REGULAR INCOME");
-            type_ = Type.REGULARINCOME;
-        }
 
-        mTitle = trans.getTitle();
-        if (mTitle.matches("")) dodavanje = true;
+            title.setText(mTitle);
+            String s = "";
+            s += mAmount;
+            amount.setText(s);
+            s = "";
+            s += trans.getTransactionInterval();
+            interval.setText(s);
+            description.setText(mDescription);
+            date.setText(date1.toString());
+            endDate.setText(date2.toString());
 
-        mAmount = trans.getAmount();
-        budget = 600;                    //skontat kako slat budzet
-        mDescription = trans.getItemDescription();
-        if (!trans.getDate().toString().matches("")) date1 = trans.getDate();
-        if (!trans.getEndDate().toString().matches("")) date2 = trans.getEndDate();
-
-
-        title.setText(mTitle);
-        String s = ""; s += mAmount;
-        amount.setText(s);
-        s = ""; s += trans.getTransactionInterval();
-        interval.setText(s);
-        description.setText(mDescription);
-        date.setText(date1.toString());
-        endDate.setText(date2.toString());
-
-        if (mTitle.matches("")){
-            delete.setEnabled(false);
-        }
+            if (mTitle.matches("")) {
+                delete.setEnabled(false);
+            }
 
 
-
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 //                AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
 //                        .setTitle("Delete")
 //                        .setMessage("Are you sure you want to delete transaction?")
@@ -147,99 +148,127 @@ public class TransactionDetailFragment extends Fragment {
 //                        })
 //                        .show();
 
-            }
+                }
 
-        });
+            });
 
-        title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                title.setBackgroundColor(Color.GREEN);
-            }
-        });
+            title.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-        description.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                description.setBackgroundColor(Color.GREEN);
-            }
-        });
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
-        amount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                amount.setBackgroundColor(Color.GREEN);
-            }
-        });
+                @Override
+                public void afterTextChanged(Editable s) {
+                    title.setBackgroundColor(Color.GREEN);
+                }
+            });
 
-        interval.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                interval.setBackgroundColor(Color.GREEN);
-            }
-        });
+            description.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-        date.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    description.setBackgroundColor(Color.GREEN);
+                }
+            });
+
+            amount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    amount.setBackgroundColor(Color.GREEN);
+                }
+            });
+
+            interval.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    interval.setBackgroundColor(Color.GREEN);
+                }
+            });
+
+            date.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
 
                     date.setBackgroundColor(Color.GREEN);
 
 
-            }
-        });
+                }
+            });
 
-        endDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
+            endDate.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
 
                     endDate.setBackgroundColor(Color.GREEN);
 
-            }
-        });
+                }
+            });
 
-        type.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                type.setBackgroundColor(Color.GREEN);
-            }
-        });
+            type.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    type.setBackgroundColor(Color.GREEN);
+                }
+            });
 
 
-       // if (!mTitle.matches(title.getText().toString())) title.setBackgroundColor(Color.GREEN);
+            // if (!mTitle.matches(title.getText().toString())) title.setBackgroundColor(Color.GREEN);
 
-        OK.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
+            OK.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onClick(View v) {
 
 //                mTitle = title.getText().toString();
 //                mDescription = description.getText().toString();
@@ -309,11 +338,11 @@ public class TransactionDetailFragment extends Fragment {
 //                }
 
 
-            }
-        });
+                }
+            });
 
 
-
+        }
 
             return view;
 
