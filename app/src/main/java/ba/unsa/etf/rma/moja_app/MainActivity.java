@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,33 +27,34 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, IFinanceView {
-    private TextView limitView;
-    private TextView globalAmountView;
-    private Spinner sortSpinner;
-    private ListView transactionList;
-    private ArrayList<Transaction> mTransactionList;
-    private SpinnerAdapter mAdapter;
-    private TextView monthView;
-    private Button leftButton;
-    private Button rightButton;
-    private LocalDate current = null;
-    private Button add;
-    private String month = null;
-    private int year = 0;
-    private int month_value = 0;
-    private Transaction transaction;
-    private Account account = new Account(658,-1000,100);
-    private ListAdapter listAdapter;
-    private boolean twoPaneMode = false;
+public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick {//AdapterView.OnItemSelectedListener,
+//    private TextView limitView;
+//    private TextView globalAmountView;
+//    private Spinner sortSpinner;
+//    private ListView transactionList;
+//    private ArrayList<Transaction> mTransactionList;
+//    private SpinnerAdapter mAdapter;
+//    private TextView monthView;
+//    private Button leftButton;
+//    private Button rightButton;
+//    private LocalDate current = null;
+//    private Button add;
+//    private String month = null;
+//    private int year = 0;
+//    private int month_value = 0;
+//    private Transaction transaction;
+//    private Account account = new Account(658,-1000,100);
+//    private ListAdapter listAdapter;
+    private boolean twoPaneMode;
 
-    private IFinancePresenter financePresenter;
-    public IFinancePresenter getPresenter() {
-        if (financePresenter == null) {
-            financePresenter = new FinancePresenter(this, this);
-        }
-        return financePresenter;
-    }
+
+//    private IFinancePresenter financePresenter;
+//    public IFinancePresenter getPresenter() {
+//        if (financePresenter == null) {
+//            financePresenter = new FinancePresenter(this, this);
+//        }
+//        return financePresenter;
+//    }
 
 
 
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             twoPaneMode = true;
             TransactionDetailFragment detailFragment = (TransactionDetailFragment) fragmentManager.findFragmentById(R.id.transaction_detail);
 
-            if (detailFragment==null) {
+            if (detailFragment == null) {
                 detailFragment = new TransactionDetailFragment();
                 fragmentManager.beginTransaction().
                         replace(R.id.transaction_detail, detailFragment)
@@ -81,16 +83,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Fragment listFragment = fragmentManager.findFragmentByTag("list");
 
-        if (listFragment==null){
+        if (listFragment == null) {
             listFragment = new TransactionListFragment();
-            fragmentManager.beginTransaction().replace(R.id.transaction_list, listFragment,"list").commit();
+            fragmentManager.beginTransaction().replace(R.id.transaction_list, listFragment, "list").commit();
         } else {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
-
-
-
-
+    }
 
 
 //        sortSpinner = findViewById(R.id.sortSpinner);
@@ -227,87 +226,105 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        });
 
 
+            @Override
+            public void onItemClicked(Transaction transaction) {
 
+                Bundle arguments = new Bundle();
+                arguments.putParcelable("transaction", transaction);
+                TransactionDetailFragment detailFragment = new TransactionDetailFragment();
+                detailFragment.setArguments(arguments);
+                if (twoPaneMode){
 
-    }
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.transaction_detail, detailFragment)
+                            .commit();
+                }
+                else{
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_CANCELED) { }
-        else if (requestCode == 1) {
-            Transaction t = null;
-            LocalDate date1 = null;
-            LocalDate date2 = null;
-            String s = data.getStringExtra("type");
-            Type type_ = null;
-            Bundle b = data.getExtras();
-            if (s.matches("INDIVIDUALPAYMENT")) type_ = Type.INDIVIDUALPAYMENT;
-            if (s.matches("REGULARPAYMENT")) type_ = Type.REGULARPAYMENT;
-            if (s.matches("PURCHASE")) type_ = Type.PURCHASE;
-            if (s.matches("INDIVIDUALINCOME")) type_ = Type.INDIVIDUALINCOME;
-            if (s.matches("REGULARINCOME")) type_ = Type.REGULARINCOME;
-
-            if (!data.getStringExtra("date").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                date1 = LocalDate.parse(data.getStringExtra("date"));
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.transaction_list, detailFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
             }
-            if (!data.getStringExtra("eDate").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                date2 = LocalDate.parse(data.getStringExtra("eDate"));
-            }
-            double d = account.getBudget();
-            account.setBudget(d + b.getDouble("amount"));
-            String s1 = "" + account.getBudget();
-            globalAmountView.setText(s1);
-            t = new Transaction(date1, data.getStringExtra("title"), b.getDouble("amount"),
-                    type_, data.getStringExtra("description"), b.getInt("interval"), date2);
-            if (resultCode == RESULT_OK) { }
 
-            if (resultCode == 2){
-                financePresenter.deleteTransaction(t);
-            }
-            if (resultCode == 3){
-                financePresenter.addTransaction(t);
-            }
-            if (resultCode == 4){
-                financePresenter.deleteTransaction(transaction);
-                financePresenter.addTransaction(t);
-            }
-        }
-    }
-
-    private void initList(){
-        mTransactionList = new ArrayList<>();
-        mTransactionList.add(new Transaction("All", R.drawable.white));
-        mTransactionList.add(new Transaction("Individual Payment", R.drawable.individual_payment));
-        mTransactionList.add(new Transaction("Regular Payment", R.drawable.regular_payment));
-        mTransactionList.add(new Transaction("Purchase", R.drawable.purchase));
-        mTransactionList.add(new Transaction("Individual Income", R.drawable.individual_income));
-        mTransactionList.add(new Transaction("Regular Income", R.drawable.regular_income));
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text  = parent.getItemAtPosition(position).toString();
-        financePresenter.sortTransactions(text);
-        notifyTransactionsListDataSetChanged();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-
-    }
-
-    @Override
-    public void setTransactions(ArrayList<Transaction> transactions) {
-        listAdapter.setTransaction(transactions);
-    }
-
-    @Override
-    public void notifyTransactionsListDataSetChanged() {
-        listAdapter.notifyDataSetChanged();
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (resultCode == RESULT_CANCELED) { }
+//        else if (requestCode == 1) {
+//            Transaction t = null;
+//            LocalDate date1 = null;
+//            LocalDate date2 = null;
+//            String s = data.getStringExtra("type");
+//            Type type_ = null;
+//            Bundle b = data.getExtras();
+//            if (s.matches("INDIVIDUALPAYMENT")) type_ = Type.INDIVIDUALPAYMENT;
+//            if (s.matches("REGULARPAYMENT")) type_ = Type.REGULARPAYMENT;
+//            if (s.matches("PURCHASE")) type_ = Type.PURCHASE;
+//            if (s.matches("INDIVIDUALINCOME")) type_ = Type.INDIVIDUALINCOME;
+//            if (s.matches("REGULARINCOME")) type_ = Type.REGULARINCOME;
+//
+//            if (!data.getStringExtra("date").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                date1 = LocalDate.parse(data.getStringExtra("date"));
+//            }
+//            if (!data.getStringExtra("eDate").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                date2 = LocalDate.parse(data.getStringExtra("eDate"));
+//            }
+//            double d = account.getBudget();
+//            account.setBudget(d + b.getDouble("amount"));
+//            String s1 = "" + account.getBudget();
+//            globalAmountView.setText(s1);
+//            t = new Transaction(date1, data.getStringExtra("title"), b.getDouble("amount"),
+//                    type_, data.getStringExtra("description"), b.getInt("interval"), date2);
+//            if (resultCode == RESULT_OK) { }
+//
+//            if (resultCode == 2){
+//                financePresenter.deleteTransaction(t);
+//            }
+//            if (resultCode == 3){
+//                financePresenter.addTransaction(t);
+//            }
+//            if (resultCode == 4){
+//                financePresenter.deleteTransaction(transaction);
+//                financePresenter.addTransaction(t);
+//            }
+//        }
+//    }
+//
+//    private void initList(){
+//        mTransactionList = new ArrayList<>();
+//        mTransactionList.add(new Transaction("All", R.drawable.white));
+//        mTransactionList.add(new Transaction("Individual Payment", R.drawable.individual_payment));
+//        mTransactionList.add(new Transaction("Regular Payment", R.drawable.regular_payment));
+//        mTransactionList.add(new Transaction("Purchase", R.drawable.purchase));
+//        mTransactionList.add(new Transaction("Individual Income", R.drawable.individual_income));
+//        mTransactionList.add(new Transaction("Regular Income", R.drawable.regular_income));
+//    }
+//
+//
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    @Override
+//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//        String text  = parent.getItemAtPosition(position).toString();
+//        financePresenter.sortTransactions(text);
+//        notifyTransactionsListDataSetChanged();
+//    }
+//
+//    @Override
+//    public void onNothingSelected(AdapterView<?> parent) {
+//
+//
+//    }
+//
+//    @Override
+//    public void setTransactions(ArrayList<Transaction> transactions) {
+//        listAdapter.setTransaction(transactions);
+//    }
+//
+//    @Override
+//    public void notifyTransactionsListDataSetChanged() {
+//        listAdapter.notifyDataSetChanged();
+//    }
 }

@@ -8,11 +8,11 @@ import androidx.annotation.RequiresApi;
 import java.time.LocalDate;
 
 public class ListItemPresenter implements IListItemPresenter {
-    private IListItemView view;
+
     private Context context;
 
-    public ListItemPresenter(IListItemView view, Context context) {
-        this.view = view;
+    public ListItemPresenter(Context context) {
+
         this.context = context;
     }
 
