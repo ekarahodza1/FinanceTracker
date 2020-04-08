@@ -1,12 +1,17 @@
 package ba.unsa.etf.rma.moja_app;
 
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.time.LocalDate;
 import java.util.Date;
 
-public class Transaction {
+public class Transaction implements Parcelable {
 
     private LocalDate date;
     private String title;
@@ -32,6 +37,30 @@ public class Transaction {
         this.typeString = type;
         this.image = image;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    protected Transaction(Parcel in) {
+        title = in.readString();
+        date = LocalDate.parse(in.readString());
+        endDate = LocalDate.parse(in.readString());
+        itemDescription = in.readString();
+        amount = in.readDouble();
+        transactionInterval = in.readInt();
+        typeString = in.readString();
+    }
+
+    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        public Transaction createFromParcel(Parcel in) {
+            return new Transaction(in);
+        }
+
+        @Override
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
+        }
+    };
 
     public String getTypeString() {
         return typeString;
@@ -108,5 +137,22 @@ public class Transaction {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(date.toString());
+        dest.writeString(endDate.toString());
+        dest.writeString(title);
+        dest.writeString(itemDescription);
+        dest.writeDouble(amount);
+        dest.writeInt(transactionInterval);
+        dest.writeString(typeString);
+
+
+    }
 }
