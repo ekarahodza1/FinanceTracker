@@ -82,6 +82,7 @@
         android:id="@+id/transactionList"
         android:layout_width="271dp"
         android:layout_height="201dp"
+        android:listSelector="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"

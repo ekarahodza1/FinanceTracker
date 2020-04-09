@@ -10,11 +10,14 @@
         android:id="@+id/transaction_list"
         android:layout_width="189dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"></FrameLayout>
-    <FrameLayout
+        android:layout_weight="2">
+
+    </FrameLayout>
+
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_weight="2"
         android:layout_height="match_parent"
         android:id="@+id/transaction_detail">
-    </FrameLayout>
+    </ScrollView>
 </LinearLayout>
