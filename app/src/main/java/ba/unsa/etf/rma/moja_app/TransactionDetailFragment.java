@@ -46,7 +46,15 @@ public class TransactionDetailFragment extends Fragment {
     private String imageType;
     private double budget;
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
-    private Transaction trans;
+    private Transaction trans, original;
+
+
+    private OnItemChange onItemChange;
+    public interface OnItemChange {
+        public void onDeleteClicked(Transaction t);
+        public void onAddClicked(Transaction transaction);
+        public void onChangeClicked(Transaction t1, Transaction t2);
+    }
 
 
     @Override
@@ -55,6 +63,7 @@ public class TransactionDetailFragment extends Fragment {
 
         if (getArguments() != null && getArguments().containsKey("transaction")) {
             trans = getArguments().getParcelable("transaction");
+            original = trans;
 
 
             image = view.findViewById(R.id.image1);
@@ -69,34 +78,9 @@ public class TransactionDetailFragment extends Fragment {
             OK = (Button) view.findViewById(R.id.buttonOK);
 
 
-//        imageType = trans.getType().toString();
-//
-//        if (imageType.matches("INDIVIDUALPAYMENT")) {
-//            image.setImageResource(R.drawable.individual_payment);
-//            type.setText("INDIVIDUAL PAYMENT");
-//            type_ = Type.INDIVIDUALPAYMENT;
-//        }
-//        if (imageType.matches("REGULARPAYMENT")) {
-//            image.setImageResource(R.drawable.regular_payment);
-//            type.setText("REGULAR PAYMENT");
-//            type_ = Type.REGULARPAYMENT;
-//
-//        }
-//        if (imageType.matches("PURCHASE")) {
-//            image.setImageResource(R.drawable.purchase);
-//            type.setText("PURCHASE");
-//            type_ = Type.PURCHASE;
-//        }
-//        if (imageType.matches("INDIVIDUALINCOME")) {
-//            image.setImageResource(R.drawable.individual_income);
-//            type.setText("INDIVIDUAL INCOME");
-//            type_ = Type.INDIVIDUALINCOME;
-//        }
-//        if (imageType.matches("REGULARINCOME")) {
-//            image.setImageResource(R.drawable.regular_income);
-//            type.setText("REGULAR INCOME");
-//            type_ = Type.REGULARINCOME;
-//        }
+        imageType = trans.getType().toString();
+
+        type.setText(imageType);
 
             mTitle = trans.getTitle();
             if (mTitle.matches("")) dodavanje = true;
@@ -104,11 +88,9 @@ public class TransactionDetailFragment extends Fragment {
             mAmount = trans.getAmount();
             budget = 600;                    //skontat kako slat budzet
             mDescription = trans.getItemDescription();
-            if (!trans.getDate().toString().matches("")) date1 = trans.getDate();
-            if (!trans.getEndDate().toString().matches("")) date2 = trans.getEndDate();
+            if (trans.getDate() != null) date1 = trans.getDate();
+            if (trans.getEndDate() != null) date2 = trans.getEndDate();
 
-
-            type.setText("REGULAR INCOME");
 
             title.setText(mTitle);
             String s = "";
@@ -119,34 +101,39 @@ public class TransactionDetailFragment extends Fragment {
             interval.setText(s);
             description.setText(mDescription);
             date.setText(date1.toString());
-            endDate.setText(date2.toString());
+            if (date2 != null) endDate.setText(date2.toString());
+            else endDate.setText("");
+
 
             if (mTitle.matches("")) {
                 delete.setEnabled(false);
             }
 
 
+            onItemChange = (OnItemChange) getActivity();
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-//                AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
-//                        .setTitle("Delete")
-//                        .setMessage("Are you sure you want to delete transaction?")
-//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                setResult(2, getIntent());
-//                                finish();
-//                            }
-//                        })
-//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                              //  alertDialog2.cancel();
-//
-//                            }
-//                        })
-//                        .show();
+               public void onClick(View v) {
+                AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
+                        .setTitle("Delete")
+                        .setMessage("Are you sure you want to delete transaction?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                onItemChange.onDeleteClicked(trans);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                              //  alertDialog2.cancel();
+
+                            }
+                        })
+                        .show();
+
+
+
 
                 }
 
@@ -263,80 +250,62 @@ public class TransactionDetailFragment extends Fragment {
             });
 
 
-            // if (!mTitle.matches(title.getText().toString())) title.setBackgroundColor(Color.GREEN);
 
             OK.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(View v) {
 
-//                mTitle = title.getText().toString();
-//                mDescription = description.getText().toString();
-//                if (presenter.validateDate(date.getText().toString())) date1 = LocalDate.parse(date.getText().toString());
-//                if (presenter.validateDate(endDate.getText().toString()))  date2 = LocalDate.parse(endDate.getText().toString());
-//                mAmount = Double.parseDouble(amount.getText().toString());
-//                mInterval = Integer.parseInt(interval.getText().toString());
-//                imageType = type.getText().toString();
-//                Intent result = new Intent();
-//
-//                if (presenter.validateDescription(mDescription, imageType) == false || presenter.validateTitle(mTitle) == false
-//                || presenter.validateInterval(mInterval, imageType) == false || presenter.validateType(imageType) == false || date1 == null) {
-//                    AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
-//                            .setTitle("Incorrect data")
-//                            .setMessage("Some fields have incorrect inputs")
-//                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    setResult(RESULT_CANCELED, result);
-//                                    finish();
-//                                }
-//                            })
-//                          .show();
-//
-//                    setResult(RESULT_CANCELED, result);
-//                    finish();
-//                }
-//
-//
-//
-//                result.putExtra("title", mTitle);
-//                Bundle b = new Bundle();
-//                b.putDouble("amount", mAmount);
-//                result.putExtras(b);
-//                result.putExtra("date", date.getText().toString());
-//                result.putExtra("eDate", endDate.getText().toString());
-//                b.putInt("interval", mInterval);
-//                result.putExtra("type", imageType);
-//                result.putExtra("description", mDescription);
-//
-//
-//
-//                if (budget + mAmount < -1000) {
-//                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-//                            .setTitle("Alert!")
-//                            .setMessage("Are you sure you want to go over the limit?")
-//                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    if (dodavanje) setResult(3, result);
-//                                    else setResult(4, result);
-//                                    finish();
-//                                }
-//                            })
-//                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    amount.setText("0.0");
-//                                }
-//                            }).show();
-//                }
-//                else {
-//
-//                    if (dodavanje) setResult(3, result);
-//                    else setResult(4, result);
-//                    finish();
-//                }
+                mTitle = title.getText().toString();
+                mDescription = description.getText().toString();
+                if (presenter.validateDate(date.getText().toString())) date1 = LocalDate.parse(date.getText().toString());
+                if (presenter.validateDate(endDate.getText().toString()))  date2 = LocalDate.parse(endDate.getText().toString());
+                mAmount = Double.parseDouble(amount.getText().toString());
+                mInterval = Integer.parseInt(interval.getText().toString());
+                imageType = type.getText().toString();
+                type_ = Type.valueOf(imageType);
 
+
+                if (presenter.validateDescription(mDescription, imageType) == false || presenter.validateTitle(mTitle) == false
+                || presenter.validateInterval(mInterval, imageType) == false || presenter.validateType(imageType) == false || date1 == null) {
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
+                            .setTitle("Incorrect data")
+                            .setMessage("Some fields have incorrect inputs")
+                            .setPositiveButton("Change", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                          .show();
+
+                }
+                Transaction t = new Transaction(date1, mTitle, mAmount, type_, mDescription, mInterval, date2);
+
+                if (budget + mAmount < -1000) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                            .setTitle("Alert!")
+                            .setMessage("Are you sure you want to go over the limit?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (dodavanje) onItemChange.onAddClicked(t);
+                                    else onItemChange.onChangeClicked(original, t);
+
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    amount.setText("0.0");
+                                }
+                            }).show();
+                }
+                else {
+
+                    if (dodavanje) onItemChange.onAddClicked(t);
+                    else onItemChange.onChangeClicked(original, t);
+                }
 
                 }
             });

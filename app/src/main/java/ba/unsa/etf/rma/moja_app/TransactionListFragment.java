@@ -35,7 +35,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     private String month = null;
     private int year = 0;
     private int month_value = 0;
-    private Transaction transaction;
+    private Transaction trans;
     private Account account = new Account(658,-1000,100);
     private ListAdapter listAdapter;
     private IFinancePresenter financePresenter;
@@ -58,13 +58,10 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View fragmentView = inflater.inflate(R.layout.fragment_list, container, false);
-
-
 
         sortSpinner = fragmentView.findViewById(R.id.sortSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sorting, android.R.layout.simple_spinner_item);
@@ -81,8 +78,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         transactionList = (ListView) fragmentView.findViewById(R.id.transactionList);
         transactionList.setAdapter(listAdapter);
         getPresenter().refreshTransactions();
-
-
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -158,21 +153,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         transactionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(getActivity(), ListItemActivity.class);   //myb je trebalo kao prvi parametar getContext
-//                Transaction t = listAdapter.getItem(position);
-//                transaction = t;
-//                intent.putExtra("title", t.getTitle());
-//                Bundle b = new Bundle();
-//                b.putDouble("amount", t.getAmount());
-//                intent.putExtras(b);
-//                intent.putExtra("date", t.getDate().toString());
-//                if (t.getEndDate() == null) intent.putExtra("eDate", "");
-//                else intent.putExtra("eDate", t.getEndDate().toString());
-//                b.putInt("interval", t.getTransactionInterval());
-//                intent.putExtra("type", t.getType().toString());
-//                intent.putExtra("description", t.getItemDescription());
-//                intent.putExtra("budget", account.getBudget());
-//                startActivityForResult(intent, 1);
                 Transaction transaction = listAdapter.getItem(position);
                 onItemClick.onItemClicked(transaction);
 
@@ -205,63 +185,71 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
             }
         });
 
+        if (getArguments() != null && getArguments().containsKey("delete")) {
+            trans = getArguments().getParcelable("delete");
+            financePresenter.deleteTransaction(trans);
+        }
+
+        if (getArguments() != null && getArguments().containsKey("change1") && getArguments().containsKey("change2")) {
+            trans = getArguments().getParcelable("change1");
+            financePresenter.deleteTransaction(trans);
+            trans = getArguments().getParcelable("change2");
+            financePresenter.addTransaction(trans);
+        }
+
+
+
 
         return fragmentView;
         }
 
-//    private AdapterView.OnItemClickListener listItemClickListener = new AdapterView.OnItemClickListener() {
-//        @Override
-//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            Transaction transaction = listAdapter.getItem(position);
-//            onItemClick.onItemClicked(transaction);
+
+
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (resultCode == 0) { }  //result canceled
+//        else if (requestCode == 1) {
+//            Transaction t = null;
+//            LocalDate date1 = null;
+//            LocalDate date2 = null;
+//            String s = data.getStringExtra("type");
+//            Type type_ = null;
+//            Bundle b = data.getExtras();
+//            if (s.matches("INDIVIDUALPAYMENT")) type_ = Type.INDIVIDUALPAYMENT;
+//            if (s.matches("REGULARPAYMENT")) type_ = Type.REGULARPAYMENT;
+//            if (s.matches("PURCHASE")) type_ = Type.PURCHASE;
+//            if (s.matches("INDIVIDUALINCOME")) type_ = Type.INDIVIDUALINCOME;
+//            if (s.matches("REGULARINCOME")) type_ = Type.REGULARINCOME;
+//
+//            if (!data.getStringExtra("date").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                date1 = LocalDate.parse(data.getStringExtra("date"));
+//            }
+//            if (!data.getStringExtra("eDate").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                date2 = LocalDate.parse(data.getStringExtra("eDate"));
+//            }
+//            double d = account.getBudget();
+//            account.setBudget(d + b.getDouble("amount"));
+//            String s1 = "" + account.getBudget();
+//            globalAmountView.setText(s1);
+//            t = new Transaction(date1, data.getStringExtra("title"), b.getDouble("amount"),
+//                    type_, data.getStringExtra("description"), b.getInt("interval"), date2);
+//            if (resultCode == -1) { }  // result ok
+//
+//            if (resultCode == 2){
+//                financePresenter.deleteTransaction(t);
+//            }
+//            if (resultCode == 3){
+//                financePresenter.addTransaction(t);
+//            }
+//            if (resultCode == 4){
+//                financePresenter.deleteTransaction(transaction);
+//                financePresenter.addTransaction(t);
+//            }
 //        }
-//    };
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == 0) { }  //result canceled
-        else if (requestCode == 1) {
-            Transaction t = null;
-            LocalDate date1 = null;
-            LocalDate date2 = null;
-            String s = data.getStringExtra("type");
-            Type type_ = null;
-            Bundle b = data.getExtras();
-            if (s.matches("INDIVIDUALPAYMENT")) type_ = Type.INDIVIDUALPAYMENT;
-            if (s.matches("REGULARPAYMENT")) type_ = Type.REGULARPAYMENT;
-            if (s.matches("PURCHASE")) type_ = Type.PURCHASE;
-            if (s.matches("INDIVIDUALINCOME")) type_ = Type.INDIVIDUALINCOME;
-            if (s.matches("REGULARINCOME")) type_ = Type.REGULARINCOME;
-
-            if (!data.getStringExtra("date").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                date1 = LocalDate.parse(data.getStringExtra("date"));
-            }
-            if (!data.getStringExtra("eDate").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                date2 = LocalDate.parse(data.getStringExtra("eDate"));
-            }
-            double d = account.getBudget();
-            account.setBudget(d + b.getDouble("amount"));
-            String s1 = "" + account.getBudget();
-            globalAmountView.setText(s1);
-            t = new Transaction(date1, data.getStringExtra("title"), b.getDouble("amount"),
-                    type_, data.getStringExtra("description"), b.getInt("interval"), date2);
-            if (resultCode == -1) { }  // result ok
-
-            if (resultCode == 2){
-                financePresenter.deleteTransaction(t);
-            }
-            if (resultCode == 3){
-                financePresenter.addTransaction(t);
-            }
-            if (resultCode == 4){
-                financePresenter.deleteTransaction(transaction);
-                financePresenter.addTransaction(t);
-            }
-        }
-    }
+//    }
 
     private void initList(){
         mTransactionList = new ArrayList<>();
