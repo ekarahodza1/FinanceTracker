@@ -50,6 +50,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     private OnItemClick onItemClick;
     public interface OnItemClick {
         public void onItemClicked(Transaction t);
+        public void onNewClicked(Transaction t);
     }
 
     @Override
@@ -168,20 +169,8 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ListItemActivity.class);  //sejm
-                intent.putExtra("title", "");
-                Bundle b = new Bundle();
-                b.putDouble("amount", 0);
-                intent.putExtras(b);
-                intent.putExtra("date", "");
-                intent.putExtra("eDate", "");
-                b.putInt("interval", 0);
-                intent.putExtra("type", "");
-                intent.putExtra("description", "");
-                double d = account.getBudget();
-                Bundle b1 = new Bundle();
-                intent.putExtra("budget", d);
-                startActivityForResult(intent, 1);
+                Transaction t = new Transaction(null, null, 0, null, null, 0, null);
+                onItemClick.onNewClicked(t);
             }
         });
 
@@ -194,6 +183,11 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
             trans = getArguments().getParcelable("change1");
             financePresenter.deleteTransaction(trans);
             trans = getArguments().getParcelable("change2");
+            financePresenter.addTransaction(trans);
+        }
+
+        if (getArguments() != null && getArguments().containsKey("add")) {
+            trans = getArguments().getParcelable("add");
             financePresenter.addTransaction(trans);
         }
 

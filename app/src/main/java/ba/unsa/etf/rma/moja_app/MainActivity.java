@@ -130,6 +130,19 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
                 .commit();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void onNewClicked(Transaction transaction) {
+
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("new", transaction);
+        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
+        detailFragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, detailFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
 
 
 }

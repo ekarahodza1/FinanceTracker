@@ -35,15 +35,15 @@ public class TransactionDetailFragment extends Fragment {
     private EditText type;
     private Button delete;
     private Button OK;
-    private String mTitle;
+    private String mTitle = "";
     private double mAmount;
     private LocalDate date1;
     private LocalDate date2;
     private Type type_;
-    private int mInterval;
+    private int mInterval = 0;
     private boolean dodavanje = false;
-    private String mDescription;
-    private String imageType;
+    private String mDescription = "";
+    private String imageType = "";
     private double budget;
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
     private Transaction trans, original;
@@ -64,6 +64,15 @@ public class TransactionDetailFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("transaction")) {
             trans = getArguments().getParcelable("transaction");
             original = trans;
+        }
+
+        else if (getArguments() != null && getArguments().containsKey("new")) {
+            trans = getArguments().getParcelable("new");
+            original = trans;
+            dodavanje = true;
+        }
+
+        else return view;
 
 
             image = view.findViewById(R.id.image1);
@@ -78,42 +87,39 @@ public class TransactionDetailFragment extends Fragment {
             OK = (Button) view.findViewById(R.id.buttonOK);
 
 
-        imageType = trans.getType().toString();
+        if (trans.getType() != null) imageType = trans.getType().toString();
 
         type.setText(imageType);
-
-            mTitle = trans.getTitle();
-            if (mTitle.matches("")) dodavanje = true;
-
-            mAmount = trans.getAmount();
-            budget = 600;                    //skontat kako slat budzet
-            mDescription = trans.getItemDescription();
-            if (trans.getDate() != null) date1 = trans.getDate();
-            if (trans.getEndDate() != null) date2 = trans.getEndDate();
+        mTitle = trans.getTitle();
+        mAmount = trans.getAmount();
+        budget = 600;                    //skontat kako slat budzet
+        mDescription = trans.getItemDescription();
+        if (trans.getDate() != null) date1 = trans.getDate();
+        if (trans.getEndDate() != null) date2 = trans.getEndDate();
 
 
-            title.setText(mTitle);
-            String s = "";
-            s += mAmount;
-            amount.setText(s);
-            s = "";
-            s += trans.getTransactionInterval();
-            interval.setText(s);
-            description.setText(mDescription);
-            date.setText(date1.toString());
-            if (date2 != null) endDate.setText(date2.toString());
-            else endDate.setText("");
+        title.setText(mTitle);
+        String s = "";
+        s += mAmount;
+        amount.setText(s);
+        s = "";
+        s += trans.getTransactionInterval();
+        interval.setText(s);
+        description.setText(mDescription);
+        if (date1 != null) date.setText(date1.toString());
+        if (date2 != null) endDate.setText(date2.toString());
+        else endDate.setText("");
 
 
-            if (mTitle.matches("")) {
-                delete.setEnabled(false);
-            }
+        if (mTitle == null) {
+            delete.setEnabled(false);
+        }
 
 
-            onItemChange = (OnItemChange) getActivity();
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-               public void onClick(View v) {
+        onItemChange = (OnItemChange) getActivity();
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
                         .setTitle("Delete")
                         .setMessage("Are you sure you want to delete transaction?")
@@ -131,12 +137,7 @@ public class TransactionDetailFragment extends Fragment {
                             }
                         })
                         .show();
-
-
-
-
                 }
-
             });
 
             title.addTextChangedListener(new TextWatcher() {
@@ -311,7 +312,7 @@ public class TransactionDetailFragment extends Fragment {
             });
 
 
-        }
+
 
             return view;
 
