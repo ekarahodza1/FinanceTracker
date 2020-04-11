@@ -56,6 +56,9 @@ public class TransactionDetailFragment extends Fragment {
         public void onChangeClicked(Transaction t1, Transaction t2);
     }
 
+//    public TransactionDetailFragment() {
+//        delete.setEnabled(false);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,7 +135,7 @@ public class TransactionDetailFragment extends Fragment {
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                              //  alertDialog2.cancel();
+
 
                             }
                         })
@@ -257,62 +260,66 @@ public class TransactionDetailFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                mTitle = title.getText().toString();
-                mDescription = description.getText().toString();
-                if (presenter.validateDate(date.getText().toString())) date1 = LocalDate.parse(date.getText().toString());
-                if (presenter.validateDate(endDate.getText().toString()))  date2 = LocalDate.parse(endDate.getText().toString());
-                mAmount = Double.parseDouble(amount.getText().toString());
-                mInterval = Integer.parseInt(interval.getText().toString());
-                imageType = type.getText().toString();
-                type_ = Type.valueOf(imageType);
+                    mTitle = title.getText().toString();
+                    mDescription = description.getText().toString();
+                    if (presenter.validateDate(date.getText().toString()))
+                        date1 = LocalDate.parse(date.getText().toString());
+                    if (presenter.validateDate(endDate.getText().toString()))
+                        date2 = LocalDate.parse(endDate.getText().toString());
+                    mAmount = Double.parseDouble(amount.getText().toString());
+                    mInterval = Integer.parseInt(interval.getText().toString());
+                    imageType = type.getText().toString();
+
+                    if (presenter.validateDescription(mDescription, imageType) == false
+                            || presenter.validateTitle(mTitle) == false
+                            || presenter.validateInterval(mInterval, imageType) == false
+                            || presenter.validateType(imageType) == false ||
+                            date1 == null) {
+                        AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
+                                .setTitle("Incorrect data")
+                                .setMessage("Some fields have incorrect inputs")
+                                .setPositiveButton("Change", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                                .show();
+                    } else {
 
 
-                if (presenter.validateDescription(mDescription, imageType) == false
-                        || presenter.validateTitle(mTitle) == false
-                || presenter.validateInterval(mInterval, imageType) == false
-                        || presenter.validateType(imageType) == false ||
-                        date1 == null) {
-                    AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
-                            .setTitle("Incorrect data")
-                            .setMessage("Some fields have incorrect inputs")
-                            .setPositiveButton("Change", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                        type_ = Type.valueOf(imageType);
+                        Transaction t = new Transaction(date1, mTitle, mAmount, type_, mDescription, mInterval, date2);
 
-                                }
-                            })
-                          .show();
+                        if (budget + mAmount < -1000) {
+                            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                                    .setTitle("Alert!")
+                                    .setMessage("Are you sure you want to go over the limit?")
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (dodavanje) onItemChange.onAddClicked(t);
+                                            else onItemChange.onChangeClicked(original, t);
 
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            amount.setText("0.0");
+                                        }
+                                    }).show();
+                        } else {
+
+                            if (dodavanje) onItemChange.onAddClicked(t);
+                            else onItemChange.onChangeClicked(original, t);
+                        }
+                    }
                 }
-                Transaction t = new Transaction(date1, mTitle, mAmount, type_, mDescription, mInterval, date2);
 
-                if (budget + mAmount < -1000) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                            .setTitle("Alert!")
-                            .setMessage("Are you sure you want to go over the limit?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (dodavanje) onItemChange.onAddClicked(t);
-                                    else onItemChange.onChangeClicked(original, t);
-
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    amount.setText("0.0");
-                                }
-                            }).show();
-                }
-                else {
-
-                    if (dodavanje) onItemChange.onAddClicked(t);
-                    else onItemChange.onChangeClicked(original, t);
-                }
-
-                }
             });
+
+
 
 
             return view;

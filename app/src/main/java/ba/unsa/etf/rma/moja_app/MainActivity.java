@@ -80,12 +80,14 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
                             .replace(R.id.transaction_detail, detailFragment)
                             .commit();
                 }
-                else{
+                else {
 
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.transaction_list, detailFragment)
                             .addToBackStack(null)
                             .commit();
+
+
                 }
             }
 
