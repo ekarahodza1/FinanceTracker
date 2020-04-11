@@ -315,8 +315,6 @@ public class TransactionDetailFragment extends Fragment {
             });
 
 
-
-
             return view;
 
     }

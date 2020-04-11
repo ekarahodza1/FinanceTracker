@@ -141,11 +141,14 @@ public class FinancePresenter implements IFinancePresenter {
         ArrayList<Transaction> pomocne = new ArrayList<>();    //testirat
         for (Transaction t: transactions) {
             if (t.getEndDate() != null) {
-                if (current1.getMonthValue() >= t.getDate().getMonthValue() && current1.getMonthValue() <= t.getEndDate().getMonthValue()){
+                if (current1.getMonthValue() >= t.getDate().getMonthValue()
+                        && current1.getMonthValue() <= t.getEndDate().getMonthValue()
+                        && current1.getYear() == t.getEndDate().getYear()){
                     pomocne.add(t);
                 }
             }
-            else if (t.getDate().getMonthValue() == current1.getMonthValue()) pomocne.add(t);
+            else if (t.getDate().getMonthValue() == current1.getMonthValue()
+                    && current1.getYear() == t.getDate().getYear()) pomocne.add(t);
 
         }
 
