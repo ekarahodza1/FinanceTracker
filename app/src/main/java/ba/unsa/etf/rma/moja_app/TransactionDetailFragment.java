@@ -3,6 +3,7 @@ package ba.unsa.etf.rma.moja_app;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,13 +57,13 @@ public class TransactionDetailFragment extends Fragment {
         public void onChangeClicked(Transaction t1, Transaction t2);
     }
 
-//    public TransactionDetailFragment() {
-//        delete.setEnabled(false);
-//    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.transaction_detail, container, false);
+        int orientation = getResources().getConfiguration().orientation;
+
 
         if (getArguments() != null && getArguments().containsKey("transaction")) {
             trans = getArguments().getParcelable("transaction");
@@ -71,6 +72,12 @@ public class TransactionDetailFragment extends Fragment {
 
         else if (getArguments() != null && getArguments().containsKey("new")) {
             trans = getArguments().getParcelable("new");
+            original = trans;
+            dodavanje = true;
+        }
+
+        else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+            trans = new Transaction(null, null, 0, null, null, 0, null);
             original = trans;
             dodavanje = true;
         }
@@ -88,6 +95,9 @@ public class TransactionDetailFragment extends Fragment {
             type = view.findViewById(R.id.editType);
             delete = (Button) view.findViewById(R.id.buttonDelete);
             OK = (Button) view.findViewById(R.id.buttonOK);
+
+
+
 
 
         if (trans.getType() != null) imageType = trans.getType().toString();

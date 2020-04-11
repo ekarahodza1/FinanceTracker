@@ -92,17 +92,24 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
             }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onDeleteClicked(Transaction transaction) {
 
         Bundle arguments = new Bundle();
         arguments.putParcelable("delete", transaction);
         TransactionListFragment listFragment = new TransactionListFragment();
+        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
         listFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, listFragment)
                 .addToBackStack(null)
                 .commit();
+        if (twoPaneMode) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.transaction_detail, detailFragment)
+                    .commit();
+        }
     }
 
     @Override
@@ -118,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
                 .commit();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onChangeClicked(Transaction t1, Transaction t2) {
 
@@ -125,11 +133,15 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
         arguments.putParcelable("change1", t1);
         arguments.putParcelable("change2", t2);
         TransactionListFragment listFragment = new TransactionListFragment();
+        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
         listFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, listFragment)
                 .addToBackStack(null)
                 .commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.transaction_detail, detailFragment)
+//                .commit();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -143,6 +155,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
                 .replace(R.id.transaction_list, detailFragment)
                 .addToBackStack(null)
                 .commit();
+//        TransactionListFragment listFragment = new TransactionListFragment();
+//        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
+//        listFragment.setArguments(arguments);
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.transaction_list, listFragment)
+//                .addToBackStack(null)
+//                .commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.transaction_detail, detailFragment)
+//                .commit();
     }
 
 
