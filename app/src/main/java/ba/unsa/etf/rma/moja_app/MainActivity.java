@@ -135,13 +135,16 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
         TransactionListFragment listFragment = new TransactionListFragment();
         TransactionDetailFragment detailFragment = new TransactionDetailFragment();
         listFragment.setArguments(arguments);
+        detailFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, listFragment)
                 .addToBackStack(null)
                 .commit();
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.transaction_detail, detailFragment)
-//                .commit();
+        if (twoPaneMode) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.transaction_detail, detailFragment)
+                    .commit();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -149,22 +152,22 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
 
         Bundle arguments = new Bundle();
         arguments.putParcelable("new", transaction);
-        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
-        detailFragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.transaction_list, detailFragment)
-                .addToBackStack(null)
-                .commit();
-//        TransactionListFragment listFragment = new TransactionListFragment();
 //        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
-//        listFragment.setArguments(arguments);
+//        detailFragment.setArguments(arguments);
 //        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.transaction_list, listFragment)
+//                .replace(R.id.transaction_list, detailFragment)
 //                .addToBackStack(null)
 //                .commit();
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.transaction_detail, detailFragment)
-//                .commit();
+        TransactionListFragment listFragment = new TransactionListFragment();
+        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
+        listFragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, listFragment)
+                .addToBackStack(null)
+                .commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_detail, detailFragment)
+                .commit();
     }
 
 
