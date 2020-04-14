@@ -27,7 +27,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class MainActivity extends AppCompatActivity implements TransactionListFragment.OnItemClick, TransactionDetailFragment.OnItemChange {//AdapterView.OnItemSelectedListener,
+public class MainActivity extends AppCompatActivity implements
+        TransactionListFragment.OnItemClick,
+        TransactionDetailFragment.OnItemChange,
+         BudgetFragment.OnBudgetChange{//AdapterView.OnItemSelectedListener,
 
     private boolean twoPaneMode;
 
@@ -121,6 +124,33 @@ public class MainActivity extends AppCompatActivity implements TransactionListFr
         listFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, listFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onRightClicked1(Transaction t) {
+
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("budget", t);
+        BudgetFragment budgetFragment = new BudgetFragment();
+        budgetFragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, budgetFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onRightClicked2() {
+
+//        Bundle arguments = new Bundle();
+//        arguments.putParcelable("budget", t);
+        GraphsFragment graphsFragment = new GraphsFragment();
+      //  budgetFragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, graphsFragment)
                 .addToBackStack(null)
                 .commit();
     }

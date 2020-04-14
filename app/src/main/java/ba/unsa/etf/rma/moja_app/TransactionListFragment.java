@@ -30,6 +30,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     private TextView monthView;
     private Button leftButton;
     private Button rightButton;
+    private Button right;
     private LocalDate current = null;
     private Button add;
     private String month = null;
@@ -51,6 +52,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     public interface OnItemClick {
         public void onItemClicked(Transaction t);
         public void onNewClicked(Transaction t);
+        public void onRightClicked1(Transaction t);
     }
 
     @Override
@@ -163,6 +165,16 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         });
 
 
+        right = (Button)fragmentView.findViewById(R.id.right);
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Transaction t = new Transaction(current, null, 0, null, null, 0, null);
+                onItemClick.onRightClicked1(t);
+            }
+        });
+
+
 
 
         add = (Button)fragmentView.findViewById(R.id.buttonAdd);
@@ -193,57 +205,9 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
 
 
 
-
         return fragmentView;
         }
 
-
-
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (resultCode == 0) { }  //result canceled
-//        else if (requestCode == 1) {
-//            Transaction t = null;
-//            LocalDate date1 = null;
-//            LocalDate date2 = null;
-//            String s = data.getStringExtra("type");
-//            Type type_ = null;
-//            Bundle b = data.getExtras();
-//            if (s.matches("INDIVIDUALPAYMENT")) type_ = Type.INDIVIDUALPAYMENT;
-//            if (s.matches("REGULARPAYMENT")) type_ = Type.REGULARPAYMENT;
-//            if (s.matches("PURCHASE")) type_ = Type.PURCHASE;
-//            if (s.matches("INDIVIDUALINCOME")) type_ = Type.INDIVIDUALINCOME;
-//            if (s.matches("REGULARINCOME")) type_ = Type.REGULARINCOME;
-//
-//            if (!data.getStringExtra("date").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                date1 = LocalDate.parse(data.getStringExtra("date"));
-//            }
-//            if (!data.getStringExtra("eDate").matches("")) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                date2 = LocalDate.parse(data.getStringExtra("eDate"));
-//            }
-//            double d = account.getBudget();
-//            account.setBudget(d + b.getDouble("amount"));
-//            String s1 = "" + account.getBudget();
-//            globalAmountView.setText(s1);
-//            t = new Transaction(date1, data.getStringExtra("title"), b.getDouble("amount"),
-//                    type_, data.getStringExtra("description"), b.getInt("interval"), date2);
-//            if (resultCode == -1) { }  // result ok
-//
-//            if (resultCode == 2){
-//                financePresenter.deleteTransaction(t);
-//            }
-//            if (resultCode == 3){
-//                financePresenter.addTransaction(t);
-//            }
-//            if (resultCode == 4){
-//                financePresenter.deleteTransaction(transaction);
-//                financePresenter.addTransaction(t);
-//            }
-//        }
-//    }
 
     private void initList(){
         mTransactionList = new ArrayList<>();
