@@ -48,6 +48,8 @@ public class TransactionDetailFragment extends Fragment {
     private double budget;
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
     private Transaction trans, original;
+    private Account account;
+    private IAccountPresenter accountPresenter = new AccountPresenter( getActivity());
 
 
     private OnItemChange onItemChange;
@@ -64,6 +66,9 @@ public class TransactionDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.transaction_detail, container, false);
         int orientation = getResources().getConfiguration().orientation;
 
+        if (getArguments() != null && getArguments().containsKey("account")){
+            account = getArguments().getParcelable("account");
+        }
 
         if (getArguments() != null && getArguments().containsKey("transaction")) {
             trans = getArguments().getParcelable("transaction");
@@ -105,7 +110,6 @@ public class TransactionDetailFragment extends Fragment {
         type.setText(imageType);
         mTitle = trans.getTitle();
         mAmount = trans.getAmount();
-        budget = 600;                    //skontat kako slat budzet
         mDescription = trans.getItemDescription();
         if (trans.getDate() != null) date1 = trans.getDate();
         if (trans.getEndDate() != null) date2 = trans.getEndDate();
@@ -301,13 +305,15 @@ public class TransactionDetailFragment extends Fragment {
                         type_ = Type.valueOf(imageType);
                         Transaction t = new Transaction(date1, mTitle, mAmount, type_, mDescription, mInterval, date2);
 
-                        if (budget + mAmount < -1000) {
+                        if (account.getBudget() + mAmount < account.getTotalLimit()) {
                             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                                     .setTitle("Alert!")
                                     .setMessage("Are you sure you want to go over the limit?")
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            account.setBudget(account.getBudget() + mAmount);
+                                            accountPresenter.set(account);
                                             if (dodavanje) onItemChange.onAddClicked(t);
                                             else onItemChange.onChangeClicked(original, t);
 

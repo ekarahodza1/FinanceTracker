@@ -71,10 +71,11 @@ public class MainActivity extends AppCompatActivity implements
 
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void onItemClicked(Transaction transaction) {
+            public void onItemClicked(Transaction transaction, Account account) {
 
                 Bundle arguments = new Bundle();
                 arguments.putParcelable("transaction", transaction);
+                arguments.putParcelable("account", account);
                 TransactionDetailFragment detailFragment = new TransactionDetailFragment();
                 detailFragment.setArguments(arguments);
                 if (twoPaneMode){
@@ -130,16 +131,26 @@ public class MainActivity extends AppCompatActivity implements
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onRightClicked1(Transaction t) {
+    public void onRightClicked1(Account a) {
 
         Bundle arguments = new Bundle();
-        arguments.putParcelable("budget", t);
+        arguments.putParcelable("budget", a);
         BudgetFragment budgetFragment = new BudgetFragment();
         budgetFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, budgetFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onChanged(Account a) {
+
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("new_account", a);
+        BudgetFragment budgetFragment = new BudgetFragment();
+        budgetFragment.setArguments(arguments);
+
     }
 
     @Override
@@ -178,10 +189,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void onNewClicked(Transaction transaction) {
+    public void onNewClicked(Transaction transaction, Account account) {
 
         Bundle arguments = new Bundle();
         arguments.putParcelable("new", transaction);
+        arguments.putParcelable("account", account);
 //        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
 //        detailFragment.setArguments(arguments);
 //        getSupportFragmentManager().beginTransaction()

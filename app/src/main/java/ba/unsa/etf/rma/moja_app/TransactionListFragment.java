@@ -40,7 +40,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     private Account account;
     private ListAdapter listAdapter;
     private IFinancePresenter financePresenter;
-    private IAccountPresenter accountPresenter = new AccountPresenter(this, getActivity());
+    private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -58,9 +58,9 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
 
     private OnItemClick onItemClick;
     public interface OnItemClick {
-        public void onItemClicked(Transaction t);
-        public void onNewClicked(Transaction t);
-        public void onRightClicked1(Transaction t);
+        public void onItemClicked(Transaction t, Account a);
+        public void onNewClicked(Transaction t, Account a);
+        public void onRightClicked1(Account a);
     }
 
     @Override
@@ -153,10 +153,16 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         limitView = fragmentView.findViewById(R.id.limitView);
         globalAmountView = fragmentView.findViewById(R.id.globalAmountView);
 
-        String s = ""; s += accountPresenter.get().getTotalLimit();
+        if (getArguments() != null && getArguments().containsKey("new_account")){
+            account = getArguments().getParcelable("new_account");
+        }
+        else account = accountPresenter.get();
+
+
+        String s = ""; s += account.getTotalLimit();
         limitView.setText(s);
 
-        s = "";  s += accountPresenter.get().getBudget();
+        s = "";  s += account.getBudget();
         globalAmountView.setText(s);
 
 
@@ -165,7 +171,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Transaction transaction = listAdapter.getItem(position);
-                onItemClick.onItemClicked(transaction);
+                onItemClick.onItemClicked(transaction, account);
 
 
             }
@@ -177,8 +183,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Transaction t = new Transaction(current, null, 0, null, null, 0, null);
-                onItemClick.onRightClicked1(t);
+                onItemClick.onRightClicked1(accountPresenter.get());
             }
         });
 
@@ -190,7 +195,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
             @Override
             public void onClick(View v) {
                 Transaction t = new Transaction(null, null, 0, null, null, 0, null);
-                onItemClick.onNewClicked(t);
+                onItemClick.onNewClicked(t, account);
             }
         });
 

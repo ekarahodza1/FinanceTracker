@@ -1,15 +1,15 @@
 package ba.unsa.etf.rma.moja_app;
 
 import android.content.Context;
+import android.os.Parcelable;
 
 public class AccountPresenter implements IAccountPresenter{
 
     private Account account = Model.account;
-    private IFinanceView view;
     private Context context;
 
-    public AccountPresenter(IFinanceView view, Context context) {
-        this.view = view;
+    public AccountPresenter(Context context) {
+
         this.context = context;
     }
 
@@ -17,7 +17,11 @@ public class AccountPresenter implements IAccountPresenter{
         return account;
     }
 
-    public void set(Account a){
+    public void set(Parcelable a){
+        this.account = (Account)a;
+    }
+
+    public void set(Account a) {
         this.account = a;
     }
 }
