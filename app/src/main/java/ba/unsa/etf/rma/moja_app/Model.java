@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TransactionsModel {
+public class Model {
     public static ArrayList<Transaction> transactions = new ArrayList<Transaction>() {
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -95,15 +95,9 @@ public class TransactionsModel {
                         "headphones", 0, null));
             }
 
-
-
-//            add(new Transaction(null, "Shopping", 2000, Type.PURCHASE,
-//                    "new dress", 0, null));
-//            add(new Transaction(null, "Insurance", 500, Type.INDIVIDUALINCOME,
-//                    null, 0, null));
-
         }
 
-
     };
+
+    public static Account account = new Account(658, -1000, -1000);
 }

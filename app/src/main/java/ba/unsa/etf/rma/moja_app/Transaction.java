@@ -147,7 +147,8 @@ public class Transaction implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(date.toString());
-        dest.writeString(endDate.toString());
+        if (endDate == null) dest.writeString("");
+        else dest.writeString(endDate.toString());
         dest.writeString(title);
         dest.writeString(itemDescription);
         dest.writeDouble(amount);

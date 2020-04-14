@@ -37,9 +37,10 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     private int year = 0;
     private int month_value = 0;
     private Transaction trans;
-    private Account account = new Account(658,-1000,100);
+    private Account account;
     private ListAdapter listAdapter;
     private IFinancePresenter financePresenter;
+    private IAccountPresenter accountPresenter = new AccountPresenter(this, getActivity());
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -47,6 +48,13 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         }
         return financePresenter;
     }
+
+//    public IAccountPresenter getAccountPresenter(){
+//        if (accountPresenter == null){
+//            accountPresenter = new AccountPresenter(this, getActivity());
+//        }
+//        return accountPresenter;
+//    }
 
     private OnItemClick onItemClick;
     public interface OnItemClick {
@@ -145,10 +153,10 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         limitView = fragmentView.findViewById(R.id.limitView);
         globalAmountView = fragmentView.findViewById(R.id.globalAmountView);
 
-        String s = ""; s += account.getTotalLimit();
+        String s = ""; s += accountPresenter.get().getTotalLimit();
         limitView.setText(s);
 
-        s = "";  s += account.getBudget();
+        s = "";  s += accountPresenter.get().getBudget();
         globalAmountView.setText(s);
 
 
@@ -243,7 +251,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     public void notifyTransactionsListDataSetChanged() {
         listAdapter.notifyDataSetChanged();
     }
-
 
 
 

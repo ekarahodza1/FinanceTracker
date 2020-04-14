@@ -5,6 +5,6 @@ import java.util.ArrayList;
 public class FinanceInteractor implements IFinanceInteractor {
     @Override
     public ArrayList<Transaction> get(){
-        return TransactionsModel.transactions;
+        return Model.transactions;
     }
 }
