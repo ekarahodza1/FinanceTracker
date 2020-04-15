@@ -100,8 +100,8 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
                 ArrayList<BarEntry> mPayment = graphPresenter.getDayPayment(list);
                 ArrayList<BarEntry> mAll = graphPresenter.getDayAll(list);
 
-                BarDataSet set1 = new BarDataSet(mIncome, "Income");
-                BarDataSet set2 = new BarDataSet(mPayment, "Payment");
+                BarDataSet set1 = new BarDataSet(mIncome, "Payment");
+                BarDataSet set2 = new BarDataSet(mPayment, "Income");
                 BarDataSet set3 = new BarDataSet(mAll, "All");
 
                 BarData data1 = new BarData(); data1.addDataSet(set1);

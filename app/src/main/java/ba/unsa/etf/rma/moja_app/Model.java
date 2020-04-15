@@ -27,15 +27,15 @@ public class Model {
                         "", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2020, 2, 2), "Shopping", -299, Type.INDIVIDUALPAYMENT,
+                add(new Transaction(LocalDate.of(2020, 4, 2), "Shopping", -299, Type.INDIVIDUALPAYMENT,
                         "new washing machine", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2020, 3, 13), "Utilities", -53, Type.REGULARPAYMENT,
+                add(new Transaction(LocalDate.of(2020, 3, 19), "Utilities", -53, Type.REGULARPAYMENT,
                         "electricity", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2019, 3, 13), "Gift", -199, Type.PURCHASE,
+                add(new Transaction(LocalDate.of(2019, 4, 13), "Gift", -199, Type.PURCHASE,
                         "blender", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -43,7 +43,7 @@ public class Model {
                         "gas", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2019, 3, 13), "Gift", -199, Type.PURCHASE,
+                add(new Transaction(LocalDate.of(2019, 4, 28), "Gift", -199, Type.PURCHASE,
                         "blender", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -63,7 +63,7 @@ public class Model {
                         "groceries", 15, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2019, 11, 18), "Shopping", -99, Type.PURCHASE,
+                add(new Transaction(LocalDate.of(2020, 4, 4), "Shopping", -99, Type.PURCHASE,
                         "new boots", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -83,7 +83,7 @@ public class Model {
                         "water bill", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2019, 3, 3), "Gift", -17, Type.PURCHASE,
+                add(new Transaction(LocalDate.of(2019, 4, 7), "Gift", -17, Type.PURCHASE,
                         "picture frame", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -104,6 +104,12 @@ public class GraphPresenter implements IGraphPresenter{
                     int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] += trans.getAmount();
                 }
+                else if (trans.getEndDate() != null
+                        && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()){
+                    int j = trans.getDate().getDayOfMonth() / 7;
+                    weeks[j] += trans.getAmount();
+                }
             }
         }
 
@@ -123,6 +129,11 @@ public class GraphPresenter implements IGraphPresenter{
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
                     int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] -= trans.getAmount();
+                } else if (trans.getEndDate() != null
+                        && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()){
+                    int j = trans.getDate().getDayOfMonth() / 7;
+                    weeks[j] -= trans.getAmount();
                 }
             }
         }
@@ -140,6 +151,11 @@ public class GraphPresenter implements IGraphPresenter{
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
+                    int j = trans.getDate().getDayOfMonth() / 7;
+                    weeks[j] += trans.getAmount();
+                } else if (trans.getEndDate() != null
+                        && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()) {
                     int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] += trans.getAmount();
                 }
@@ -163,6 +179,10 @@ public class GraphPresenter implements IGraphPresenter{
             if (trans.getType() == Type.PURCHASE || trans.getType() == Type.REGULARPAYMENT || trans.getType() == Type.INDIVIDUALPAYMENT){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){ ;
                     days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
+                } else if (trans.getEndDate() != null
+                        && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()){
+                    days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
                 }
             }
         }
@@ -183,6 +203,10 @@ public class GraphPresenter implements IGraphPresenter{
             if (trans.getType() == Type.INDIVIDUALINCOME || trans.getType() == Type.REGULARINCOME){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){ ;
                     days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
+                } else if (trans.getEndDate() != null
+                        && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()){
+                    days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
                 }
             }
         }
@@ -202,6 +226,10 @@ public class GraphPresenter implements IGraphPresenter{
             Transaction trans = t.get(i);
 
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){ ;
+                    days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
+                } else if (trans.getEndDate() != null
+                        && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()){
                     days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
                 }
 
