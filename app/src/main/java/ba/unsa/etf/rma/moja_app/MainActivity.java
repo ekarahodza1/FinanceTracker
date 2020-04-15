@@ -213,8 +213,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLeftClicked1(){
+    public void onLeftClicked1(Account a){
         GraphsFragment graphsFragment = new GraphsFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("budget", a);
+        graphsFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, graphsFragment)
                 .addToBackStack(null)
@@ -240,8 +243,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLeftClicked3(){
+    public void onLeftClicked3(Account a){
         BudgetFragment budgetFragment = new BudgetFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("budget", a);
+        budgetFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, budgetFragment)
                 .addToBackStack(null)

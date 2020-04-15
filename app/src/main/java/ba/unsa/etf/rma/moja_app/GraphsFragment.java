@@ -36,10 +36,11 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     private GestureDetector gestureDetector;
     private IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
     private OnSwipeChange onSwipeChange;
+    private Account account;
 
     public interface OnSwipeChange {
         public void onRightClicked3();
-        public void onLeftClicked3();
+        public void onLeftClicked3(Account a);
 
     }
 
@@ -47,6 +48,9 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.graphs_fragment, container, false);
+        if (getArguments() != null && getArguments().containsKey("budget")) {
+            account = getArguments().getParcelable("budget");
+        }
 
         income = view.findViewById(R.id.incomeChart);
         payment = view.findViewById(R.id.paymentChart);
@@ -238,7 +242,7 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     }
 
     private void onSwipeRight() {
-        onSwipeChange.onLeftClicked3();
+        onSwipeChange.onLeftClicked3(account);
     }
 
     private void onSwipeLeft() {

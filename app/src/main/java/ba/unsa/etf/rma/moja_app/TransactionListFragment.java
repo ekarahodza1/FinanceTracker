@@ -104,7 +104,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     }
 
     private void onSwipeRight() {
-        onItemClick.onLeftClicked1();
+        onItemClick.onLeftClicked1(accountPresenter.get());
     }
 
 
@@ -115,7 +115,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         public void onItemClicked(Transaction t, Account a);
         public void onNewClicked(Transaction t, Account a);
         public void onRightClicked1(Account a);
-        public void onLeftClicked1();
+        public void onLeftClicked1(Account a);
     }
 
 
