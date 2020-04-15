@@ -31,7 +31,7 @@ public class GraphPresenter implements IGraphPresenter{
                         months[trans.getDate().getMonthValue() - 1] += trans.getAmount();
                     } else {
                         for (int j = trans.getDate().getMonthValue(); j <= trans.getEndDate().getMonthValue(); j++){
-                            months[j] += trans.getAmount();
+                            months[j-1] += trans.getAmount();
                         }
                     }
                 }
@@ -56,7 +56,7 @@ public class GraphPresenter implements IGraphPresenter{
                         months[trans.getDate().getMonthValue() - 1] -= trans.getAmount();
                     } else {
                         for (int j = trans.getDate().getMonthValue(); j <= trans.getEndDate().getMonthValue(); j++){
-                            months[j] += trans.getAmount();
+                            months[j-1] -= trans.getAmount();
                         }
                     }
                 }
@@ -80,7 +80,7 @@ public class GraphPresenter implements IGraphPresenter{
                         months[trans.getDate().getMonthValue() - 1] += trans.getAmount();
                     } else {
                         for (int j = trans.getDate().getMonthValue(); j <= trans.getEndDate().getMonthValue(); j++){
-                            months[j] += trans.getAmount();
+                            months[j-1] += trans.getAmount();
                         }
                     }
             }
@@ -101,7 +101,7 @@ public class GraphPresenter implements IGraphPresenter{
             Transaction trans = t.get(i);
             if (trans.getType() == Type.INDIVIDUALINCOME || trans.getType() == Type.REGULARINCOME){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
-                    int j = trans.getDate().getDayOfMonth() % 7;
+                    int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] += trans.getAmount();
                 }
             }
@@ -121,7 +121,7 @@ public class GraphPresenter implements IGraphPresenter{
             Transaction trans = t.get(i);
             if (trans.getType() == Type.PURCHASE || trans.getType() == Type.REGULARPAYMENT || trans.getType() == Type.INDIVIDUALPAYMENT){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
-                    int j = trans.getDate().getDayOfMonth() % 7;
+                    int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] -= trans.getAmount();
                 }
             }
@@ -140,7 +140,7 @@ public class GraphPresenter implements IGraphPresenter{
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
-                    int j = trans.getDate().getDayOfMonth() % 7;
+                    int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] += trans.getAmount();
                 }
 

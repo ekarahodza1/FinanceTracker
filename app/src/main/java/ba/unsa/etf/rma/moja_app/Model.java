@@ -19,7 +19,7 @@ public class Model {
                         "", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2020, 3, 1), "Salary", 2000, Type.REGULARINCOME,
+                add(new Transaction(LocalDate.of(2020, 3, 1), "Salary", 1000, Type.REGULARINCOME,
                         "", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -27,7 +27,7 @@ public class Model {
                         "", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2020, 2, 2), "Shopping", -999, Type.INDIVIDUALPAYMENT,
+                add(new Transaction(LocalDate.of(2020, 2, 2), "Shopping", -299, Type.INDIVIDUALPAYMENT,
                         "new washing machine", 0, null));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
