@@ -1,5 +1,6 @@
 package ba.unsa.etf.rma.moja_app;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     private IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
     private OnSwipeChange onSwipeChange;
     private Account account;
+    private int orientation = getResources().getConfiguration().orientation;
 
     public interface OnSwipeChange {
         public void onRightClicked3();
@@ -242,11 +244,12 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     }
 
     private void onSwipeRight() {
-        onSwipeChange.onLeftClicked3(account);
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) onSwipeChange.onLeftClicked3(account);
     }
 
     private void onSwipeLeft() {
-        onSwipeChange.onRightClicked3();
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) onSwipeChange.onRightClicked3();
     }
 
 }

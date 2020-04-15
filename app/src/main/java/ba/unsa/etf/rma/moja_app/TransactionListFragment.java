@@ -1,6 +1,7 @@
 package ba.unsa.etf.rma.moja_app;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -47,6 +48,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private IFinancePresenter financePresenter;
     private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
     private GestureDetector gestureDetector;
+    private int orientation = getResources().getConfiguration().orientation;
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -100,10 +102,12 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     }
 
     private void onSwipeLeft() {
+        if (orientation == Configuration.ORIENTATION_PORTRAIT)
         onItemClick.onRightClicked1(accountPresenter.get());
     }
 
     private void onSwipeRight() {
+        if (orientation == Configuration.ORIENTATION_PORTRAIT)
         onItemClick.onLeftClicked1(accountPresenter.get());
     }
 
@@ -142,7 +146,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         mAdapter = new SpinnerAdapter(getActivity(), mTransactionList);
         spinnerTransactions.setAdapter(mAdapter);
 
-        listAdapter = new ListAdapter(getActivity(), R.layout.list_view1, new ArrayList<Transaction>());  //malo sumnjivo
+        listAdapter = new ListAdapter(getActivity(), R.layout.list_view1, new ArrayList<Transaction>());
         transactionList = (ListView) fragmentView.findViewById(R.id.transactionList);
         transactionList.setAdapter(listAdapter);
         getPresenter().refreshTransactions();
@@ -157,6 +161,14 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             month_value = current.getMonth().getValue();
             year = current.getYear();
         }
+        monthView = (TextView) fragmentView.findViewById(R.id.monthView);
+        monthView.setText(month + ", " + year);
+        financePresenter.filterMonth(current);
+        notifyTransactionsListDataSetChanged();
+        leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
+        rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
+
+
         spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -173,14 +185,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             }
         });
 
-
-
-        monthView = (TextView) fragmentView.findViewById(R.id.monthView);
-        monthView.setText(month + " ," + year);
-        financePresenter.filterMonth(current);
-        notifyTransactionsListDataSetChanged();
-        leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
-        rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
 
         leftButton.setOnClickListener(new View.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.O)

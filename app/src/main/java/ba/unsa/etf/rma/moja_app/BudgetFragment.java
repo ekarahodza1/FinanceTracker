@@ -1,5 +1,6 @@
 package ba.unsa.etf.rma.moja_app;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
     private Account account;
     private GestureDetector gestureDetector;
     private OnBudgetChange onBudgetChange;
+    private int orientation = getResources().getConfiguration().orientation;
 
     @Override
     public boolean onDown(MotionEvent e) {
@@ -66,11 +68,13 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
     }
 
     private void onSwipeLeft() {
-        onBudgetChange.onRightClicked2();
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) onBudgetChange.onRightClicked2();
     }
 
     private void onSwipeRight() {
-        onBudgetChange.onLeftClicked2();
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) onBudgetChange.onLeftClicked2();
     }
 
 

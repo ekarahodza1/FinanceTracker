@@ -93,7 +93,6 @@ public class FinancePresenter implements IFinancePresenter {
         ArrayList<Transaction> pomocne = new ArrayList<>();
         if (criteria.matches("All")) {
             filterMonth(LocalDate.now());
-            //view.setTransactions(transactions);
             return;
         }
         for (int i = 0; i < transactions.size(); i++){
@@ -113,6 +112,7 @@ public class FinancePresenter implements IFinancePresenter {
                 pomocne.add(transactions.get(i));
             }
         }
+        transactions = pomocne;
         view.setTransactions(pomocne);
 
 
@@ -141,6 +141,7 @@ public class FinancePresenter implements IFinancePresenter {
     @Override
     public void filterMonth(LocalDate current1){
         ArrayList<Transaction> pomocne = new ArrayList<>();    //testirat
+        transactions = interactor.get();
         for (Transaction t: transactions) {
             if (t.getEndDate() != null) {
                 if (current1.getMonthValue() >= t.getDate().getMonthValue()
@@ -154,20 +155,21 @@ public class FinancePresenter implements IFinancePresenter {
 
         }
 
+        transactions = pomocne;
         view.setTransactions(pomocne);
     }
 
 
     public void addTransaction(Transaction t){
         interactor.add(t);
-        view.setTransactions(transactions);
+        view.setTransactions(interactor.get());
         view.notifyTransactionsListDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void deleteTransaction(Transaction t){
         interactor.delete(t);
-        view.setTransactions(transactions);
+        view.setTransactions(interactor.get());
         view.notifyTransactionsListDataSetChanged();
     }
 }

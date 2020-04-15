@@ -39,10 +39,10 @@
         android:layout_height="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
+        app:layout_constraintHorizontal_bias="0.477"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.155" />
+        app:layout_constraintVertical_bias="0.191" />
 
     <Spinner
         android:id="@+id/sortSpinner"
@@ -50,33 +50,10 @@
         android:layout_height="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintHorizontal_bias="0.477"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
-        app:layout_constraintVertical_bias="0.17" />
-
-    <TextView
-        android:id="@+id/filerView"
-        android:layout_width="77dp"
-        android:layout_height="33dp"
-        android:text="Filter by"
-        app:layout_constraintBottom_toBottomOf="@+id/filterSpinner"
-        app:layout_constraintEnd_toEndOf="@+id/filterSpinner"
-        app:layout_constraintHorizontal_bias="0.088"
-        app:layout_constraintStart_toStartOf="@+id/filterSpinner"
-        app:layout_constraintTop_toTopOf="@+id/filterSpinner"
-        app:layout_constraintVertical_bias="0.565" />
-
-    <TextView
-        android:id="@+id/sortView"
-        android:layout_width="84dp"
-        android:layout_height="34dp"
-        android:text="Sort by"
-        app:layout_constraintBottom_toBottomOf="@+id/sortSpinner"
-        app:layout_constraintEnd_toEndOf="@+id/sortSpinner"
-        app:layout_constraintHorizontal_bias="0.089"
-        app:layout_constraintStart_toStartOf="@+id/sortSpinner"
-        app:layout_constraintTop_toTopOf="@+id/sortSpinner" />
+        app:layout_constraintVertical_bias="0.233" />
 
     <ListView
         android:id="@+id/transactionList"
@@ -85,10 +62,10 @@
         android:listSelector="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortSpinner"
-        app:layout_constraintVertical_bias="0.071" />
+        app:layout_constraintVertical_bias="0.24" />
 
     <Button
         android:id="@+id/leftButton"
@@ -107,13 +84,13 @@
         android:layout_width="60dp"
         android:layout_height="40dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="44dp"
         android:text=" →"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.189" />
 
     <TextView
         android:id="@+id/monthView"
@@ -124,20 +101,20 @@
         android:layout_marginEnd="6dp"
         app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
         app:layout_constraintEnd_toStartOf="@+id/rightButton"
-        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/leftButton"
         app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.189" />
 
     <Button
         android:id="@+id/buttonAdd"
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="536dp"
+        android:layout_marginTop="564dp"
         android:text="Add transaction"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.277"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,19 +122,20 @@
         android:id="@+id/globalAmountView"
         android:layout_width="110dp"
         android:layout_height="35dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toTopOf="@+id/limitView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.076"
+        app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toEndOf="@+id/label1" />
 
     <TextView
         android:id="@+id/limitView"
         android:layout_width="110dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.076"
+        app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toEndOf="@+id/label2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
