@@ -48,7 +48,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private IFinancePresenter financePresenter;
     private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
     private GestureDetector gestureDetector;
-    private int orientation = getResources().getConfiguration().orientation;
+
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -102,11 +102,13 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     }
 
     private void onSwipeLeft() {
+        int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT)
         onItemClick.onRightClicked1(accountPresenter.get());
     }
 
     private void onSwipeRight() {
+        int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT)
         onItemClick.onLeftClicked1(accountPresenter.get());
     }
@@ -164,6 +166,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         monthView = (TextView) fragmentView.findViewById(R.id.monthView);
         monthView.setText(month + ", " + year);
         financePresenter.filterMonth(current);
+
         notifyTransactionsListDataSetChanged();
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
         rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
@@ -174,7 +177,8 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Transaction clicked = (Transaction) parent.getItemAtPosition(position);
                 String clickedName = clicked.getTypeString();
-                financePresenter.filterTransactions(clickedName);
+                sortSpinner.setSelection(0);
+                financePresenter.filterTransactions(clickedName, current);
                 notifyTransactionsListDataSetChanged();
             }
 
@@ -195,6 +199,8 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                     }
 
                 monthView.setText(current.getMonth().toString() + " ," + current.getYear());
+                spinnerTransactions.setSelection(0);
+                sortSpinner.setSelection(0);
                 financePresenter.filterMonth(current);
             }
     });
@@ -207,6 +213,8 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                 }
 
                 monthView.setText(current.getMonth().toString() + " ," + current.getYear());
+                spinnerTransactions.setSelection(0);
+                sortSpinner.setSelection(0);
                 financePresenter.filterMonth(current);
             }
         });

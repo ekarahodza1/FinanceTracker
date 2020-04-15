@@ -38,7 +38,6 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     private IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
     private OnSwipeChange onSwipeChange;
     private Account account;
-    private int orientation = getResources().getConfiguration().orientation;
 
     public interface OnSwipeChange {
         public void onRightClicked3();
@@ -244,11 +243,12 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     }
 
     private void onSwipeRight() {
-
+        int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) onSwipeChange.onLeftClicked3(account);
     }
 
     private void onSwipeLeft() {
+        int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) onSwipeChange.onRightClicked3();
     }
 

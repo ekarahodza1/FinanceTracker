@@ -19,11 +19,6 @@ public class FinancePresenter implements IFinancePresenter {
     @Override
     public void sortTransactions(String criteria) {
 
-//        if (criteria.matches("Not sorted")){
-//            view.setTransactions(new ArrayList<Transaction>());
-//            view.setTransactions(transactions);
-//            return;
-//        }
 
          if (criteria.matches( "Price - Descending")) {
              Collections.sort(transactions, new Comparator<Transaction>() {
@@ -89,12 +84,15 @@ public class FinancePresenter implements IFinancePresenter {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void filterTransactions(String criteria){
+    public void filterTransactions(String criteria, LocalDate current){
         ArrayList<Transaction> pomocne = new ArrayList<>();
         if (criteria.matches("All")) {
-            filterMonth(LocalDate.now());
+            filterMonth(current);
             return;
         }
+
+        filterMonth(current);
+
         for (int i = 0; i < transactions.size(); i++){
             if (criteria.matches("Individual Payment") && transactions.get(i).getType() == Type.INDIVIDUALPAYMENT){
                 pomocne.add(transactions.get(i));
@@ -140,7 +138,7 @@ public class FinancePresenter implements IFinancePresenter {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void filterMonth(LocalDate current1){
-        ArrayList<Transaction> pomocne = new ArrayList<>();    //testirat
+        ArrayList<Transaction> pomocne = new ArrayList<>();
         transactions = interactor.get();
         for (Transaction t: transactions) {
             if (t.getEndDate() != null) {

@@ -24,7 +24,7 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
     private Account account;
     private GestureDetector gestureDetector;
     private OnBudgetChange onBudgetChange;
-    private int orientation = getResources().getConfiguration().orientation;
+
 
     @Override
     public boolean onDown(MotionEvent e) {
@@ -68,12 +68,12 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
     }
 
     private void onSwipeLeft() {
-
+        int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) onBudgetChange.onRightClicked2();
     }
 
     private void onSwipeRight() {
-
+        int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) onBudgetChange.onLeftClicked2();
     }
 

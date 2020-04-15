@@ -156,10 +156,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onRightClicked2() {
 
-//        Bundle arguments = new Bundle();
-//        arguments.putParcelable("budget", t);
         GraphsFragment graphsFragment = new GraphsFragment();
-      //  budgetFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, graphsFragment)
                 .addToBackStack(null)
@@ -194,12 +191,6 @@ public class MainActivity extends AppCompatActivity implements
         Bundle arguments = new Bundle();
         arguments.putParcelable("new", transaction);
         arguments.putParcelable("account", account);
-//        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
-//        detailFragment.setArguments(arguments);
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.transaction_list, detailFragment)
-//                .addToBackStack(null)
-//                .commit();
         TransactionListFragment listFragment = new TransactionListFragment();
         TransactionDetailFragment detailFragment = new TransactionDetailFragment();
         listFragment.setArguments(arguments);
@@ -207,8 +198,9 @@ public class MainActivity extends AppCompatActivity implements
                 .replace(R.id.transaction_list, listFragment)
                 .addToBackStack(null)
                 .commit();
+        detailFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.transaction_detail, detailFragment)
+                .replace(R.id.transaction_list, detailFragment)
                 .commit();
     }
 
