@@ -49,7 +49,7 @@ public class TransactionDetailFragment extends Fragment {
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
     private Transaction trans, original;
     private Account account;
-    private IAccountPresenter accountPresenter = new AccountPresenter( getActivity());
+    private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
 
 
     private OnItemChange onItemChange;
@@ -332,15 +332,9 @@ public class TransactionDetailFragment extends Fragment {
                         }
                     }
                 }
-
             });
 
-
-
-
             return view;
-
     }
-
 }
 

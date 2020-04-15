@@ -12,6 +12,8 @@ import java.util.Comparator;
 
 public class FinancePresenter implements IFinancePresenter {
     private ArrayList<Transaction> transactions;
+
+
     @RequiresApi(api = Build.VERSION_CODES.N)
 
     @Override
@@ -157,23 +159,15 @@ public class FinancePresenter implements IFinancePresenter {
 
 
     public void addTransaction(Transaction t){
-        transactions.add(t);
+        interactor.add(t);
         view.setTransactions(transactions);
         view.notifyTransactionsListDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void deleteTransaction(Transaction t){
-        for (int i = 0; i < transactions.size(); i++) {
-            Transaction t1 = transactions.get(i);
-            if (t1.getTitle().matches(t.getTitle()) && t1.getAmount() == t.getAmount()
-                    && t1.getTransactionInterval() == t.getTransactionInterval()
-                    && t1.getItemDescription().matches(t.getItemDescription())){
-                transactions.remove(t1);
-                view.setTransactions(transactions);
-                view.notifyTransactionsListDataSetChanged();
-                break;
-            }
-        }
+        interactor.delete(t);
+        view.setTransactions(transactions);
+        view.notifyTransactionsListDataSetChanged();
     }
 }

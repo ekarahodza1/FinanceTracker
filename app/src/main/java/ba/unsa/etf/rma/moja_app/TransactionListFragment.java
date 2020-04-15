@@ -49,12 +49,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         return financePresenter;
     }
 
-//    public IAccountPresenter getAccountPresenter(){
-//        if (accountPresenter == null){
-//            accountPresenter = new AccountPresenter(this, getActivity());
-//        }
-//        return accountPresenter;
-//    }
 
     private OnItemClick onItemClick;
     public interface OnItemClick {
