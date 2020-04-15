@@ -1,6 +1,7 @@
 package ba.unsa.etf.rma.moja_app;
 
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +23,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 
-public class GraphsFragment extends Fragment implements OnChartGestureListener, OnChartValueSelectedListener {
+public class GraphsFragment extends Fragment implements GestureDetector.OnGestureListener {
 
     private BarChart income;
     private BarChart payment;
@@ -32,9 +33,15 @@ public class GraphsFragment extends Fragment implements OnChartGestureListener, 
     private Button month;
     private FinanceInteractor interactor = new FinanceInteractor();
     private ArrayList<Transaction> list;
-    IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
+    private GestureDetector gestureDetector;
+    private IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
+    private OnSwipeChange onSwipeChange;
 
+    public interface OnSwipeChange {
+        public void onRightClicked3();
+        public void onLeftClicked3();
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -172,56 +179,70 @@ public class GraphsFragment extends Fragment implements OnChartGestureListener, 
             }
         });
 
+        onSwipeChange = (OnSwipeChange) getActivity();
+
+        gestureDetector = new GestureDetector(this);
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+
         return view;
     }
 
+
+
     @Override
-    public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
 
     }
 
     @Override
-    public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
 
     }
 
     @Override
-    public void onChartLongPressed(MotionEvent me) {
-
+    public boolean onFling(MotionEvent down, MotionEvent move, float X, float Y) {
+        boolean value = false;
+        float diffY = move.getY() - down.getY();
+        float diffX = move.getX() - down.getX();
+        if (Math.abs(diffX) > 100 && Math.abs(X) > 100){
+            if (diffX > 0){
+                onSwipeRight();
+            } else {
+                onSwipeLeft();
+            }
+            value = true;
+        }
+        return value;
     }
 
-    @Override
-    public void onChartDoubleTapped(MotionEvent me) {
-
+    private void onSwipeRight() {
+        onSwipeChange.onLeftClicked3();
     }
 
-    @Override
-    public void onChartSingleTapped(MotionEvent me) {
-
+    private void onSwipeLeft() {
+        onSwipeChange.onRightClicked3();
     }
 
-    @Override
-    public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-
-    }
-
-    @Override
-    public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-
-    }
-
-    @Override
-    public void onChartTranslate(MotionEvent me, float dX, float dY) {
-
-    }
-
-    @Override
-    public void onValueSelected(Entry e, Highlight h) {
-
-    }
-
-    @Override
-    public void onNothingSelected() {
-
-    }
 }

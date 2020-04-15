@@ -30,7 +30,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements
         TransactionListFragment.OnItemClick,
         TransactionDetailFragment.OnItemChange,
-         BudgetFragment.OnBudgetChange{//AdapterView.OnItemSelectedListener,
+         BudgetFragment.OnBudgetChange, GraphsFragment.OnSwipeChange{
 
     private boolean twoPaneMode;
 
@@ -211,6 +211,44 @@ public class MainActivity extends AppCompatActivity implements
                 .replace(R.id.transaction_detail, detailFragment)
                 .commit();
     }
+
+    @Override
+    public void onLeftClicked1(){
+        GraphsFragment graphsFragment = new GraphsFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, graphsFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onLeftClicked2(){
+        TransactionListFragment transactionListFragment = new TransactionListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, transactionListFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onRightClicked3(){
+        TransactionListFragment transactionListFragment = new TransactionListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, transactionListFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onLeftClicked3(){
+        BudgetFragment budgetFragment = new BudgetFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, budgetFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+
 
 
 

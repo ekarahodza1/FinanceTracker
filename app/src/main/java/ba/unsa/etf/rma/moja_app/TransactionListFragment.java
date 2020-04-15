@@ -3,7 +3,9 @@ package ba.unsa.etf.rma.moja_app;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,14 +14,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class TransactionListFragment extends Fragment implements IFinanceView, AdapterView.OnItemSelectedListener{
+public class TransactionListFragment extends Fragment implements IFinanceView,
+        AdapterView.OnItemSelectedListener, GestureDetector.OnGestureListener {
 
     private TextView limitView;
     private TextView globalAmountView;
@@ -30,7 +36,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     private TextView monthView;
     private Button leftButton;
     private Button rightButton;
-    private Button right;
     private LocalDate current = null;
     private Button add;
     private String month = null;
@@ -41,6 +46,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
     private ListAdapter listAdapter;
     private IFinancePresenter financePresenter;
     private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
+    private GestureDetector gestureDetector;
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -51,11 +57,68 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
 
 
     private OnItemClick onItemClick;
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent down, MotionEvent move, float X, float Y) {
+        boolean value = false;
+        float diffY = move.getY() - down.getY();
+        float diffX = move.getX() - down.getX();
+        if (Math.abs(diffX) > 100 && Math.abs(X) > 100){
+            if (diffX > 0){
+                onSwipeRight();
+            } else {
+                onSwipeLeft();
+            }
+            value = true;
+        }
+        return value;
+    }
+
+    private void onSwipeLeft() {
+        onItemClick.onRightClicked1(accountPresenter.get());
+    }
+
+    private void onSwipeRight() {
+        onItemClick.onLeftClicked1();
+    }
+
+
+
+
+
     public interface OnItemClick {
         public void onItemClicked(Transaction t, Account a);
         public void onNewClicked(Transaction t, Account a);
         public void onRightClicked1(Account a);
+        public void onLeftClicked1();
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -173,17 +236,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
         });
 
 
-        right = (Button)fragmentView.findViewById(R.id.right);
-        right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClick.onRightClicked1(accountPresenter.get());
-            }
-        });
-
-
-
-
         add = (Button)fragmentView.findViewById(R.id.buttonAdd);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,10 +262,23 @@ public class TransactionListFragment extends Fragment implements IFinanceView, A
             financePresenter.addTransaction(trans);
         }
 
+        gestureDetector = new GestureDetector(this);
+
+        fragmentView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+
 
 
         return fragmentView;
         }
+
+        
+
 
 
     private void initList(){
