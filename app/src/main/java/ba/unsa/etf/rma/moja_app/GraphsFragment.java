@@ -72,7 +72,11 @@ public class GraphsFragment extends Fragment implements OnChartGestureListener, 
         payment.setData(data2);
         all.setData(data3);
 
-        income.invalidate();
+        payment.setDescription(null);
+        income.setDescription(null);
+        all.setDescription(null);
+
+        //income.invalidate();
 
         day = (Button)view.findViewById(R.id.days);
         week = (Button)view.findViewById(R.id.week);
@@ -96,6 +100,15 @@ public class GraphsFragment extends Fragment implements OnChartGestureListener, 
                 income.setData(data1);
                 payment.setData(data2);
                 all.setData(data3);
+
+                income.notifyDataSetChanged();
+                income.invalidate();
+
+                payment.notifyDataSetChanged();
+                payment.invalidate();
+
+                all.notifyDataSetChanged();
+                all.invalidate();
             }
         });
 
@@ -117,6 +130,15 @@ public class GraphsFragment extends Fragment implements OnChartGestureListener, 
                 income.setData(data1);
                 payment.setData(data2);
                 all.setData(data3);
+
+                income.notifyDataSetChanged();
+                income.invalidate();
+
+                payment.notifyDataSetChanged();
+                payment.invalidate();
+
+                all.notifyDataSetChanged();
+                all.invalidate();
             }
         });
 
@@ -138,6 +160,15 @@ public class GraphsFragment extends Fragment implements OnChartGestureListener, 
                 income.setData(data1);
                 payment.setData(data2);
                 all.setData(data3);
+
+                income.notifyDataSetChanged();
+                income.invalidate();
+
+                payment.notifyDataSetChanged();
+                payment.invalidate();
+
+                all.notifyDataSetChanged();
+                all.invalidate();
             }
         });
 
