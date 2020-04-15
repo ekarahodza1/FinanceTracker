@@ -146,7 +146,8 @@ public class Transaction implements Parcelable {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(date.toString());
+        if (date == null) dest.writeString("");
+        else dest.writeString(date.toString());
         if (endDate == null) dest.writeString("");
         else dest.writeString(endDate.toString());
         dest.writeString(title);
