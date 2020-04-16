@@ -23,7 +23,7 @@ public class Model {
                         "", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2020, 3, 1), "Meal allowance", 200, Type.REGULARINCOME,
+                add(new Transaction(LocalDate.of(2020, 3, 1), "Meals", 200, Type.REGULARINCOME,
                         "", 30, LocalDate.of(2020, 12, 1)));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
