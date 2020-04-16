@@ -2,6 +2,7 @@ package ba.unsa.etf.rma.moja_app;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -48,7 +49,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private IFinancePresenter financePresenter;
     private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
     private GestureDetector gestureDetector;
-
+    private int positionOfLastItem = -1;
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -239,8 +240,19 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         transactionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Transaction transaction = listAdapter.getItem(position);
-                onItemClick.onItemClicked(transaction, account);
+
+                if (positionOfLastItem != position) {
+                    positionOfLastItem = position;
+                    Transaction transaction = listAdapter.getItem(position);
+                    transactionList.setSelector(R.color.colorAccent);
+                    onItemClick.onItemClicked(transaction, account);
+                }
+                else {
+                    positionOfLastItem = -1;
+                    transactionList.setSelector(R.color.white);
+                    Transaction t = new Transaction(null, null, 0, null, null, 0, null);
+                    onItemClick.onNewClicked(t, account);
+                }
 
 
             }

@@ -199,9 +199,11 @@ public class MainActivity extends AppCompatActivity implements
                 .addToBackStack(null)
                 .commit();
         detailFragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.transaction_list, detailFragment)
-                .commit();
+        if (twoPaneMode) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.transaction_detail, detailFragment)
+                    .commit();
+        }
     }
 
     @Override

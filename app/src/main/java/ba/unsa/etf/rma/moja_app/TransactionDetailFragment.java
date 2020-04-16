@@ -228,9 +228,7 @@ public class TransactionDetailFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
                     date.setBackgroundColor(Color.GREEN);
-
 
                 }
             });

@@ -57,13 +57,12 @@
         android:id="@+id/transactionList"
         android:layout_width="271dp"
         android:layout_height="201dp"
-        android:listSelector="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintHorizontal_bias="0.426"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortSpinner"
-        app:layout_constraintVertical_bias="0.139" />
+        app:layout_constraintVertical_bias="0.096" />
 
     <Button
         android:id="@+id/leftButton"
@@ -109,10 +108,10 @@
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="520dp"
+        android:layout_marginTop="548dp"
         android:text="Add transaction"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.14"
+        app:layout_constraintHorizontal_bias="0.144"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
