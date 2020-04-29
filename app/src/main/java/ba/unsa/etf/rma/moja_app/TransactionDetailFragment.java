@@ -50,7 +50,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private LocalDate date2;
     private LocalDate current;
     private Type type_;
-    private int mInterval = 0;
+    private Integer mInterval = 0;
     private boolean dodavanje = false;
     private String mDescription = "";
     private String imageType = "";
@@ -362,16 +362,10 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
                     mTitle = title.getText().toString();
                     mDescription = description.getText().toString();
-
-
-
-                    if (presenter.validateDate(date.getText().toString()))
-                        date1 = LocalDate.parse(date.getText().toString());
-                    if (presenter.validateDate(endDate.getText().toString()))
-                        date2 = LocalDate.parse(endDate.getText().toString());
                     mAmount = Double.parseDouble(amount.getText().toString());
                     mInterval = Integer.parseInt(interval.getText().toString());
                     if (type_ != null) imageType = type_.toString();
+                    else imageType = null;
 
                     if (presenter.validateDescription(mDescription, imageType) == false
                             || presenter.validateTitle(mTitle) == false

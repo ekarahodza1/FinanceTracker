@@ -52,16 +52,5 @@ public class ListItemPresenter implements IListItemPresenter {
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public boolean validateDate(String date){
-        try {
-            LocalDate d = LocalDate.parse(date);
 
-        }
-        catch(Exception e){
-            return false;
-        }
-        return true;
-    }
 }
