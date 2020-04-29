@@ -1,10 +1,12 @@
 package ba.unsa.etf.rma.moja_app;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,8 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -29,8 +34,8 @@ public class TransactionDetailFragment extends Fragment {
     private ImageView image;
     private EditText title;
     private EditText amount;
-    private EditText date;
-    private EditText endDate;
+    private TextView date;
+    private TextView endDate;
     private EditText description;
     private EditText interval;
     private EditText type;
@@ -50,6 +55,8 @@ public class TransactionDetailFragment extends Fragment {
     private Transaction trans, original;
     private Account account;
     private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
+    private DatePickerDialog.OnDateSetListener  mOnDateSetListener1;
+    private DatePickerDialog.OnDateSetListener  mOnDateSetListener2;
 
 
     private OnItemChange onItemChange;
@@ -125,12 +132,62 @@ public class TransactionDetailFragment extends Fragment {
         description.setText(mDescription);
         if (date1 != null) date.setText(date1.toString());
         if (date2 != null) endDate.setText(date2.toString());
-        else endDate.setText("");
+        else endDate.setText("No end date");
+
 
 
         if (mTitle == null) {
             delete.setEnabled(false);
         }
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mOnDateSetListener1, date1.getYear(), date1.getMonthValue()-1, date1.getDayOfMonth());
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+            }
+        });
+
+        mOnDateSetListener1 = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                LocalDate d = LocalDate.of(year, month+1, dayOfMonth);
+                date1 = d;
+                date.setText(date1.toString());
+            }
+        };
+
+        endDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (date2 != null) {
+                    DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+                            android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                            mOnDateSetListener2, date2.getYear(), date2.getMonthValue(), date2.getDayOfMonth());
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
+                else {
+                    Toast.makeText(getActivity(), "There is no end date", Toast.LENGTH_SHORT);
+                }
+
+            }
+        });
+
+        mOnDateSetListener2 = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                LocalDate d = LocalDate.of(year, month, dayOfMonth);
+                date2 = d;
+                endDate.setText(date2.toString());
+            }
+        };
+
+
 
 
         onItemChange = (OnItemChange) getActivity();
@@ -274,6 +331,9 @@ public class TransactionDetailFragment extends Fragment {
 
                     mTitle = title.getText().toString();
                     mDescription = description.getText().toString();
+
+
+
                     if (presenter.validateDate(date.getText().toString()))
                         date1 = LocalDate.parse(date.getText().toString());
                     if (presenter.validateDate(endDate.getText().toString()))
