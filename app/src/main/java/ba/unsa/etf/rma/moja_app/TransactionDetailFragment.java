@@ -45,6 +45,7 @@ public class TransactionDetailFragment extends Fragment {
     private double mAmount;
     private LocalDate date1;
     private LocalDate date2;
+    private LocalDate current;
     private Type type_;
     private int mInterval = 0;
     private boolean dodavanje = false;
@@ -111,6 +112,7 @@ public class TransactionDetailFragment extends Fragment {
 
 
 
+            current = LocalDate.now();
 
         if (trans.getType() != null) imageType = trans.getType().toString();
 
@@ -131,8 +133,9 @@ public class TransactionDetailFragment extends Fragment {
         interval.setText(s);
         description.setText(mDescription);
         if (date1 != null) date.setText(date1.toString());
+        else date.setText("No date, click to enter");
         if (date2 != null) endDate.setText(date2.toString());
-        else endDate.setText("No end date");
+        else endDate.setText("No end date, click to enter");
 
 
 
@@ -143,12 +146,20 @@ public class TransactionDetailFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(getActivity(),
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mOnDateSetListener1, date1.getYear(), date1.getMonthValue()-1, date1.getDayOfMonth());
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-
+                if (date != null) {
+                    DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+                            android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                            mOnDateSetListener1, date1.getYear(), date1.getMonthValue() - 1, date1.getDayOfMonth());
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
+                else {
+                    DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+                            android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                            mOnDateSetListener1, current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth());
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
+                }
             }
         });
 
@@ -167,12 +178,16 @@ public class TransactionDetailFragment extends Fragment {
                 if (date2 != null) {
                     DatePickerDialog dialog = new DatePickerDialog(getActivity(),
                             android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                            mOnDateSetListener2, date2.getYear(), date2.getMonthValue(), date2.getDayOfMonth());
+                            mOnDateSetListener2, date2.getYear(), date2.getMonthValue()-1, date2.getDayOfMonth());
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.show();
                 }
                 else {
-                    Toast.makeText(getActivity(), "There is no end date", Toast.LENGTH_SHORT);
+                    DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+                            android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                            mOnDateSetListener2, current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth());
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
                 }
 
             }
@@ -181,7 +196,7 @@ public class TransactionDetailFragment extends Fragment {
         mOnDateSetListener2 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                LocalDate d = LocalDate.of(year, month, dayOfMonth);
+                LocalDate d = LocalDate.of(year, month+1, dayOfMonth);
                 date2 = d;
                 endDate.setText(date2.toString());
             }
