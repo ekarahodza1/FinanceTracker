@@ -10,4 +10,13 @@
         <item>Date - Ascending</item>
         <item>Date - Descending</item>
     </string-array>
+
+    <string-array name="type">
+        <item>Individual payment</item>
+        <item>Regular payment</item>
+        <item>Purchase</item>
+        <item>Individual income</item>
+        <item>Regular income</item>
+    </string-array>
+
 </resources>

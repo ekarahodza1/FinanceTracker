@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editType" />
 
-    <EditText
+    <Spinner
         android:id="@+id/editType"
         android:layout_width="200dp"
         android:layout_height="40dp"

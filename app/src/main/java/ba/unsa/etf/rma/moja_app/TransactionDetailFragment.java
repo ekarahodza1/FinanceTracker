@@ -14,10 +14,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +32,7 @@ import java.time.LocalDate;
 import static android.app.Activity.RESULT_CANCELED;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class TransactionDetailFragment extends Fragment {
+public class TransactionDetailFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private ImageView image;
     private EditText title;
@@ -38,7 +41,7 @@ public class TransactionDetailFragment extends Fragment {
     private TextView endDate;
     private EditText description;
     private EditText interval;
-    private EditText type;
+    private Spinner type;
     private Button delete;
     private Button OK;
     private String mTitle = "";
@@ -61,6 +64,22 @@ public class TransactionDetailFragment extends Fragment {
 
 
     private OnItemChange onItemChange;
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        type.setBackgroundColor(Color.GREEN);
+        if (position == 0) type_ = Type.INDIVIDUALPAYMENT;
+        else if (position == 1) type_ = Type.REGULARPAYMENT;
+        else if (position == 2) type_ = Type.PURCHASE;
+        else if (position == 3) type_ = Type.INDIVIDUALINCOME;
+        else if (position == 4) type_ = Type.REGULARINCOME;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     public interface OnItemChange {
         public void onDeleteClicked(Transaction t);
         public void onAddClicked(Transaction transaction);
@@ -98,6 +117,9 @@ public class TransactionDetailFragment extends Fragment {
         else return view;
 
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.type, android.R.layout.simple_spinner_item);
+
             image = view.findViewById(R.id.image1);
             title = view.findViewById(R.id.editTitle);
             amount = view.findViewById(R.id.editAmount);
@@ -114,9 +136,19 @@ public class TransactionDetailFragment extends Fragment {
 
             current = LocalDate.now();
 
-        if (trans.getType() != null) imageType = trans.getType().toString();
+        if (trans.getType() != null) {
+            imageType = trans.getType().toString();
+            if (trans.getType() == Type.INDIVIDUALPAYMENT) type.setSelection(0);
+            else if (trans.getType() == Type.REGULARPAYMENT) type.setSelection(1);
+            else if (trans.getType() == Type.PURCHASE) type.setSelection(2);
+            else if (trans.getType() == Type.INDIVIDUALINCOME) type.setSelection(3);
+            else if (trans.getType() == Type.REGULARINCOME) type.setSelection(4);
+            type_ = trans.getType();
+        }
 
-        type.setText(imageType);
+        type.setAdapter(adapter);
+        type.setOnItemSelectedListener(this);
+
         mTitle = trans.getTitle();
         mAmount = trans.getAmount();
         mDescription = trans.getItemDescription();
@@ -146,7 +178,7 @@ public class TransactionDetailFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (date != null) {
+                if (date1 != null) {
                     DatePickerDialog dialog = new DatePickerDialog(getActivity(),
                             android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                             mOnDateSetListener1, date1.getYear(), date1.getMonthValue() - 1, date1.getDayOfMonth());
@@ -322,22 +354,6 @@ public class TransactionDetailFragment extends Fragment {
                 }
             });
 
-            type.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    type.setBackgroundColor(Color.GREEN);
-                }
-            });
-
-
 
             OK.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -355,7 +371,7 @@ public class TransactionDetailFragment extends Fragment {
                         date2 = LocalDate.parse(endDate.getText().toString());
                     mAmount = Double.parseDouble(amount.getText().toString());
                     mInterval = Integer.parseInt(interval.getText().toString());
-                    imageType = type.getText().toString();
+                    if (type_ != null) imageType = type_.toString();
 
                     if (presenter.validateDescription(mDescription, imageType) == false
                             || presenter.validateTitle(mTitle) == false
