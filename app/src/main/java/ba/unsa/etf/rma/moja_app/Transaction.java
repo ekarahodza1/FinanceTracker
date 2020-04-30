@@ -154,8 +154,7 @@ public class Transaction implements Parcelable {
         dest.writeString(itemDescription);
         dest.writeDouble(amount);
         dest.writeInt(transactionInterval);
-        if (type == null) dest.writeString("");
-        else dest.writeString(type.toString());
+        dest.writeString(type.toString());
 
 
     }

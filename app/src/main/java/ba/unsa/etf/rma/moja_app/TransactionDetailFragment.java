@@ -55,6 +55,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private String mDescription = "";
     private String imageType = "";
     private double budget;
+    private boolean boja = false;
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
     private Transaction trans, original;
     private Account account;
@@ -66,13 +67,17 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private OnItemChange onItemChange;
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        type.setBackgroundColor(Color.GREEN);
-        if (position == 0) type_ = Type.INDIVIDUALPAYMENT;
-        else if (position == 1) type_ = Type.REGULARPAYMENT;
-        else if (position == 2) type_ = Type.PURCHASE;
-        else if (position == 3) type_ = Type.INDIVIDUALINCOME;
-        else if (position == 4) type_ = Type.REGULARINCOME;
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+        if (pos == 0) type_ = Type.INDIVIDUALPAYMENT;
+        else if (pos == 1) type_ = Type.REGULARPAYMENT;
+        else if (pos == 2) type_ = Type.PURCHASE;
+        else if (pos == 3) type_ = Type.INDIVIDUALINCOME;
+        else if (pos == 4) type_ = Type.REGULARINCOME;
+        if (boja) {
+            type.setBackgroundColor(Color.GREEN);
+        }
+        boja = true;
     }
 
     @Override
@@ -132,22 +137,37 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
             OK = (Button) view.findViewById(R.id.buttonOK);
 
 
-
+        type.setAdapter(adapter);
+        type.setOnItemSelectedListener(this);
 
             current = LocalDate.now();
 
         if (trans.getType() != null) {
             imageType = trans.getType().toString();
-            if (trans.getType() == Type.INDIVIDUALPAYMENT) type.setSelection(0);
-            else if (trans.getType() == Type.REGULARPAYMENT) type.setSelection(1);
-            else if (trans.getType() == Type.PURCHASE) type.setSelection(2);
-            else if (trans.getType() == Type.INDIVIDUALINCOME) type.setSelection(3);
-            else if (trans.getType() == Type.REGULARINCOME) type.setSelection(4);
+            if (trans.getType() == Type.INDIVIDUALPAYMENT) {
+                type.setSelection(0);
+
+            }
+            else if (trans.getType() == Type.REGULARPAYMENT) {
+                type.setSelection(1);
+
+            }
+            else if (trans.getType() == Type.PURCHASE) {
+                type.setSelection(2);
+            }
+            else if (trans.getType() == Type.INDIVIDUALINCOME) {
+                type.setSelection(3);
+
+            }
+            else if (trans.getType() == Type.REGULARINCOME) {
+                type.setSelection(4);
+
+            }
             type_ = trans.getType();
         }
 
-        type.setAdapter(adapter);
-        type.setOnItemSelectedListener(this);
+
+
 
         mTitle = trans.getTitle();
         mAmount = trans.getAmount();
