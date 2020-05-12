@@ -79,8 +79,9 @@ public class FinanceInteractor extends AsyncTask<String, Integer, Void> implemen
                 Integer type = t.getInt("TransactionTypeId");
                 String description = t.getString("itemDescription");
                 Integer interval;
-                if (t.getString("transactionInterval") == null) interval = 0;
-                else interval = t.getInt("transactionInterval");
+                String interv = t.getString("transactionInterval");
+                if (interv == null) interval = 0;
+                else interval = 30;
                 String endDate = t.getString("endDate");  LocalDate d2 = null;
                 Integer id = t.getInt("id");
 
