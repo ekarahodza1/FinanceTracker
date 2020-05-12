@@ -18,10 +18,29 @@ public class Transaction implements Parcelable {
     private double amount;
     private String typeString;
     private Type type;
+    private int type_;
     private String itemDescription;
     private int transactionInterval;
     private LocalDate endDate;
     private int image;
+    private int id;
+
+    public Transaction(int id, LocalDate date, String title, double amount, int type, String itemDescription, int transactionInterval, LocalDate endDate) {
+        this.date = date;
+        this.title = title;
+        this.amount = amount;
+        this.type_ = type;
+        this.itemDescription = itemDescription;
+        this.transactionInterval = transactionInterval;
+        this.endDate = endDate;
+        this.id = id;
+
+        if (type == 1) this.type = Type.REGULARINCOME;
+        else if (type == 2) this.type = Type.REGULARPAYMENT;
+        else if (type == 3) this.type = Type.PURCHASE;
+        else if (type == 4) this.type = Type.INDIVIDUALINCOME;
+        else if (type == 5) this.type = Type.INDIVIDUALPAYMENT;
+    }
 
     public Transaction(LocalDate date, String title, double amount, Type type, String itemDescription, int transactionInterval, LocalDate endDate) {
         this.date = date;
@@ -32,6 +51,8 @@ public class Transaction implements Parcelable {
         this.transactionInterval = transactionInterval;
         this.endDate = endDate;
     }
+
+
 
     public Transaction(String type, int image) {
         this.typeString = type;
@@ -85,6 +106,14 @@ public class Transaction implements Parcelable {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

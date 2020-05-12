@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class FinancePresenter implements IFinancePresenter {
+public class FinancePresenter implements IFinancePresenter, FinanceInteractor.OnTransactionsAdd {
     private ArrayList<Transaction> transactions;
 
 
@@ -122,9 +122,19 @@ public class FinancePresenter implements IFinancePresenter {
 
     public FinancePresenter(IFinanceView view, Context context) {
         this.view       = view;
-        this.interactor = new FinanceInteractor();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.interactor = (IFinanceInteractor)
+                    new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this);
+        }
+
         this.context    = context;
-        transactions = interactor.get();
+        transactions = interactor.getT();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void addTransactions(){
+        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
     }
 
     @Override
@@ -139,7 +149,7 @@ public class FinancePresenter implements IFinancePresenter {
     @Override
     public void filterMonth(LocalDate current1){
         ArrayList<Transaction> pomocne = new ArrayList<>();
-        transactions = interactor.get();
+        transactions = interactor.getT();
         for (Transaction t: transactions) {
             if (t.getEndDate() != null) {
                 if (current1.getMonthValue() >= t.getDate().getMonthValue()
@@ -160,14 +170,21 @@ public class FinancePresenter implements IFinancePresenter {
 
     public void addTransaction(Transaction t){
         interactor.add(t);
-        view.setTransactions(interactor.get());
+        view.setTransactions(interactor.getT());
         view.notifyTransactionsListDataSetChanged();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void deleteTransaction(Transaction t){
         interactor.delete(t);
-        view.setTransactions(interactor.get());
+        view.setTransactions(interactor.getT());
+        view.notifyTransactionsListDataSetChanged();
+    }
+
+    @Override
+    public void onDone(ArrayList<Transaction> results) {
+        transactions = results;
+        view.setTransactions(results);
         view.notifyTransactionsListDataSetChanged();
     }
 }

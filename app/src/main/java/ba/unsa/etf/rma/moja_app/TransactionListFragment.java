@@ -152,6 +152,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         listAdapter = new ListAdapter(getActivity(), R.layout.list_view1, new ArrayList<Transaction>());
         transactionList = (ListView) fragmentView.findViewById(R.id.transactionList);
         transactionList.setAdapter(listAdapter);
+        getPresenter().addTransactions();
         getPresenter().refreshTransactions();
 
 

@@ -14,4 +14,6 @@ public interface IFinancePresenter {
     void filterMonth(LocalDate current1);
     void deleteTransaction(Transaction t);
     void addTransaction(Transaction t);
+
+    void addTransactions();
 }

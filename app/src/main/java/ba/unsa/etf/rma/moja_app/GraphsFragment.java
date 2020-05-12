@@ -32,7 +32,7 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     private Button day;
     private Button week;
     private Button month;
-    private FinanceInteractor interactor = new FinanceInteractor();
+    private FinanceInteractor interactor = new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this);
     private ArrayList<Transaction> list;
     private GestureDetector gestureDetector;
     private IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
@@ -66,7 +66,7 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
         all.setDragEnabled(false);
         all.setScaleEnabled(false);
 
-        list = interactor.get();
+        list = interactor.getT();
 
         ArrayList<BarEntry> mIncome = graphPresenter.getMonthIncome(list);
         ArrayList<BarEntry> mPayment = graphPresenter.getMonthPayment(list);
