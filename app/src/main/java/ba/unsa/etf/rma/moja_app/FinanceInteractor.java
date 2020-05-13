@@ -19,7 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class FinanceInteractor extends AsyncTask<String, Integer, Void> implements IFinanceInteractor {
@@ -61,7 +63,6 @@ public class FinanceInteractor extends AsyncTask<String, Integer, Void> implemen
         String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
                 + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114" + "/transactions?page=0";
 
-        System.out.println("Uslo 1");
         try {
             URL url = new URL(url1);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -69,25 +70,26 @@ public class FinanceInteractor extends AsyncTask<String, Integer, Void> implemen
             String result = convertStreamToString(in);
             JSONObject jo = new JSONObject(result);
             JSONArray results = jo.getJSONArray("transactions");
-            System.out.println("Uslo 2");
+
             for (int i = 0; i < results.length(); i++) {
                 JSONObject t = results.getJSONObject(i);
 
-                String date = t.getString("date"); LocalDate d1 = LocalDate.now();
+                String date = t.getString("date");
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+                LocalDate d1 = LocalDate.parse(date, dateTimeFormatter);
                 String title = t.getString("title");
                 Double amount = t.getDouble("amount");
                 Integer type = t.getInt("TransactionTypeId");
-                String description = t.getString("itemDescription");
+                String description = t.getString("itemDescription"); if (description.matches("null")) description = "";
                 Integer interval;
                 String interv = t.getString("transactionInterval");
-                if (interv == null) interval = 0;
-                else interval = 30;
+                if (interv.matches("null")) interval = 0;
+                else interval = Integer.parseInt(interv);
                 String endDate = t.getString("endDate");  LocalDate d2 = null;
                 Integer id = t.getInt("id");
 
-                if(endDate != null) {
-                    d2 = LocalDate.now();
-                    d2.minusMonths(-2);
+                if(!endDate.matches("null")) {
+                    d2 = LocalDate.parse(endDate, dateTimeFormatter);
                 }
 
                 transactions.add(new Transaction(id, d1, title, amount, type, description, interval, d2));

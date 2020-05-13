@@ -29,7 +29,7 @@ public class ListItemPresenter implements IListItemPresenter {
 
     @Override
     public boolean validateTitle(String title){
-        if (title.length() > 3 && title.length() < 15) return true;
+        if (title.length() >= 3 && title.length() <= 15) return true;
         return false;
     }
 
