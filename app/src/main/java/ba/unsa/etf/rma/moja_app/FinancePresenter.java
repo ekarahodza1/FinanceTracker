@@ -149,8 +149,9 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     @Override
     public void filterMonth(LocalDate current1){
         ArrayList<Transaction> pomocne = new ArrayList<>();
-       // transactions = interactor.getT();
-        for (Transaction t: transactions) {
+        ArrayList<Transaction> pomocne1 = new ArrayList<>();
+        pomocne1 = transactions;
+        for (Transaction t: pomocne1) {
             if (t.getEndDate() != null) {
                 if (current1.getMonthValue() >= t.getDate().getMonthValue()
                         && current1.getMonthValue() <= t.getEndDate().getMonthValue()
@@ -163,7 +164,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
         }
 
-        transactions = pomocne;
+        //transactions = pomocne;
         view.setTransactions(pomocne);
     }
 

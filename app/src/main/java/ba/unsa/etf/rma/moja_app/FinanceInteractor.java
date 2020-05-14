@@ -59,49 +59,53 @@ public class FinanceInteractor extends AsyncTask<String, Integer, Void> implemen
     @Override
     protected Void doInBackground(String... strings) {
 
+        for (int j = 0; j < 4; j++) {
 
-        String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
-                + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114" + "/transactions?page=0";
+            String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
+                    + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114" + "/transactions?page=" + j;
 
-        try {
-            URL url = new URL(url1);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            String result = convertStreamToString(in);
-            JSONObject jo = new JSONObject(result);
-            JSONArray results = jo.getJSONArray("transactions");
+            try {
+                URL url = new URL(url1);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                String result = convertStreamToString(in);
+                JSONObject jo = new JSONObject(result);
+                JSONArray results = jo.getJSONArray("transactions");
 
-            for (int i = 0; i < results.length(); i++) {
-                JSONObject t = results.getJSONObject(i);
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject t = results.getJSONObject(i);
 
-                String date = t.getString("date");
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-                LocalDate d1 = LocalDate.parse(date, dateTimeFormatter);
-                String title = t.getString("title");
-                Double amount = t.getDouble("amount");
-                Integer type = t.getInt("TransactionTypeId");
-                String description = t.getString("itemDescription"); if (description.matches("null")) description = "";
-                Integer interval;
-                String interv = t.getString("transactionInterval");
-                if (interv.matches("null")) interval = 0;
-                else interval = Integer.parseInt(interv);
-                String endDate = t.getString("endDate");  LocalDate d2 = null;
-                Integer id = t.getInt("id");
+                    String date = t.getString("date");
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+                    LocalDate d1 = LocalDate.parse(date, dateTimeFormatter);
+                    String title = t.getString("title");
+                    Double amount = t.getDouble("amount");
+                    Integer type = t.getInt("TransactionTypeId");
+                    String description = t.getString("itemDescription");
+                    if (description.matches("null")) description = "";
+                    Integer interval;
+                    String interv = t.getString("transactionInterval");
+                    if (interv.matches("null")) interval = 0;
+                    else interval = Integer.parseInt(interv);
+                    String endDate = t.getString("endDate");
+                    LocalDate d2 = null;
+                    Integer id = t.getInt("id");
 
-                if(!endDate.matches("null")) {
-                    d2 = LocalDate.parse(endDate, dateTimeFormatter);
+                    if (!endDate.matches("null")) {
+                        d2 = LocalDate.parse(endDate, dateTimeFormatter);
+                    }
+
+                    transactions.add(new Transaction(id, d1, title, amount, type, description, interval, d2));
+
+                    if (i == 4) break;
                 }
-
-                transactions.add(new Transaction(id, d1, title, amount, type, description, interval, d2));
-
-                if (i==4) break;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
         return null;
     }
