@@ -154,7 +154,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         transactionList.setAdapter(listAdapter);
         getPresenter().addTransactions();
         getPresenter().refreshTransactions();
-
+        accountPresenter.addAccount();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             current = LocalDate.now();
@@ -227,7 +227,11 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         if (getArguments() != null && getArguments().containsKey("new_account")){
             account = getArguments().getParcelable("new_account");
         }
-        else account = accountPresenter.get();
+
+        else {
+
+            account = accountPresenter.get();
+        }
 
 
         String s = ""; s += account.getTotalLimit();

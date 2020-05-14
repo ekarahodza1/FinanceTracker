@@ -6,4 +6,6 @@ public interface IAccountPresenter {
     public Account get();
     public void set(Account a);
     public void set(Parcelable a);
+
+    void addAccount();
 }

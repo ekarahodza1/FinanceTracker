@@ -3,13 +3,13 @@ package ba.unsa.etf.rma.moja_app;
 import android.content.Context;
 import android.os.Parcelable;
 
-public class AccountPresenter implements IAccountPresenter{
+public class AccountPresenter implements IAccountPresenter, AccountInteractor.OnAccountAdd{
 
-    private Account account = Model.account;
+    private Account account;
     private Context context;
 
     public AccountPresenter(Context context) {
-
+        this.account = new Account();
         this.context = context;
     }
 
@@ -21,7 +21,18 @@ public class AccountPresenter implements IAccountPresenter{
         this.account = (Account)a;
     }
 
+    @Override
+    public void addAccount() {
+        new AccountInteractor((AccountInteractor.OnAccountAdd)
+                this).execute();
+    }
+
     public void set(Account a) {
         this.account = a;
+    }
+
+    @Override
+    public void onDone(Account result) {
+        account = result;
     }
 }
