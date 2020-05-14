@@ -1,6 +1,7 @@
 package ba.unsa.etf.rma.moja_app;
 
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -24,7 +26,8 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 
-public class GraphsFragment extends Fragment implements GestureDetector.OnGestureListener {
+@RequiresApi(api = Build.VERSION_CODES.O)
+public class GraphsFragment extends Fragment implements GestureDetector.OnGestureListener, IFinanceView {
 
     private BarChart income;
     private BarChart payment;
@@ -32,12 +35,23 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     private Button day;
     private Button week;
     private Button month;
-    private FinanceInteractor interactor = new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this);
+    //private FinanceInteractor interactor = new FinanceInteractor(getActivity());
+    private FinancePresenter presenter = new FinancePresenter(this, getActivity());
     private ArrayList<Transaction> list;
     private GestureDetector gestureDetector;
     private IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
     private OnSwipeChange onSwipeChange;
     private Account account;
+
+    @Override
+    public void setTransactions(ArrayList<Transaction> transactions) {
+
+    }
+
+    @Override
+    public void notifyTransactionsListDataSetChanged() {
+
+    }
 
     public interface OnSwipeChange {
         public void onRightClicked3();
@@ -66,7 +80,7 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
         all.setDragEnabled(false);
         all.setScaleEnabled(false);
 
-        list = interactor.getT();
+        list = presenter.get();
 
         ArrayList<BarEntry> mIncome = graphPresenter.getMonthIncome(list);
         ArrayList<BarEntry> mPayment = graphPresenter.getMonthPayment(list);

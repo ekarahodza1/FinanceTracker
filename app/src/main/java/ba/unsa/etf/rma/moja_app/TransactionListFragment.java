@@ -169,7 +169,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         monthView.setText(month + ", " + year);
         financePresenter.filterMonth(current);
 
-        //notifyTransactionsListDataSetChanged();
+        notifyTransactionsListDataSetChanged();
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
         rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
 

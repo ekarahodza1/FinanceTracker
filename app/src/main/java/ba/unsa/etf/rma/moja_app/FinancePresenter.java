@@ -188,4 +188,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         view.setTransactions(results);
         view.notifyTransactionsListDataSetChanged();
     }
+
+    public ArrayList<Transaction> get() {
+        return transactions;
+    }
 }
