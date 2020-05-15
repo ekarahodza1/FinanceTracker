@@ -29,7 +29,6 @@ public class Transaction implements Parcelable{
     private LocalDate endDate;
     private int image;
     private int id;
-    private Map<Integer, String> t = new HashMap<Integer, String>();
 
 
     public Transaction(int id, LocalDate date, String title, double amount, int type, String itemDescription, int transactionInterval, LocalDate endDate) {
@@ -45,11 +44,6 @@ public class Transaction implements Parcelable{
         TransactionType t1 = new TransactionType();
         typeString = t1.getType(type);
 
-        if (type == 1) this.type = Type.REGULARINCOME;
-        else if (type == 2) this.type = Type.REGULARPAYMENT;
-        else if (type == 3) this.type = Type.PURCHASE;
-        else if (type == 4) this.type = Type.INDIVIDUALINCOME;
-        else if (type == 5) this.type = Type.INDIVIDUALPAYMENT;
     }
 
     public Transaction(LocalDate date, String title, double amount, Type type, String itemDescription, int transactionInterval, LocalDate endDate) {

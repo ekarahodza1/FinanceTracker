@@ -60,13 +60,13 @@ public class ListAdapter extends ArrayAdapter<Transaction> {
         titleView.setText(t.getTitle());
         amountView.setText(Double.toString(t.getAmount()));
 
-        Type type = t.getType();
+        String type = t.getTypeString();
         try {
-            if (type == Type.INDIVIDUALINCOME) imageView.setImageResource(R.drawable.individual_income);
-            if (type == Type.REGULARINCOME) imageView.setImageResource(R.drawable.regular_income);
-            if (type == Type.INDIVIDUALPAYMENT) imageView.setImageResource(R.drawable.individual_payment);
-            if (type == Type.PURCHASE) imageView.setImageResource(R.drawable.purchase);
-            if (type == Type.REGULARPAYMENT) imageView.setImageResource(R.drawable.regular_payment);
+            if (type.matches("Individual income")) imageView.setImageResource(R.drawable.individual_income);
+            if (type.matches("Regular income")) imageView.setImageResource(R.drawable.regular_income);
+            if (type.matches("Individual payment")) imageView.setImageResource(R.drawable.individual_payment);
+            if (type.matches("Purchase")) imageView.setImageResource(R.drawable.purchase);
+            if (type.matches("Regular payment")) imageView.setImageResource(R.drawable.regular_payment);
         }
         catch (Exception e) {
             imageView.setImageResource(R.drawable.picture1);
