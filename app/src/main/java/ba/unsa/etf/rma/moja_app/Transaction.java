@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Transaction implements Parcelable, TransactionType.OnTypeAdd{
+public class Transaction implements Parcelable{
 
     private LocalDate date;
     private String title;
@@ -31,10 +31,6 @@ public class Transaction implements Parcelable, TransactionType.OnTypeAdd{
     private int id;
     private Map<Integer, String> t = new HashMap<Integer, String>();
 
-    @Override
-    public void onDone(Map<Integer, String> result) {
-        t = result;
-    }
 
     public Transaction(int id, LocalDate date, String title, double amount, int type, String itemDescription, int transactionInterval, LocalDate endDate) {
         this.date = date;
@@ -46,10 +42,7 @@ public class Transaction implements Parcelable, TransactionType.OnTypeAdd{
         this.endDate = endDate;
         this.id = id;
 
-
-        TransactionType t1 = (TransactionType) new TransactionType((TransactionType.OnTypeAdd)this).execute();
-
-
+        TransactionType t1 = new TransactionType();
         typeString = t1.getType(type);
 
         if (type == 1) this.type = Type.REGULARINCOME;

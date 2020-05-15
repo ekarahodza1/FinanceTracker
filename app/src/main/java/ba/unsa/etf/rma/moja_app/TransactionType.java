@@ -14,18 +14,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TransactionType extends AsyncTask<String, Integer, Void> {
-    private Map<Integer, String> mapa;
-    private OnTypeAdd caller;
 
-    public TransactionType(OnTypeAdd caller) {
+
+public class TransactionType {
+    private Map<Integer, String> mapa;
+
+    public TransactionType() {
         this.mapa = new HashMap<Integer, String>();
-        this.caller = caller;
+        jsonParse();
     }
 
     public String getType(Integer id) {
@@ -33,31 +32,8 @@ public class TransactionType extends AsyncTask<String, Integer, Void> {
     }
 
 
-
-    public String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new
-                InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-            }
-        }
-        return sb.toString();
-    }
-
-
-    @Override
-    protected Void doInBackground(String... strings) {
+    private void jsonParse() {
         String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/transactionTypes";
-
         try {
             URL url = new URL(url1);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -84,19 +60,26 @@ public class TransactionType extends AsyncTask<String, Integer, Void> {
             e.printStackTrace();
         }
 
-        return null;
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid){
-        super.onPostExecute(aVoid);
-        caller.onDone(mapa);
+    public String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new
+                InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+            }
+        }
+        return sb.toString();
     }
-
-    public interface OnTypeAdd{
-        public void onDone(Map<Integer, String> result);
-    }
-
 
 
 }
