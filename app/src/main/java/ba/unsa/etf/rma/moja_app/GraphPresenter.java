@@ -25,7 +25,7 @@ public class GraphPresenter implements IGraphPresenter{
         double[] months = new double[]{0,0,0,0,0,0,0,0,0,0,0,0};
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
-            if (trans.getType() == Type.INDIVIDUALINCOME || trans.getType() == Type.REGULARINCOME){
+            if (trans.getTypeString().matches("Individual income") || trans.getTypeString().matches("Regular income")){
                 if (trans.getDate().getYear() == LocalDate.now().getYear()){
                     if (trans.getEndDate() == null){
                         months[trans.getDate().getMonthValue() - 1] += trans.getAmount();
@@ -50,7 +50,9 @@ public class GraphPresenter implements IGraphPresenter{
         double[] months = new double[]{0,0,0,0,0,0,0,0,0,0,0,0};
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
-            if (trans.getType() == Type.PURCHASE || trans.getType() == Type.REGULARPAYMENT || trans.getType() == Type.INDIVIDUALPAYMENT){
+            if (trans.getTypeString().matches("Purchase")
+                    || trans.getTypeString().matches("Regular payment")
+                    || trans.getTypeString().matches("Individual payment")){
                 if (trans.getDate().getYear() == LocalDate.now().getYear()){
                     if (trans.getEndDate() == null){
                         months[trans.getDate().getMonthValue() - 1] -= trans.getAmount();
@@ -99,7 +101,7 @@ public class GraphPresenter implements IGraphPresenter{
         double[] weeks = new double[]{0,0,0,0,0};
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
-            if (trans.getType() == Type.INDIVIDUALINCOME || trans.getType() == Type.REGULARINCOME){
+            if (trans.getTypeString().matches("Individual income") || trans.getTypeString().matches("Regular income")){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
                     int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] += trans.getAmount();
@@ -125,7 +127,9 @@ public class GraphPresenter implements IGraphPresenter{
         double[] weeks = new double[]{0,0,0,0,0};
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
-            if (trans.getType() == Type.PURCHASE || trans.getType() == Type.REGULARPAYMENT || trans.getType() == Type.INDIVIDUALPAYMENT){
+            if (trans.getTypeString().matches("Purchase")
+                    || trans.getTypeString().matches("Regular payment")
+                    || trans.getTypeString().matches("Individual payment")){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
                     int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] -= trans.getAmount();
@@ -176,7 +180,9 @@ public class GraphPresenter implements IGraphPresenter{
         for (int i = 0; i < 30; i++) days[i] = 0;
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
-            if (trans.getType() == Type.PURCHASE || trans.getType() == Type.REGULARPAYMENT || trans.getType() == Type.INDIVIDUALPAYMENT){
+            if (trans.getTypeString().matches("Purchase")
+                    || trans.getTypeString().matches("Regular payment")
+                    || trans.getTypeString().matches("Individual payment")){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){ ;
                     days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
                 } else if (trans.getEndDate() != null
@@ -200,7 +206,7 @@ public class GraphPresenter implements IGraphPresenter{
         for (int i = 0; i < 30; i++) days[i] = 0;
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
-            if (trans.getType() == Type.INDIVIDUALINCOME || trans.getType() == Type.REGULARINCOME){
+            if (trans.getTypeString().matches("Individual income") || trans.getTypeString().matches("Regular income")){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){ ;
                     days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
                 } else if (trans.getEndDate() != null
