@@ -94,19 +94,19 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         filterMonth(current);
 
         for (int i = 0; i < transactions.size(); i++){
-            if (criteria.matches("Individual Payment") && transactions.get(i).getType() == Type.INDIVIDUALPAYMENT){
+            if (criteria.matches("Individual Payment") && transactions.get(i).getTypeString().matches("Individual Payment")){
                 pomocne.add(transactions.get(i));
             }
-            if (criteria.matches("Regular Payment") && transactions.get(i).getType() == Type.REGULARPAYMENT){
+            if (criteria.matches("Regular Payment") && transactions.get(i).getTypeString().matches("Regular Payment")){
                 pomocne.add(transactions.get(i));
             }
-            if (criteria.matches("Purchase") && transactions.get(i).getType() == Type.PURCHASE){
+            if (criteria.matches("Purchase") && transactions.get(i).getTypeString().matches("Purchase")){
                 pomocne.add(transactions.get(i));
             }
-            if (criteria.matches("Individual Income") && transactions.get(i).getType() == Type.INDIVIDUALINCOME){
+            if (criteria.matches("Individual Income") && transactions.get(i).getTypeString().matches("Individual Income")){
                 pomocne.add(transactions.get(i));
             }
-            if (criteria.matches("Regular Income") && transactions.get(i).getType() == Type.REGULARINCOME){
+            if (criteria.matches("Regular Income") && transactions.get(i).getTypeString().matches("Regular Income")){
                 pomocne.add(transactions.get(i));
             }
         }
