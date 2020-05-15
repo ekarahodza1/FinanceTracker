@@ -5,13 +5,18 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-public class Transaction implements Parcelable {
+public class Transaction implements Parcelable, TransactionType.OnTypeAdd{
 
     private LocalDate date;
     private String title;
@@ -24,6 +29,12 @@ public class Transaction implements Parcelable {
     private LocalDate endDate;
     private int image;
     private int id;
+    private Map<Integer, String> t = new HashMap<Integer, String>();
+
+    @Override
+    public void onDone(Map<Integer, String> result) {
+        t = result;
+    }
 
     public Transaction(int id, LocalDate date, String title, double amount, int type, String itemDescription, int transactionInterval, LocalDate endDate) {
         this.date = date;
@@ -34,6 +45,12 @@ public class Transaction implements Parcelable {
         this.transactionInterval = transactionInterval;
         this.endDate = endDate;
         this.id = id;
+
+
+        TransactionType t1 = (TransactionType) new TransactionType((TransactionType.OnTypeAdd)this).execute();
+
+
+        typeString = t1.getType(type);
 
         if (type == 1) this.type = Type.REGULARINCOME;
         else if (type == 2) this.type = Type.REGULARPAYMENT;
