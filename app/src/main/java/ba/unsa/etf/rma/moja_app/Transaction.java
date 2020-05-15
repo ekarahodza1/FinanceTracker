@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 public class Transaction implements Parcelable{
@@ -30,7 +31,8 @@ public class Transaction implements Parcelable{
     private int id;
 
 
-    public Transaction(int id, LocalDate date, String title, double amount, int type, String itemDescription, int transactionInterval, LocalDate endDate) {
+    public Transaction(int id, LocalDate date, String title, double amount, int type,
+                       String itemDescription, int transactionInterval, LocalDate endDate) {
         this.date = date;
         this.title = title;
         this.amount = amount;
@@ -42,6 +44,27 @@ public class Transaction implements Parcelable{
 
         TransactionType t1 = new TransactionType();
         typeString = t1.getType(type);
+
+    }
+
+    public Transaction(LocalDate date, String title, double amount, String imageType,
+                       String itemDescription, Integer transactionInterval, LocalDate endDate) {
+
+        this.date = date;
+        this.title = title;
+        this.amount = amount;
+        this.itemDescription = itemDescription;
+        this.transactionInterval = transactionInterval;
+        this.endDate = endDate;
+        this.typeString = imageType;
+
+        TransactionType t1 = new TransactionType();
+
+        this.type_ = t1.getTypeId(imageType);
+
+        this.id = ((int) Math.random()) % 799 + 200;
+
+
 
     }
 
@@ -77,6 +100,10 @@ public class Transaction implements Parcelable{
             return new Transaction[size];
         }
     };
+
+
+
+
 
     public String getTypeString() {
         return typeString;

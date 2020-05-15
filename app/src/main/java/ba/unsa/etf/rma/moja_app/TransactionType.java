@@ -82,4 +82,7 @@ public class TransactionType {
     }
 
 
+    public int getTypeId(String name) {
+        return 1;
+    }
 }

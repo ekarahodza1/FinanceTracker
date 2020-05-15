@@ -49,7 +49,6 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private LocalDate date1;
     private LocalDate date2;
     private LocalDate current;
-    private Type type_;
     private Integer mInterval = 0;
     private boolean dodavanje = false;
     private String mDescription = "";
@@ -69,11 +68,11 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
-        if (pos == 0) type_ = Type.INDIVIDUALPAYMENT;
-        else if (pos == 1) type_ = Type.REGULARPAYMENT;
-        else if (pos == 2) type_ = Type.PURCHASE;
-        else if (pos == 3) type_ = Type.INDIVIDUALINCOME;
-        else if (pos == 4) type_ = Type.REGULARINCOME;
+        if (pos == 0) imageType = "Individual payment";
+        else if (pos == 1) imageType = "Regular payment";
+        else if (pos == 2) imageType = "Purchase";
+        else if (pos == 3) imageType = "Individual income";
+        else if (pos == 4) imageType = "Regular income";
         if (boja) {
             type.setBackgroundColor(Color.GREEN);
         }
@@ -114,7 +113,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
         }
 
         else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
-            trans = new Transaction(null, null, 0, null, null, 0, null);
+            trans = new Transaction(-1, null, null, 0, -1, null, 0, null);
             original = trans;
             dodavanje = true;
         }
@@ -142,28 +141,27 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
             current = LocalDate.now();
 
-        if (trans.getType() != null) {
-            imageType = trans.getType().toString();
-            if (trans.getType() == Type.INDIVIDUALPAYMENT) {
+        if (trans.getTypeString() != null) {
+            imageType = trans.getTypeString();
+            if (imageType.matches("Individual payment")) {
                 type.setSelection(0);
 
             }
-            else if (trans.getType() == Type.REGULARPAYMENT) {
+            else if (imageType.matches("Regular payment")) {
                 type.setSelection(1);
 
             }
-            else if (trans.getType() == Type.PURCHASE) {
+            else if (imageType.matches("Purchase")) {
                 type.setSelection(2);
             }
-            else if (trans.getType() == Type.INDIVIDUALINCOME) {
+            else if (imageType.matches("Individual income")) {
                 type.setSelection(3);
 
             }
-            else if (trans.getType() == Type.REGULARINCOME) {
+            else if (imageType.matches("Regular income")) {
                 type.setSelection(4);
 
             }
-            type_ = trans.getType();
         }
 
 
@@ -384,8 +382,8 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                     mDescription = description.getText().toString();
                     mAmount = Double.parseDouble(amount.getText().toString());
                     mInterval = Integer.parseInt(interval.getText().toString());
-                    if (type_ != null) imageType = type_.toString();
-                    else imageType = null;
+                    imageType = type.toString();
+
 
                     if (presenter.validateDescription(mDescription, imageType) == false
                             || presenter.validateTitle(mTitle) == false
@@ -405,8 +403,8 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                     } else {
 
 
-                        type_ = Type.valueOf(imageType);
-                        Transaction t = new Transaction(date1, mTitle, mAmount, type_, mDescription, mInterval, date2);
+
+                        Transaction t = new Transaction(date1, mTitle, mAmount, imageType, mDescription, mInterval, date2);
 
                         if (account.getBudget() + mAmount < account.getTotalLimit()) {
                             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
