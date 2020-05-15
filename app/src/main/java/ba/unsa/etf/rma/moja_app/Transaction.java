@@ -22,7 +22,6 @@ public class Transaction implements Parcelable{
     private String title;
     private double amount;
     private String typeString;
-    private Type type;
     private int type_;
     private String itemDescription;
     private int transactionInterval;
@@ -46,15 +45,6 @@ public class Transaction implements Parcelable{
 
     }
 
-    public Transaction(LocalDate date, String title, double amount, Type type, String itemDescription, int transactionInterval, LocalDate endDate) {
-        this.date = date;
-        this.title = title;
-        this.amount = amount;
-        this.type = type;
-        this.itemDescription = itemDescription;
-        this.transactionInterval = transactionInterval;
-        this.endDate = endDate;
-    }
 
 
 
@@ -162,13 +152,7 @@ public class Transaction implements Parcelable{
 
     }
 
-    public Type getType() {
-        return type;
-    }
 
-    public void setType(Type type) {
-        this.type = type;
-    }
 
 
     @Override
@@ -187,7 +171,7 @@ public class Transaction implements Parcelable{
         dest.writeString(itemDescription);
         dest.writeDouble(amount);
         dest.writeInt(transactionInterval);
-        dest.writeString(type.toString());
+       // dest.writeString(type.toString());
 
 
     }
