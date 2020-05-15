@@ -42,7 +42,7 @@ public class ListItemPresenter implements IListItemPresenter {
     }
     @Override
     public boolean validateDescription(String description, String type){
-        if ((type.matches("Regular income") || type.matches("Individual income")) &&
+        if ((type.matches("Regular income") || type.matches("Individual income") || type.matches("Purchase")) &&
         !description.matches("")) return false;
         return true;
     }
