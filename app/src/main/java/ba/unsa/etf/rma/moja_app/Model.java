@@ -9,19 +9,19 @@ import java.util.Date;
 public class Model {
     public static ArrayList<Transaction> transactions = new ArrayList<Transaction>() {
         {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2020, 5, 3), "Shopping", -80, Type.PURCHASE,
-                        "new dress", 0, null));
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2019, 1, 24), "Insurance", 500, Type.INDIVIDUALINCOME,
-                        "", 0, null));
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                add(new Transaction(LocalDate.of(2020, 3, 1), "Salary", 1000, Type.REGULARINCOME,
-                        "", 30, LocalDate.of(2020, 12, 1)));
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                add(new Transaction(LocalDate.of(2020, 5, 3), "Shopping", -80, Type.PURCHASE,
+//                        "new dress", 0, null));
+//            }
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                add(new Transaction(LocalDate.of(2019, 1, 24), "Insurance", 500, Type.INDIVIDUALINCOME,
+//                        "", 0, null));
+//            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                add(new Transaction(LocalDate.of(2020, 3, 1), "Salary", 1000, Type.REGULARINCOME,
+//                        "", 30, LocalDate.of(2020, 12, 1)));
+//            }
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                add(new Transaction(LocalDate.of(2020, 3, 1), "Meals", 200, Type.REGULARINCOME,
 //                        "", 30, LocalDate.of(2020, 12, 1)));

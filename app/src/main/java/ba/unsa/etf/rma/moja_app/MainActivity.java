@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onRightClicked2() {
 
@@ -206,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onLeftClicked1(Account a){
         GraphsFragment graphsFragment = new GraphsFragment();

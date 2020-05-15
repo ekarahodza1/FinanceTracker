@@ -35,20 +35,20 @@ public class ListItemPresenter implements IListItemPresenter {
 
     @Override
     public boolean validateType(String type){
-        if (type.matches("INDIVIDUALPAYMENT") || type.matches("REGULARPAYMENT") ||
-                type.matches("PURCHASE") || type.matches("INDIVIDUALINCOME") ||
+        if (type.matches("Individual payment") || type.matches("Regular payment") ||
+                type.matches("Purchase") || type.matches("Individual income") ||
                 type.matches("REGULARINCOME")) return true;
         return false;
     }
     @Override
     public boolean validateDescription(String description, String type){
-        if ((type.matches("REGULARINCOME") || type.matches("INDIVIDUALINCOME")) &&
+        if ((type.matches("Regular income") || type.matches("Individual income")) &&
         !description.matches("")) return false;
         return true;
     }
     @Override
     public boolean validateInterval(int interval, String type){
-        if (!(type.matches("REGULARPAYMENT") || type.matches("REGULARINCOME")) && interval != 0) return false;
+        if (!(type.matches("Regular payment") || type.matches("Regular income")) && interval != 0) return false;
         return true;
     }
 
