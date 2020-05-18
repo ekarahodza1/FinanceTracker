@@ -33,13 +33,7 @@ public class ListItemPresenter implements IListItemPresenter {
         return false;
     }
 
-    @Override
-    public boolean validateType(String type){
-        if (type.matches("Individual payment") || type.matches("Regular payment") ||
-                type.matches("Purchase") || type.matches("Individual income") ||
-                type.matches("REGULARINCOME")) return true;
-        return false;
-    }
+
     @Override
     public boolean validateDescription(String description, String type){
         if ((type.matches("Regular income") || type.matches("Individual income") || type.matches("Purchase")) &&

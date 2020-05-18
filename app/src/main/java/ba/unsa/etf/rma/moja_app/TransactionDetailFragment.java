@@ -388,8 +388,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                     if (presenter.validateDescription(mDescription, imageType) == false
                             || presenter.validateTitle(mTitle) == false
                             || presenter.validateInterval(mInterval, imageType) == false
-                            || presenter.validateType(imageType) == false ||
-                            date1 == null) {
+                            || date1 == null) {
                         AlertDialog alertDialog1 = new AlertDialog.Builder(getActivity())
                                 .setTitle("Incorrect data")
                                 .setMessage("Some fields have incorrect inputs")

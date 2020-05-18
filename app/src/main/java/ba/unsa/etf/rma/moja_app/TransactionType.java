@@ -20,11 +20,15 @@ import java.util.Map;
 
 
 public class TransactionType {
-    private Map<Integer, String> mapa;
+    private static Map<Integer, String> mapa;
+    private static boolean b = false;
 
     public TransactionType() {
-        this.mapa = new HashMap<Integer, String>();
-        jsonParse();
+        if (!b) {
+            this.mapa = new HashMap<Integer, String>();
+            jsonParse();
+            b = true;
+        }
     }
 
     public String getType(Integer id) {
