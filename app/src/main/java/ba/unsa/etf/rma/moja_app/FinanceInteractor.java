@@ -168,8 +168,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             obj.put("amount", t.getAmount());
             obj.put("itemDescription", t.getItemDescription());
             obj.put("endDate", t.getEndDate());
-            obj.put("AccountId", 11);
-            obj.put("TransactionTypeId", 4);
+            //obj.put("AccountId", 11);
+           // obj.put("TransactionTypeId", 4);
             String inputString = String.valueOf(obj);
 
             OutputStream o = con.getOutputStream();

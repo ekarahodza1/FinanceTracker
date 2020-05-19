@@ -174,6 +174,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addTransaction(Transaction t){
+        map.clear();
         map.put(1,t);
         new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
         interactor.add(t);
