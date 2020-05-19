@@ -101,8 +101,9 @@ public class Transaction implements Parcelable{
         }
     };
 
-
-
+    public Transaction(int i) {
+        this.id = i;
+    }
 
 
     public String getTypeString() {

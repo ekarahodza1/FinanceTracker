@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -23,8 +24,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class FinanceInteractor extends AsyncTask<String, Integer, Void> implements IFinanceInteractor {
+public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, Integer, Void> implements IFinanceInteractor {
 
     private ArrayList<Transaction> transactions;
     private OnTransactionsAdd caller;
@@ -57,8 +59,48 @@ public class FinanceInteractor extends AsyncTask<String, Integer, Void> implemen
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected Void doInBackground(String... strings) {
+    protected Void doInBackground(HashMap<Integer, Transaction>... maps) {
+        if (maps[0].get(0) != null) getTransactions();
+        else if (maps[0].get(1) != null) postTransaction(maps[0].get(1));
 
+        return null;
+    }
+
+
+    @Override
+    public ArrayList<Transaction> getT(){
+        return transactions;
+    }
+
+    public void add(Transaction t){
+
+        //postTransaction(t);
+    }
+
+    public void delete(Transaction t){
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction t1 = transactions.get(i);
+            if (t1.getTitle().matches(t.getTitle()) && t1.getAmount() == t.getAmount()
+                    && t1.getTransactionInterval() == t.getTransactionInterval()
+                    && t1.getItemDescription().matches(t.getItemDescription())){
+                transactions.remove(t1);
+                break;
+            }
+        }
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid){
+        super.onPostExecute(aVoid);
+        caller.onDone(transactions);
+    }
+
+    public interface OnTransactionsAdd{
+        public void onDone(ArrayList<Transaction> results);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getTransactions(){
         for (int j = 0; j < 4; j++) {
 
             String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
@@ -107,39 +149,54 @@ public class FinanceInteractor extends AsyncTask<String, Integer, Void> implemen
                 e.printStackTrace();
             }
         }
-        return null;
     }
 
+    private void postTransaction(Transaction t)  {
 
-    @Override
-    public ArrayList<Transaction> getT(){
-        return transactions;
-    }
+        try {
+            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions";
+            URL url = new URL (querry);
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
 
-    public void add(Transaction t){
-        transactions.add(t);
-    }
+            JSONObject obj = new JSONObject();
+            obj.put("date", t.getDate());
+            obj.put("title", t.getTitle());
+            obj.put("amount", t.getAmount());
+            obj.put("itemDescription", t.getItemDescription());
+            obj.put("endDate", t.getEndDate());
+            obj.put("AccountId", 11);
+            obj.put("TransactionTypeId", 4);
+            String inputString = String.valueOf(obj);
 
-    public void delete(Transaction t){
-        for (int i = 0; i < transactions.size(); i++) {
-            Transaction t1 = transactions.get(i);
-            if (t1.getTitle().matches(t.getTitle()) && t1.getAmount() == t.getAmount()
-                    && t1.getTransactionInterval() == t.getTransactionInterval()
-                    && t1.getItemDescription().matches(t.getItemDescription())){
-                transactions.remove(t1);
-                break;
+            OutputStream o = con.getOutputStream();
+
+            try(OutputStream os = con.getOutputStream()){
+                byte[] input = inputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
             }
+            int code = con.getResponseCode();
+            System.out.println(code);
+
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid){
-        super.onPostExecute(aVoid);
-        caller.onDone(transactions);
-    }
-
-    public interface OnTransactionsAdd{
-        public void onDone(ArrayList<Transaction> results);
     }
 
 

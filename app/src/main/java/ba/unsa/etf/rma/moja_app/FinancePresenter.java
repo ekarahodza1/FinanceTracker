@@ -9,9 +9,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class FinancePresenter implements IFinancePresenter, FinanceInteractor.OnTransactionsAdd {
     private ArrayList<Transaction> transactions;
+    private HashMap<Integer, Transaction> map = new HashMap<Integer, Transaction>();
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -134,7 +136,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void addTransactions(){
-        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
+        map.put(0, new Transaction(-1));
+        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
     }
 
     @Override
@@ -169,7 +172,10 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void addTransaction(Transaction t){
+        map.put(1,t);
+        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
         interactor.add(t);
         view.setTransactions(interactor.getT());
         view.notifyTransactionsListDataSetChanged();
