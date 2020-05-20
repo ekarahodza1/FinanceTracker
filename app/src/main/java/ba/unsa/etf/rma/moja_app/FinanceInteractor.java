@@ -60,8 +60,9 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected Void doInBackground(HashMap<Integer, Transaction>... maps) {
-        if (maps[0].get(0) != null) getTransactions();
-        else if (maps[0].get(1) != null) postTransaction(maps[0].get(1));
+        if (maps[0].get(1) != null) postTransaction(maps[0].get(1));
+        else if (maps[0].get(2) != null) deleteTransaction(maps[0].get(2));
+        else if (maps[0].get(0) != null) getTransactions();
 
         return null;
     }
@@ -78,15 +79,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     }
 
     public void delete(Transaction t){
-        for (int i = 0; i < transactions.size(); i++) {
-            Transaction t1 = transactions.get(i);
-            if (t1.getTitle().matches(t.getTitle()) && t1.getAmount() == t.getAmount()
-                    && t1.getTransactionInterval() == t.getTransactionInterval()
-                    && t1.getItemDescription().matches(t.getItemDescription())){
-                transactions.remove(t1);
-                break;
-            }
-        }
+
     }
 
     @Override
@@ -101,7 +94,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getTransactions(){
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 10; j++) {
 
             String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
                     + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114" + "/transactions?page=" + j;
@@ -169,7 +162,55 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             obj.put("itemDescription", t.getItemDescription());
             obj.put("endDate", t.getEndDate());
             //obj.put("AccountId", 11);
-           // obj.put("TransactionTypeId", 4);
+            obj.put("TransactionTypeId", 4);
+            String inputString = String.valueOf(obj);
+
+            OutputStream o = con.getOutputStream();
+
+            try(OutputStream os = con.getOutputStream()){
+                byte[] input = inputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            int code = con.getResponseCode();
+            System.out.println(code);
+
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteTransaction(Transaction t)  {
+
+        try {
+            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions";
+            URL url = new URL (querry);
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setRequestMethod("DELETE");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+            //con.setDoOutput(true);
+
+            JSONObject obj = new JSONObject();
+            obj.put("date", t.getDate());
+            obj.put("title", t.getTitle());
+            obj.put("amount", t.getAmount());
+            obj.put("itemDescription", t.getItemDescription());
+            obj.put("endDate", t.getEndDate());
+            //obj.put("AccountId", 11);
+            obj.put("TransactionTypeId", t.getTId());
             String inputString = String.valueOf(obj);
 
             OutputStream o = con.getOutputStream();

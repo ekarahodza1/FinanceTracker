@@ -180,6 +180,25 @@ public class Transaction implements Parcelable{
 
     }
 
+    public int getTId() {
+        return type_;
+    }
+
+    public void setTId(int type_) {
+        this.type_ = type_;
+    }
+
+    //    public int getTypeId(){
+//
+//        if (typeString.matches("Regular payment")) return 1;
+//        else if (typeString.matches("Regular income")) return 2;
+//        else if (typeString.matches("Purchase")) return 3;
+//        else if (typeString.matches("Individual income")) return 4;
+//        else if (typeString.matches("Individual payment")) return 5;
+//        return 0;
+//
+//    }
+
 
 
 

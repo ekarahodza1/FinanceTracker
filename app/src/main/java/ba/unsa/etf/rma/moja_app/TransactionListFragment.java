@@ -269,7 +269,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Transaction t = new Transaction(null, null, 0, null, null, 0, null);
+                Transaction t = new Transaction(0, null, null, 0, 0, null, 0, null);
                 onItemClick.onNewClicked(t, account);
             }
         });
