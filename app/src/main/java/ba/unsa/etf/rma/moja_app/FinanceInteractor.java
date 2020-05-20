@@ -60,9 +60,20 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected Void doInBackground(HashMap<Integer, Transaction>... maps) {
-        if (maps[0].get(1) != null) postTransaction(maps[0].get(1));
-        else if (maps[0].get(2) != null) deleteTransaction(maps[0].get(2));
-        else if (maps[0].get(0) != null) getTransactions();
+
+        if (maps.length != 0) {
+            if (maps[0].get(1) != null) {
+                postTransaction(maps[0].get(1));
+                System.out.println("POSTAVLJANE");
+            } else if (maps[0].get(2) != null) {
+                deleteTransaction(maps[0].get(2));
+                System.out.println("BRISANJE");
+            }
+        }
+//        else if (maps[0].get(0) != null) {
+//            System.out.println("DOBAVLJANJE");
+//        }
+        getTransactions();
 
         return null;
     }
@@ -79,6 +90,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     }
 
     public void delete(Transaction t){
+        //deleteTransaction(t);
 
     }
 
@@ -201,9 +213,10 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             con.setRequestMethod("DELETE");
             con.setRequestProperty("Content-Type", "application/json");
             con.setRequestProperty("Accept", "application/json");
-            //con.setDoOutput(true);
+            con.setDoOutput(true);
 
             JSONObject obj = new JSONObject();
+            obj.put("id", t.getId());
             obj.put("date", t.getDate());
             obj.put("title", t.getTitle());
             obj.put("amount", t.getAmount());

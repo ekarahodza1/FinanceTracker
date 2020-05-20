@@ -137,7 +137,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     @Override
     public void addTransactions(){
         map.put(0, new Transaction(-1));
-        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
+        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
+
     }
 
     @Override
@@ -179,7 +180,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         interactor.add(t);
         view.setTransactions(interactor.getT());
         view.notifyTransactionsListDataSetChanged();
-        map.remove(1, t);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -189,7 +190,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         interactor.delete(t);
         view.setTransactions(interactor.getT());
         view.notifyTransactionsListDataSetChanged();
-        map.remove(2, t);
+
     }
 
     @Override
