@@ -78,6 +78,7 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
     }
 
 
+
     public interface OnBudgetChange {
         public void onRightClicked2();
         public void onLeftClicked2();

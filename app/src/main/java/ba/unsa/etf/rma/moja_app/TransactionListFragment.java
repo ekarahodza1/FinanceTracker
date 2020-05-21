@@ -228,9 +228,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             account = getArguments().getParcelable("new_account");
             accountPresenter.setAccount(account);
         }
-
         else {
-
             account = accountPresenter.get();
         }
 
@@ -281,10 +279,11 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         }
 
         if (getArguments() != null && getArguments().containsKey("change1") && getArguments().containsKey("change2")) {
-            trans = getArguments().getParcelable("change1");
-            financePresenter.deleteTransaction(trans);
+            //trans = getArguments().getParcelable("change1");
+            //financePresenter.deleteTransaction(trans);
             trans = getArguments().getParcelable("change2");
-            financePresenter.addTransaction(trans);
+            //financePresenter.addTransaction(trans);
+            financePresenter.changeTransaction(trans);
         }
 
         if (getArguments() != null && getArguments().containsKey("add")) {

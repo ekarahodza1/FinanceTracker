@@ -193,6 +193,15 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void changeTransaction(Transaction t){
+        map.put(3,t);
+        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
+        view.setTransactions(interactor.getT());
+        view.notifyTransactionsListDataSetChanged();
+
+    }
+
     @Override
     public void onDone(ArrayList<Transaction> results) {
         transactions = results;

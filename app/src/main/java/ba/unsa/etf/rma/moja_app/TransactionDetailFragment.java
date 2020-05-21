@@ -398,7 +398,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                     mDescription = description.getText().toString();
                     mAmount = Double.parseDouble(amount.getText().toString());
                     mInterval = Integer.parseInt(interval.getText().toString());
-                    imageType = type.toString();
+                    imageType = type.getSelectedItem().toString();
 
 
                     if (presenter.validateDescription(mDescription, imageType) == false

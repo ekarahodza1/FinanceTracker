@@ -68,11 +68,16 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             } else if (maps[0].get(2) != null) {
                 deleteTransaction(maps[0].get(2));
                 System.out.println("BRISANJE");
+            } else if (maps[0].get(3) != null) {
+                updateTransaction(maps[0].get(3));
+                System.out.println("DOBAVLJANJE");
+            }
+
+            else if (maps[0].get(0) != null) {
+
+                System.out.println("DOBAVLJANJE");
             }
         }
-//        else if (maps[0].get(0) != null) {
-//            System.out.println("DOBAVLJANJE");
-//        }
         getTransactions();
 
         return null;
@@ -172,8 +177,10 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             obj.put("title", t.getTitle());
             obj.put("amount", t.getAmount());
             obj.put("itemDescription", t.getItemDescription());
+            obj.put("transactionInterval", t.getTransactionInterval());
             obj.put("endDate", t.getEndDate());
-            obj.put("TransactionTypeId", 4);
+            int a = t.getTId();
+            obj.put("TransactionTypeId", t.getTId());
             String inputString = String.valueOf(obj);
 
             OutputStream o = con.getOutputStream();
@@ -207,7 +214,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
 
         try {
             String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/" +
-                    "account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions/" + "1422";
+                    "account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions/" + t.getId();
             URL url = new URL (querry);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("DELETE");
@@ -227,6 +234,51 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateTransaction(Transaction t){
+        try {
+            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com" +
+                    "/account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions/" + t.getId();
+            URL url = new URL (querry);
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+
+            JSONObject obj = new JSONObject();
+            //obj.put("date", t.getDate());
+            //obj.put("title", t.getTitle());
+            obj.put("amount", t.getAmount());
+            //obj.put("itemDescription", t.getItemDescription());
+            //obj.put("endDate", t.getEndDate());
+            //obj.put("TransactionTypeId", 4);
+            String inputString = String.valueOf(obj);
+
+            try(OutputStream os = con.getOutputStream()){
+                byte[] input = inputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            int code = con.getResponseCode();
+            System.out.println(code);
+
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
