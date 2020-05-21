@@ -207,7 +207,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     private void deleteTransaction(Transaction t)  {
 
         try {
-            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions";
+            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/" +
+                    "account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions/" + "1422";
             URL url = new URL (querry);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("DELETE");
@@ -215,25 +216,25 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
 
-            JSONObject obj = new JSONObject();
-            obj.put("id", t.getId());
-            obj.put("date", t.getDate());
-            obj.put("title", t.getTitle());
-            obj.put("amount", t.getAmount());
-            obj.put("itemDescription", t.getItemDescription());
-            obj.put("endDate", t.getEndDate());
-            //obj.put("AccountId", 11);
-            obj.put("TransactionTypeId", t.getTId());
-            String inputString = String.valueOf(obj);
-
-            OutputStream o = con.getOutputStream();
-
-            try(OutputStream os = con.getOutputStream()){
-                byte[] input = inputString.getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-            int code = con.getResponseCode();
-            System.out.println(code);
+//            JSONObject obj = new JSONObject();
+//            obj.put("id", t.getId());
+//            obj.put("date", t.getDate());
+//            obj.put("title", t.getTitle());
+//            obj.put("amount", t.getAmount());
+//            obj.put("itemDescription", t.getItemDescription());
+//            obj.put("endDate", t.getEndDate());
+//            //obj.put("AccountId", 11);
+//            obj.put("TransactionTypeId", t.getTId());
+//            String inputString = String.valueOf(obj);
+//
+//            OutputStream o = con.getOutputStream();
+//
+//            try(OutputStream os = con.getOutputStream()){
+//                byte[] input = inputString.getBytes("utf-8");
+//                os.write(input, 0, input.length);
+//            }
+//            int code = con.getResponseCode();
+//            System.out.println(code);
 
             try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
                 StringBuilder response = new StringBuilder();
@@ -248,8 +249,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
         }
     }
 
