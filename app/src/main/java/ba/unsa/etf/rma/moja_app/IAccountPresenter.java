@@ -4,8 +4,8 @@ import android.os.Parcelable;
 
 public interface IAccountPresenter {
     public Account get();
-    public void set(Account a);
-    public void set(Parcelable a);
+    public void setAccount(Account a);
+    public void setAccount(Parcelable a);
 
     void addAccount();
 }

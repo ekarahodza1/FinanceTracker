@@ -143,13 +143,16 @@ public class MainActivity extends AppCompatActivity implements
                 .commit();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onChanged(Account a) {
 
         Bundle arguments = new Bundle();
         arguments.putParcelable("new_account", a);
-        BudgetFragment budgetFragment = new BudgetFragment();
-        budgetFragment.setArguments(arguments);
+        TransactionListFragment transactionListFragment = new TransactionListFragment();
+        transactionListFragment.setArguments(arguments);
+//        BudgetFragment budgetFragment = new BudgetFragment();
+//        budgetFragment.setArguments(arguments);
 
     }
 

@@ -429,7 +429,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             account.setBudget(account.getBudget() + mAmount);
-                                            accountPresenter.set(account);
+                                            accountPresenter.setAccount(account);
                                             if (dodavanje) onItemChange.onAddClicked(t);
                                             else onItemChange.onChangeClicked(original, t);
 

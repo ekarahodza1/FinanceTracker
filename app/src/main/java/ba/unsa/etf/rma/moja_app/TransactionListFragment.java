@@ -226,6 +226,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
         if (getArguments() != null && getArguments().containsKey("new_account")){
             account = getArguments().getParcelable("new_account");
+            accountPresenter.setAccount(account);
         }
 
         else {

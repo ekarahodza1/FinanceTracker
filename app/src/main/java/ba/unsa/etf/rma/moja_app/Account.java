@@ -23,6 +23,7 @@ public class Account implements Parcelable {
     }
 
     protected Account(Parcel in) {
+        id = in.readInt();
         budget = in.readDouble();
         totalLimit = in.readDouble();
         monthLimit = in.readDouble();
@@ -85,6 +86,7 @@ public class Account implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeDouble(budget);
         dest.writeDouble(monthLimit);
         dest.writeDouble(totalLimit);

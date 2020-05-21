@@ -11,13 +11,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
-public class AccountInteractor extends AsyncTask<String, Integer, Void>  implements IAccountInteractor {
+public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integer, Void>  implements IAccountInteractor {
 
     private OnAccountAdd caller;
     private Account account;
@@ -48,7 +50,26 @@ public class AccountInteractor extends AsyncTask<String, Integer, Void>  impleme
 
 
     @Override
-    protected Void doInBackground(String... strings) {
+    protected Void doInBackground(HashMap<String, Account>... maps) {
+        if (maps[0].get("get") != null) getAccount();
+        else if (maps[0].get("update") != null) postAccount(maps[0].get("update"));
+
+        return null;
+    }
+
+
+
+    @Override
+    protected void onPostExecute(Void aVoid){
+        super.onPostExecute(aVoid);
+        caller.onDone(account);
+    }
+
+    public interface OnAccountAdd{
+        void onDone(Account result);
+    }
+
+    private void getAccount(){
         String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
                 + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114";
 
@@ -76,17 +97,49 @@ public class AccountInteractor extends AsyncTask<String, Integer, Void>  impleme
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid){
-        super.onPostExecute(aVoid);
-        caller.onDone(account);
-    }
+    private void postAccount(Account account) {
+        try {
+            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
+                    + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114";
+            URL url = new URL (querry);
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
 
-    public interface OnAccountAdd{
-        void onDone(Account result);
+            JSONObject obj = new JSONObject();
+
+            obj.put("budget", account.getBudget());
+            obj.put("monthLimit", account.getMonthLimit());
+            obj.put("totalLimit", account.getTotalLimit());
+
+            String inputString = String.valueOf(obj);
+
+            try(OutputStream os = con.getOutputStream()){
+                byte[] input = inputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            int code = con.getResponseCode();
+            System.out.println(code);
+
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println(response.toString());
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
