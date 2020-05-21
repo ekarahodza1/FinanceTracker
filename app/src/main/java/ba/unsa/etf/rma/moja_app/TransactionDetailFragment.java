@@ -28,11 +28,12 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_CANCELED;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class TransactionDetailFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class TransactionDetailFragment extends Fragment implements AdapterView.OnItemSelectedListener, IFinanceView {
 
     private ImageView image;
     private EditText title;
@@ -58,7 +59,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
     private Transaction trans, original;
     private Account account;
-    private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
+    private IAccountPresenter accountPresenter = new AccountPresenter(this, getActivity());
     private DatePickerDialog.OnDateSetListener  mOnDateSetListener1;
     private DatePickerDialog.OnDateSetListener  mOnDateSetListener2;
 
@@ -81,6 +82,21 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void setTransactions(ArrayList<Transaction> transactions) {
+
+    }
+
+    @Override
+    public void notifyTransactionsListDataSetChanged() {
+
+    }
+
+    @Override
+    public void setAccount(Account result) {
 
     }
 

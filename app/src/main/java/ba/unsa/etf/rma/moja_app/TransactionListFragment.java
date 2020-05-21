@@ -47,7 +47,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private Account account;
     private ListAdapter listAdapter;
     private IFinancePresenter financePresenter;
-    private IAccountPresenter accountPresenter = new AccountPresenter(getActivity());
+    private IAccountPresenter accountPresenter = new AccountPresenter(this, getActivity());
     private GestureDetector gestureDetector;
     private int positionOfLastItem = -1;
 
@@ -345,8 +345,17 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         listAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void setAccount(Account result) {
+        account = result;
+        String s = ""; s += account.getTotalLimit();
+        limitView.setText(s);
 
-
+        s = "";  s += account.getBudget();
+        globalAmountView.setText(s);
     }
+
+
+}
 
 

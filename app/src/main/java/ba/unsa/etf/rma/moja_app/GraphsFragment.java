@@ -53,6 +53,11 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
 
     }
 
+    @Override
+    public void setAccount(Account result) {
+
+    }
+
     public interface OnSwipeChange {
         public void onRightClicked3();
         public void onLeftClicked3(Account a);

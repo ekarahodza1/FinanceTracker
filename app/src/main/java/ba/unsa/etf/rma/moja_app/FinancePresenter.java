@@ -14,7 +14,9 @@ import java.util.HashMap;
 public class FinancePresenter implements IFinancePresenter, FinanceInteractor.OnTransactionsAdd {
     private ArrayList<Transaction> transactions;
     private HashMap<Integer, Transaction> map = new HashMap<Integer, Transaction>();
-
+    private IFinanceView view;
+    private IFinanceInteractor interactor;
+    private Context context;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
 
@@ -118,9 +120,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
     }
 
-    private IFinanceView view;
-    private IFinanceInteractor interactor;
-    private Context context;
+
 
     public FinancePresenter(IFinanceView view, Context context) {
         this.view       = view;

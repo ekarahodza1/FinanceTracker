@@ -6,14 +6,17 @@ import android.os.Parcelable;
 public class AccountPresenter implements IAccountPresenter, AccountInteractor.OnAccountAdd{
 
     private Account account;
+    private IFinanceView view;
     private Context context;
 
-    public AccountPresenter(Context context) {
+    public AccountPresenter(IFinanceView view, Context context) {
         this.account = new Account();
         this.context = context;
+        this.view = view;
     }
 
     public Account get(){
+
         return account;
     }
 
@@ -33,6 +36,8 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
 
     @Override
     public void onDone(Account result) {
+
         account = result;
+        view.setAccount(result);
     }
 }
