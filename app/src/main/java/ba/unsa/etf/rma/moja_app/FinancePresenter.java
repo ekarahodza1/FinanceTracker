@@ -318,7 +318,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         transactions = results;
         transactions1 = results;
         filterMonth(LocalDate.now());
-        view.setTransactions(results);
+        //view.setTransactions(results);
         view.notifyTransactionsListDataSetChanged();
     }
 

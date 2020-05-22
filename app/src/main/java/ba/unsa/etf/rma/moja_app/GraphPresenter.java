@@ -14,11 +14,16 @@ import java.util.Map;
 
 public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTransactionsAdd{
     private Context context;
-    private ArrayList<Transaction> list = new ArrayList<Transaction>();
+    private static ArrayList<Transaction> list = new ArrayList<Transaction>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public GraphPresenter(Context context) {
         this.context = context;
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void addTransactions(){
         new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
     }
 
@@ -257,9 +262,12 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onDone(ArrayList<Transaction> results) {
         list = results;
+        GraphsFragment g = new GraphsFragment();
+        g.set(results);
     }
 
     public ArrayList<Transaction> get(){

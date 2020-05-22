@@ -238,8 +238,10 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     private void updateTransaction(Transaction t){
         try {
             String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com" +
-                    "/account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions/" + t.getId();
+                    "/account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions/" +
+                    t.getId();
             URL url = new URL (querry);
+            System.out.println(querry);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type",  "application/json; charset=utf-8");
@@ -247,13 +249,14 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             con.setDoOutput(true);
 
             JSONObject obj = new JSONObject();
-            //obj.put("date", t.getDate());
-            //obj.put("title", t.getTitle());
+            obj.put("date", t.getDate());
+            obj.put("title", t.getTitle());
             obj.put("amount", t.getAmount());
-            //obj.put("itemDescription", t.getItemDescription());
-            //obj.put("endDate", t.getEndDate());
-            //obj.put("TransactionTypeId", 4);
-            String inputString = String.valueOf(obj);
+            obj.put("itemDescription", t.getItemDescription());
+            obj.put("transactionInterval", t.getTransactionInterval());
+            obj.put("endDate", t.getEndDate());
+            obj.put("TransactionTypeId", t.getTId());
+            String inputString = (obj).toString();
 
             try(OutputStream os = con.getOutputStream()){
                 byte[] input = inputString.getBytes("utf-8");

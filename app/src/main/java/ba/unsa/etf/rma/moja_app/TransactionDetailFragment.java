@@ -399,6 +399,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                     mAmount = Double.parseDouble(amount.getText().toString());
                     mInterval = Integer.parseInt(interval.getText().toString());
                     imageType = type.getSelectedItem().toString();
+                    int id = original.getTypeId(imageType);
 
 
                     if (presenter.validateDescription(mDescription, imageType) == false
@@ -419,7 +420,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
 
 
-                        Transaction t = new Transaction(date1, mTitle, mAmount, imageType, mDescription, mInterval, date2);
+                        Transaction t = new Transaction(original.getId(), date1, mTitle, mAmount, id, mDescription, mInterval, date2);
 
                         if (account.getBudget() + mAmount < account.getTotalLimit()) {
                             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())

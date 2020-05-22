@@ -57,12 +57,9 @@ public class Transaction implements Parcelable{
         this.transactionInterval = transactionInterval;
         this.endDate = endDate;
         this.typeString = imageType;
-
         TransactionType t1 = new TransactionType();
-
         this.type_ = t1.getTypeId(imageType);
 
-        this.id = ((int) Math.random()) % 799 + 200;
 
 
 
@@ -86,6 +83,7 @@ public class Transaction implements Parcelable{
         transactionInterval = in.readInt();
         typeString = in.readString();
       //  type = in.readString();
+        id = in.readInt();
     }
 
     public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
@@ -188,16 +186,16 @@ public class Transaction implements Parcelable{
         this.type_ = type_;
     }
 
-    //    public int getTypeId(){
-//
-//        if (typeString.matches("Regular payment")) return 1;
-//        else if (typeString.matches("Regular income")) return 2;
-//        else if (typeString.matches("Purchase")) return 3;
-//        else if (typeString.matches("Individual income")) return 4;
-//        else if (typeString.matches("Individual payment")) return 5;
-//        return 0;
-//
-//    }
+        public int getTypeId(String typeString){
+
+        if (typeString.matches("Regular payment")) return 1;
+        else if (typeString.matches("Regular income")) return 2;
+        else if (typeString.matches("Purchase")) return 3;
+        else if (typeString.matches("Individual income")) return 4;
+        else if (typeString.matches("Individual payment")) return 5;
+        return 0;
+
+    }
 
 
 
@@ -219,6 +217,7 @@ public class Transaction implements Parcelable{
         dest.writeDouble(amount);
         dest.writeInt(transactionInterval);
        // dest.writeString(type.toString());
+        dest.writeInt(id);
 
 
     }

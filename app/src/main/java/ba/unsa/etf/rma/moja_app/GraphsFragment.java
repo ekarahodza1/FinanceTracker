@@ -42,6 +42,47 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     private IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
     private OnSwipeChange onSwipeChange;
     private Account account;
+    View view;
+
+    public void set(ArrayList<Transaction> results) {
+        reloadMonth();
+    }
+
+    private void reloadMonth() {
+
+        income = view.findViewById(R.id.incomeChart);
+        payment = view.findViewById(R.id.paymentChart);
+        all = view.findViewById(R.id.allChart);
+
+        income.setDragEnabled(false);
+        income.setScaleEnabled(false);
+
+        payment.setDragEnabled(false);
+        payment.setScaleEnabled(false);
+
+        all.setDragEnabled(false);
+        all.setScaleEnabled(false);
+
+        ArrayList<BarEntry> mIncome = graphPresenter.getMonthIncome();
+        ArrayList<BarEntry> mPayment = graphPresenter.getMonthPayment();
+        ArrayList<BarEntry> mAll = graphPresenter.getMonthAll();
+
+        BarDataSet set1 = new BarDataSet(mIncome, "Income");
+        BarDataSet set2 = new BarDataSet(mPayment, "Payment");
+        BarDataSet set3 = new BarDataSet(mAll, "All");
+
+        BarData data1 = new BarData(); data1.addDataSet(set1);
+        BarData data2 = new BarData(); data2.addDataSet(set2);
+        BarData data3 = new BarData(); data3.addDataSet(set3);
+
+        income.setData(data1);
+        payment.setData(data2);
+        all.setData(data3);
+
+        payment.setDescription(null);
+        income.setDescription(null);
+        all.setDescription(null);
+    }
 
 
     public interface OnSwipeChange {
@@ -54,6 +95,7 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.graphs_fragment, container, false);
+        graphPresenter.addTransactions();
         if (getArguments() != null && getArguments().containsKey("budget")) {
             account = getArguments().getParcelable("budget");
         }

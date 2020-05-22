@@ -18,4 +18,6 @@ public interface IGraphPresenter {
     public ArrayList<BarEntry> getDayAll(ArrayList<Transaction> t);
 
     ArrayList<Transaction> get();
+
+    void addTransactions();
 }
