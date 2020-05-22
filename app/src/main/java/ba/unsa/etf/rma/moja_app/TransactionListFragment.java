@@ -290,6 +290,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
     @Override
     public void setTransactions(ArrayList<Transaction> transactions) {
+        //onItemClick.onTransactionsAdded(transactions);
         listAdapter.setTransaction(transactions);
     }
 
@@ -370,6 +371,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         public void onNewClicked(Transaction t, Account a);
         public void onRightClicked1(Account a);
         public void onLeftClicked1(Account a);
+        public void onTransactionsAdded(ArrayList<Transaction> t);
     }
 
 

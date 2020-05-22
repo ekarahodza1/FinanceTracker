@@ -179,11 +179,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             obj.put("itemDescription", t.getItemDescription());
             obj.put("transactionInterval", t.getTransactionInterval());
             obj.put("endDate", t.getEndDate());
-            int a = t.getTId();
             obj.put("TransactionTypeId", t.getTId());
             String inputString = String.valueOf(obj);
-
-            OutputStream o = con.getOutputStream();
 
             try(OutputStream os = con.getOutputStream()){
                 byte[] input = inputString.getBytes("utf-8");
@@ -245,9 +242,9 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             URL url = new URL (querry);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type",  "application/json");
+            con.setRequestProperty("Content-Type",  "application/json; charset=utf-8");
             con.setRequestProperty("Accept", "application/json");
-            //con.setDoOutput(true);
+            con.setDoOutput(true);
 
             JSONObject obj = new JSONObject();
             //obj.put("date", t.getDate());

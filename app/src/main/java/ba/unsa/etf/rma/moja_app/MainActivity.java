@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -221,6 +222,15 @@ public class MainActivity extends AppCompatActivity implements
                 .replace(R.id.transaction_list, graphsFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onTransactionsAdded(ArrayList<Transaction> t) {
+        GraphsFragment graphsFragment = new GraphsFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("new_transactions", (Parcelable) t);
+        graphsFragment.setArguments(arguments);
     }
 
     @Override

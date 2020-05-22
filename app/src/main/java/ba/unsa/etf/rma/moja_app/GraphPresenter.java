@@ -12,16 +12,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class GraphPresenter implements IGraphPresenter{
+public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTransactionsAdd{
     private Context context;
+    private ArrayList<Transaction> list = new ArrayList<Transaction>();
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public GraphPresenter(Context context) {
         this.context = context;
+        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getMonthIncome(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getMonthIncome(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         double[] months = new double[]{0,0,0,0,0,0,0,0,0,0,0,0};
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
@@ -45,9 +50,11 @@ public class GraphPresenter implements IGraphPresenter{
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getMonthPayment(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getMonthPayment(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
         double[] months = new double[]{0,0,0,0,0,0,0,0,0,0,0,0};
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
             if (trans.getTypeString().matches("Purchase")
@@ -72,9 +79,11 @@ public class GraphPresenter implements IGraphPresenter{
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getMonthAll(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getMonthAll(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
         double[] months = new double[]{0,0,0,0,0,0,0,0,0,0,0,0};
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
                 if (trans.getDate().getYear() == LocalDate.now().getYear()){
@@ -248,4 +257,12 @@ public class GraphPresenter implements IGraphPresenter{
     }
 
 
+    @Override
+    public void onDone(ArrayList<Transaction> results) {
+        list = results;
+    }
+
+    public ArrayList<Transaction> get(){
+        return list;
+    }
 }
