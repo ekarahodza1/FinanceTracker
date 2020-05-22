@@ -278,9 +278,6 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
     @Override
     public void onDone(ArrayList<Transaction> results) {
         list.addAll(results);
-        GraphsFragment g = new GraphsFragment();
-        g.set(results);
-        System.out.println("ucitano");
     }
 
     public ArrayList<Transaction> get(){
