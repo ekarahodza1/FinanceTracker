@@ -12,7 +12,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class FinancePresenter implements IFinancePresenter, FinanceInteractor.OnTransactionsAdd {
-    private ArrayList<Transaction> transactions;
+    private static ArrayList<Transaction> transactions;
+    private  ArrayList<Transaction> transactions1 = new ArrayList<>();
     private HashMap<Integer, Transaction> map = new HashMap<Integer, Transaction>();
     private IFinanceView view;
     private IFinanceInteractor interactor;
@@ -114,7 +115,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
                 pomocne.add(transactions.get(i));
             }
         }
-        transactions = pomocne;
+        //transactions = pomocne;
         view.setTransactions(pomocne);
 
 
@@ -122,9 +123,13 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
     public void filter(String criteria1, String criteria2, LocalDate current1){
         ArrayList<Transaction> pomocne = new ArrayList<>();
-        ArrayList<Transaction> pomocne1 = new ArrayList<>();
+        ArrayList<Transaction> pomocne1 = new ArrayList<>(transactions.size());
+        pomocne1.addAll(transactions);
+
+        System.out.println(transactions.size());
         for (Transaction t: pomocne1) {
             if (t.getEndDate() != null) {
                 if (current1.getMonthValue() >= t.getDate().getMonthValue()
@@ -137,6 +142,9 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
                     && current1.getYear() == t.getDate().getYear()) pomocne.add(t);
 
         }
+
+        System.out.println(transactions.size());
+        pomocne1.clear();
 
         for (int i = 0; i < pomocne.size(); i++){
             if (criteria1.matches("Individual Payment") && pomocne.get(i).getTypeString().matches("Individual Payment")){
@@ -157,6 +165,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             if (criteria1.matches("All")) pomocne1.add(pomocne.get(i));
         }
 
+        System.out.println(transactions.size());
         if (criteria2.matches( "Price - Descending")) {
             Collections.sort(pomocne1, new Comparator<Transaction>() {
                 @Override
@@ -218,6 +227,11 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         view.setTransactions(pomocne1);
         view.notifyTransactionsListDataSetChanged();
 
+
+        pomocne1 = transactions;
+        System.out.println(transactions.size());
+        pomocne.clear();
+
     }
 
     public FinancePresenter(IFinanceView view, Context context) {
@@ -226,6 +240,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             this.interactor = (IFinanceInteractor)
                     new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this);
         }
+        System.out.println("kreirano");
 
         this.context    = context;
         transactions = interactor.getT();
@@ -304,6 +319,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     @Override
     public void onDone(ArrayList<Transaction> results) {
         transactions = results;
+        transactions1 = results;
         filterMonth(LocalDate.now());
         //view.setTransactions(results);
         view.notifyTransactionsListDataSetChanged();

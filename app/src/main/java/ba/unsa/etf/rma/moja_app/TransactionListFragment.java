@@ -52,6 +52,8 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private int positionOfLastItem = -1;
     private String clickedName = "All";
     private String text = "Not sorted";
+    private boolean sp = false;
+    private boolean srt = false;
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -62,70 +64,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
 
     private OnItemClick onItemClick;
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent down, MotionEvent move, float X, float Y) {
-        boolean value = false;
-        float diffY = move.getY() - down.getY();
-        float diffX = move.getX() - down.getX();
-        if (Math.abs(diffX) > 100 && Math.abs(X) > 100){
-            if (diffX > 0){
-                onSwipeRight();
-            } else {
-                onSwipeLeft();
-            }
-            value = true;
-        }
-        return value;
-    }
-
-    private void onSwipeLeft() {
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT)
-        onItemClick.onRightClicked1(accountPresenter.get());
-    }
-
-    private void onSwipeRight() {
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT)
-        onItemClick.onLeftClicked1(accountPresenter.get());
-    }
-
-
-
-
-
-    public interface OnItemClick {
-        public void onItemClicked(Transaction t, Account a);
-        public void onNewClicked(Transaction t, Account a);
-        public void onRightClicked1(Account a);
-        public void onLeftClicked1(Account a);
-    }
 
 
 
@@ -169,7 +107,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         }
         monthView = (TextView) fragmentView.findViewById(R.id.monthView);
         monthView.setText(month + ", " + year);
-        financePresenter.filterMonth(current);
+        //financePresenter.filterMonth(current);
 
         notifyTransactionsListDataSetChanged();
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
@@ -179,11 +117,17 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 Transaction clicked = (Transaction) parent.getItemAtPosition(position);
                 clickedName = clicked.getTypeString();
-                sortSpinner.setSelection(0);
-                financePresenter.filterTransactions(clickedName, current);
-                notifyTransactionsListDataSetChanged();
+                //sortSpinner.setSelection(0);
+                //financePresenter.filterTransactions(clickedName, current);
+               // if (!sp) {
+                    financePresenter.filter(clickedName, text, current);
+                    notifyTransactionsListDataSetChanged();
+                    sp = true;
+               // }
+
             }
 
             @Override
@@ -203,9 +147,10 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                     }
 
                 monthView.setText(current.getMonth().toString() + " ," + current.getYear());
-                spinnerTransactions.setSelection(0);
-                sortSpinner.setSelection(0);
-                financePresenter.filterMonth(current);
+                //spinnerTransactions.setSelection(0);
+                //sortSpinner.setSelection(0);
+                //financePresenter.filterMonth(current);
+                financePresenter.filter(clickedName, text, current);
             }
     });
         rightButton.setOnClickListener(new View.OnClickListener(){
@@ -217,9 +162,11 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                 }
 
                 monthView.setText(current.getMonth().toString() + " ," + current.getYear());
-                spinnerTransactions.setSelection(0);
-                sortSpinner.setSelection(0);
-                financePresenter.filterMonth(current);
+                //spinnerTransactions.setSelection(0);
+               // sortSpinner.setSelection(0);
+                //financePresenter.filterMonth(current);
+                financePresenter.filter(clickedName, text, current);
+                System.out.println("pozvano " + current );
             }
         });
 
@@ -327,8 +274,12 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         text  = parent.getItemAtPosition(position).toString();
-        financePresenter.sortTransactions(text);
-        notifyTransactionsListDataSetChanged();
+        //financePresenter.sortTransactions(text);
+       // if(!srt) {
+            financePresenter.filter(clickedName, text, current);
+            notifyTransactionsListDataSetChanged();
+      //  }
+
     }
 
     @Override
@@ -355,6 +306,70 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
         s = "";  s += account.getBudget();
         globalAmountView.setText(s);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent down, MotionEvent move, float X, float Y) {
+        boolean value = false;
+        float diffY = move.getY() - down.getY();
+        float diffX = move.getX() - down.getX();
+        if (Math.abs(diffX) > 100 && Math.abs(X) > 100){
+            if (diffX > 0){
+                onSwipeRight();
+            } else {
+                onSwipeLeft();
+            }
+            value = true;
+        }
+        return value;
+    }
+
+    private void onSwipeLeft() {
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT)
+            onItemClick.onRightClicked1(accountPresenter.get());
+    }
+
+    private void onSwipeRight() {
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT)
+            onItemClick.onLeftClicked1(accountPresenter.get());
+    }
+
+
+
+
+
+    public interface OnItemClick {
+        public void onItemClicked(Transaction t, Account a);
+        public void onNewClicked(Transaction t, Account a);
+        public void onRightClicked1(Account a);
+        public void onLeftClicked1(Account a);
     }
 
 
