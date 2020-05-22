@@ -152,8 +152,9 @@ public class MainActivity extends AppCompatActivity implements
         arguments.putParcelable("new_account", a);
         TransactionListFragment transactionListFragment = new TransactionListFragment();
         transactionListFragment.setArguments(arguments);
-//        BudgetFragment budgetFragment = new BudgetFragment();
-//        budgetFragment.setArguments(arguments);
+        System.out.println("slanje iz main activity");
+        BudgetFragment budgetFragment = new BudgetFragment();
+        budgetFragment.setArguments(arguments);
 
     }
 

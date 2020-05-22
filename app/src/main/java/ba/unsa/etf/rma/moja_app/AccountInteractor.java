@@ -85,7 +85,7 @@ public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integ
             double monthLimit = jo.getDouble("monthLimit");
             double totalLimit = jo.getDouble("totalLimit");
 
-            account.setBudget(id);
+            account.setId(id);
             account.setBudget(budget);
             account.setMonthLimit(monthLimit);
             account.setTotalLimit(totalLimit);
