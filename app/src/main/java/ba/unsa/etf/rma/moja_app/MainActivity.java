@@ -160,8 +160,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onRightClicked2() {
+    public void onRightClicked2(Account a) {
 
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("new_account", a);
+        TransactionListFragment transactionListFragment = new TransactionListFragment();
+        transactionListFragment.setArguments(arguments);
         GraphsFragment graphsFragment = new GraphsFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, graphsFragment)
@@ -235,8 +239,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLeftClicked2(){
+    public void onLeftClicked2(Account a){
         TransactionListFragment transactionListFragment = new TransactionListFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable("new_account", a);
+        transactionListFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.transaction_list, transactionListFragment)
                 .addToBackStack(null)

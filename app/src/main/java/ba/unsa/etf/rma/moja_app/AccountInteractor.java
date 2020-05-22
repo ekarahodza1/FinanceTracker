@@ -51,9 +51,10 @@ public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integ
 
     @Override
     protected Void doInBackground(HashMap<String, Account>... maps) {
-        if (maps[0].get("get") != null) getAccount();
-        else if (maps[0].get("update") != null) postAccount(maps[0].get("update"));
 
+        if (maps[0].get("update") != null) postAccount(maps[0].get("update"));
+        //else if (maps[0].get("get") != null)
+            getAccount();
         return null;
     }
 

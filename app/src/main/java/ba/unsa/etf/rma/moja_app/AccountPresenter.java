@@ -36,7 +36,7 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
 
     public void setAccount(Account a) {
         map.put("update", a);
-            new AccountInteractor((AccountInteractor.OnAccountAdd)
+        new AccountInteractor((AccountInteractor.OnAccountAdd)
                     this).execute(map);
     }
 

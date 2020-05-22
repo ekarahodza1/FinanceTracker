@@ -20,7 +20,7 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
     private Button ok;
     private EditText totalLimit;
     private EditText monthLimit;
-    private TextView budget;
+    private EditText budget;
     private Account account;
     private GestureDetector gestureDetector;
     private OnBudgetChange onBudgetChange;
@@ -69,19 +69,19 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
 
     private void onSwipeLeft() {
         int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) onBudgetChange.onRightClicked2();
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) onBudgetChange.onRightClicked2(account);
     }
 
     private void onSwipeRight() {
         int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) onBudgetChange.onLeftClicked2();
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) onBudgetChange.onLeftClicked2(account);
     }
 
 
 
     public interface OnBudgetChange {
-        public void onRightClicked2();
-        public void onLeftClicked2();
+        public void onRightClicked2(Account a);
+        public void onLeftClicked2(Account a);
         public void onChanged(Account account);
 
     }
@@ -113,6 +113,7 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                account.setBudget(Double.valueOf(String.valueOf(budget.getText())));
                 account.setMonthLimit(Double.valueOf(String.valueOf(monthLimit.getText())));
                 account.setTotalLimit(Double.valueOf(String.valueOf(totalLimit.getText())));
                 onBudgetChange.onChanged(account);
