@@ -121,6 +121,104 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void filter(String criteria1, String criteria2, LocalDate current1){
+        ArrayList<Transaction> pomocne = new ArrayList<>();
+        ArrayList<Transaction> pomocne1 = new ArrayList<>();
+        for (Transaction t: pomocne1) {
+            if (t.getEndDate() != null) {
+                if (current1.getMonthValue() >= t.getDate().getMonthValue()
+                        && current1.getMonthValue() <= t.getEndDate().getMonthValue()
+                        && current1.getYear() == t.getEndDate().getYear()){
+                    pomocne.add(t);
+                }
+            }
+            else if (t.getDate().getMonthValue() == current1.getMonthValue()
+                    && current1.getYear() == t.getDate().getYear()) pomocne.add(t);
+
+        }
+
+        for (int i = 0; i < pomocne.size(); i++){
+            if (criteria1.matches("Individual Payment") && pomocne.get(i).getTypeString().matches("Individual Payment")){
+                pomocne1.add(pomocne.get(i));
+            }
+            if (criteria1.matches("Regular Payment") && pomocne.get(i).getTypeString().matches("Regular Payment")){
+                pomocne1.add(pomocne.get(i));
+            }
+            if (criteria1.matches("Purchase") && pomocne.get(i).getTypeString().matches("Purchase")){
+                pomocne1.add(pomocne.get(i));
+            }
+            if (criteria1.matches("Individual Income") && pomocne.get(i).getTypeString().matches("Individual Income")){
+                pomocne1.add(pomocne.get(i));
+            }
+            if (criteria1.matches("Regular Income") && pomocne.get(i).getTypeString().matches("Regular Income")){
+                pomocne1.add(pomocne.get(i));
+            }
+            if (criteria1.matches("All")) pomocne1.add(pomocne.get(i));
+        }
+
+        if (criteria2.matches( "Price - Descending")) {
+            Collections.sort(pomocne1, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction o1, Transaction o2) {
+                    return (int) (o2.getAmount() - o1.getAmount());
+                }
+            });
+        }
+        if (criteria2.matches("Price - Ascending")) {
+            Collections.sort(pomocne1, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction o1, Transaction o2) {
+                    return (int) (o1.getAmount() - o2.getAmount());
+                }
+            });
+        }
+        if (criteria2.matches("Title - Descending")) {
+            Collections.sort(pomocne1, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction o1, Transaction o2) {
+                    return o1.getTitle().compareTo(o2.getTitle());
+                }
+            });
+            Collections.reverse(pomocne1);
+        }
+        if (criteria2.matches("Title - Ascending")) {
+            Collections.sort(pomocne1, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction o1, Transaction o2) {
+                    return o1.getTitle().compareTo(o2.getTitle());
+                }
+
+            });
+
+        }
+        if (criteria2.matches("Date - Descending")) {
+            Collections.sort(pomocne1, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction o1, Transaction o2) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        return (int) (o1.getDate().compareTo(o2.getDate()));
+                    }
+                    return 0;
+                }
+            });
+        }
+        if (criteria2.matches("Date - Ascending")) {
+            Collections.sort(pomocne1, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction o1, Transaction o2) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        return (int) (o2.getDate().compareTo(o1.getDate()));
+                    }
+                    return 0;
+                }
+            });
+        }
+
+        view.setTransactions(pomocne1);
+        view.notifyTransactionsListDataSetChanged();
+
+    }
 
     public FinancePresenter(IFinanceView view, Context context) {
         this.view       = view;
@@ -202,10 +300,12 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onDone(ArrayList<Transaction> results) {
         transactions = results;
-        view.setTransactions(results);
+        filterMonth(LocalDate.now());
+        //view.setTransactions(results);
         view.notifyTransactionsListDataSetChanged();
     }
 

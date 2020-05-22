@@ -50,6 +50,8 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private IAccountPresenter accountPresenter = new AccountPresenter(this, getActivity());
     private GestureDetector gestureDetector;
     private int positionOfLastItem = -1;
+    private String clickedName = "All";
+    private String text = "Not sorted";
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -178,7 +180,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Transaction clicked = (Transaction) parent.getItemAtPosition(position);
-                String clickedName = clicked.getTypeString();
+                clickedName = clicked.getTypeString();
                 sortSpinner.setSelection(0);
                 financePresenter.filterTransactions(clickedName, current);
                 notifyTransactionsListDataSetChanged();
@@ -324,7 +326,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text  = parent.getItemAtPosition(position).toString();
+        text  = parent.getItemAtPosition(position).toString();
         financePresenter.sortTransactions(text);
         notifyTransactionsListDataSetChanged();
     }
