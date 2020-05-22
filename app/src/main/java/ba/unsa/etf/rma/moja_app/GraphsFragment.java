@@ -3,6 +3,7 @@ package ba.unsa.etf.rma.moja_app;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,7 +46,7 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     View view;
 
     public void set(ArrayList<Transaction> results) {
-        reloadMonth();
+       // month.callOnClick();
     }
 
     private void reloadMonth() {
@@ -140,95 +141,103 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
         week = (Button)view.findViewById(R.id.week);
         month = (Button)view.findViewById(R.id.month);
 
-//        day.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ArrayList<BarEntry> mIncome = graphPresenter.getDayIncome(list);
-//                ArrayList<BarEntry> mPayment = graphPresenter.getDayPayment(list);
-//                ArrayList<BarEntry> mAll = graphPresenter.getDayAll(list);
-//
-//                BarDataSet set1 = new BarDataSet(mIncome, "Payment");
-//                BarDataSet set2 = new BarDataSet(mPayment, "Income");
-//                BarDataSet set3 = new BarDataSet(mAll, "All");
-//
-//                BarData data1 = new BarData(); data1.addDataSet(set1);
-//                BarData data2 = new BarData(); data2.addDataSet(set2);
-//                BarData data3 = new BarData(); data3.addDataSet(set3);
-//
-//                income.setData(data1);
-//                payment.setData(data2);
-//                all.setData(data3);
-//
-//                income.notifyDataSetChanged();
-//                income.invalidate();
-//
-//                payment.notifyDataSetChanged();
-//                payment.invalidate();
-//
-//                all.notifyDataSetChanged();
-//                all.invalidate();
-//            }
-//        });
-//
-//        week.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ArrayList<BarEntry> mIncome = graphPresenter.getWeekIncome(list);
-//                ArrayList<BarEntry> mPayment = graphPresenter.getWeekPayment(list);
-//                ArrayList<BarEntry> mAll = graphPresenter.getWeekAll(list);
-//
-//                BarDataSet set1 = new BarDataSet(mIncome, "Income");
-//                BarDataSet set2 = new BarDataSet(mPayment, "Payment");
-//                BarDataSet set3 = new BarDataSet(mAll, "All");
-//
-//                BarData data1 = new BarData(); data1.addDataSet(set1);
-//                BarData data2 = new BarData(); data2.addDataSet(set2);
-//                BarData data3 = new BarData(); data3.addDataSet(set3);
-//
-//                income.setData(data1);
-//                payment.setData(data2);
-//                all.setData(data3);
-//
-//                income.notifyDataSetChanged();
-//                income.invalidate();
-//
-//                payment.notifyDataSetChanged();
-//                payment.invalidate();
-//
-//                all.notifyDataSetChanged();
-//                all.invalidate();
-//            }
-//        });
-//
-//        month.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ArrayList<BarEntry> mIncome = graphPresenter.getMonthIncome(list);
-//                ArrayList<BarEntry> mPayment = graphPresenter.getMonthPayment(list);
-//                ArrayList<BarEntry> mAll = graphPresenter.getMonthAll(list);
-//
-//                BarDataSet set1 = new BarDataSet(mIncome, "Income");
-//                BarDataSet set2 = new BarDataSet(mPayment, "Payment");
-//                BarDataSet set3 = new BarDataSet(mAll, "All");
-//
-//                BarData data1 = new BarData(); data1.addDataSet(set1);
-//                BarData data2 = new BarData(); data2.addDataSet(set2);
-//                BarData data3 = new BarData(); data3.addDataSet(set3);
-//
-//                income.setData(data1);
-//                payment.setData(data2);
-//                all.setData(data3);
-//
-//                income.notifyDataSetChanged();
-//                income.invalidate();
-//
-//                payment.notifyDataSetChanged();
-//                payment.invalidate();
-//
-//                all.notifyDataSetChanged();
-//                all.invalidate();
-//            }
-//        });
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                month.callOnClick();
+            }
+        }, 5000);   //5 seconds
+
+        day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list = graphPresenter.get();
+                ArrayList<BarEntry> mIncome = graphPresenter.getDayIncome();
+                ArrayList<BarEntry> mPayment = graphPresenter.getDayPayment();
+                ArrayList<BarEntry> mAll = graphPresenter.getDayAll();
+
+                BarDataSet set1 = new BarDataSet(mIncome, "Payment");
+                BarDataSet set2 = new BarDataSet(mPayment, "Income");
+                BarDataSet set3 = new BarDataSet(mAll, "All");
+
+                BarData data1 = new BarData(); data1.addDataSet(set1);
+                BarData data2 = new BarData(); data2.addDataSet(set2);
+                BarData data3 = new BarData(); data3.addDataSet(set3);
+
+                income.setData(data1);
+                payment.setData(data2);
+                all.setData(data3);
+
+                income.notifyDataSetChanged();
+                income.invalidate();
+
+                payment.notifyDataSetChanged();
+                payment.invalidate();
+
+                all.notifyDataSetChanged();
+                all.invalidate();
+            }
+        });
+
+        week.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<BarEntry> mIncome = graphPresenter.getWeekIncome();
+                ArrayList<BarEntry> mPayment = graphPresenter.getWeekPayment();
+                ArrayList<BarEntry> mAll = graphPresenter.getWeekAll();
+
+                BarDataSet set1 = new BarDataSet(mIncome, "Income");
+                BarDataSet set2 = new BarDataSet(mPayment, "Payment");
+                BarDataSet set3 = new BarDataSet(mAll, "All");
+
+                BarData data1 = new BarData(); data1.addDataSet(set1);
+                BarData data2 = new BarData(); data2.addDataSet(set2);
+                BarData data3 = new BarData(); data3.addDataSet(set3);
+
+                income.setData(data1);
+                payment.setData(data2);
+                all.setData(data3);
+
+                income.notifyDataSetChanged();
+                income.invalidate();
+
+                payment.notifyDataSetChanged();
+                payment.invalidate();
+
+                all.notifyDataSetChanged();
+                all.invalidate();
+            }
+        });
+
+        month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<BarEntry> mIncome = graphPresenter.getMonthIncome();
+                ArrayList<BarEntry> mPayment = graphPresenter.getMonthPayment();
+                ArrayList<BarEntry> mAll = graphPresenter.getMonthAll();
+
+                BarDataSet set1 = new BarDataSet(mIncome, "Income");
+                BarDataSet set2 = new BarDataSet(mPayment, "Payment");
+                BarDataSet set3 = new BarDataSet(mAll, "All");
+
+                BarData data1 = new BarData(); data1.addDataSet(set1);
+                BarData data2 = new BarData(); data2.addDataSet(set2);
+                BarData data3 = new BarData(); data3.addDataSet(set3);
+
+                income.setData(data1);
+                payment.setData(data2);
+                all.setData(data3);
+
+                income.notifyDataSetChanged();
+                income.invalidate();
+
+                payment.notifyDataSetChanged();
+                payment.invalidate();
+
+                all.notifyDataSetChanged();
+                all.invalidate();
+            }
+        });
 
         onSwipeChange = (OnSwipeChange) getActivity();
 

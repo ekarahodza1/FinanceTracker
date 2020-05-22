@@ -110,9 +110,11 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getWeekIncome(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getWeekIncome(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
         double[] weeks = new double[]{0,0,0,0,0};
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
             if (trans.getTypeString().matches("Individual income") || trans.getTypeString().matches("Regular income")){
@@ -136,8 +138,10 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getWeekPayment(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getWeekPayment(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         double[] weeks = new double[]{0,0,0,0,0};
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
@@ -163,9 +167,11 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getWeekAll(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getWeekAll(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
         double[] weeks = new double[]{0,0,0,0,0};
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
@@ -188,8 +194,10 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getDayIncome(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getDayIncome(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         double[] days = new double[30];
         for (int i = 0; i < 30; i++) days[i] = 0;
         for (int i = 0; i < t.size(); i++){
@@ -214,8 +222,10 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getDayPayment(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getDayPayment(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         double[] days = new double[30];
         for (int i = 0; i < 30; i++) days[i] = 0;
         for (int i = 0; i < t.size(); i++){
@@ -238,8 +248,10 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<BarEntry> getDayAll(ArrayList<Transaction> t){
+    public ArrayList<BarEntry> getDayAll(){
         ArrayList<BarEntry> data = new ArrayList<BarEntry>();
+        ArrayList<Transaction> t = new ArrayList<>();
+        t.addAll(list);
         double[] days = new double[30];
         for (int i = 0; i < 30; i++) days[i] = 0;
         for (int i = 0; i < t.size(); i++){
@@ -265,9 +277,10 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onDone(ArrayList<Transaction> results) {
-        list = results;
+        list.addAll(results);
         GraphsFragment g = new GraphsFragment();
         g.set(results);
+        System.out.println("ucitano");
     }
 
     public ArrayList<Transaction> get(){
