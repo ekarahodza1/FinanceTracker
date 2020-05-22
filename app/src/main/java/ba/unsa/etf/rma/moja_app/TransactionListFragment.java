@@ -166,7 +166,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                // sortSpinner.setSelection(0);
                 //financePresenter.filterMonth(current);
                 financePresenter.filter(clickedName, text, current);
-                System.out.println("pozvano " + current );
             }
         });
 

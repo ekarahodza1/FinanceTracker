@@ -132,11 +132,22 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
         for (Transaction t: pomocne1) {
             if (t.getEndDate() != null) {
-                if (current1.getMonthValue() >= t.getDate().getMonthValue()
-                        && current1.getMonthValue() <= t.getEndDate().getMonthValue()
-                        && current1.getYear() == t.getEndDate().getYear()){
-                    pomocne.add(t);
-                }
+
+                    if (current1.getMonthValue() >= t.getDate().getMonthValue()
+                            && current1.getMonthValue() <= t.getEndDate().getMonthValue()
+                            && current1.getYear() == t.getEndDate().getYear()){
+                        pomocne.add(t);
+                    }
+
+ //               LocalDate d = t.getDate();
+//                while(d.isBefore(t.getEndDate())){
+//                    if(current1.getMonthValue() >= d.getMonthValue()
+//                        && current1.getMonthValue() <= t.getEndDate().getMonthValue()
+//                        && current1.getYear() == t.getEndDate().getYear()){
+//                        pomocne.add(t);
+//                    }
+//                    d.plusDays(t.getTransactionInterval());
+//                }
             }
             else if (t.getDate().getMonthValue() == current1.getMonthValue()
                     && current1.getYear() == t.getDate().getYear()) pomocne.add(t);
