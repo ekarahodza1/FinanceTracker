@@ -120,13 +120,9 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
                 Transaction clicked = (Transaction) parent.getItemAtPosition(position);
                 clickedName = clicked.getTypeString();
-                //sortSpinner.setSelection(0);
-                //financePresenter.filterTransactions(clickedName, current);
-               // if (!sp) {
-                    financePresenter.filter(clickedName, text, current);
-                    notifyTransactionsListDataSetChanged();
-                    sp = true;
-               // }
+                financePresenter.filter(clickedName, text, current);
+                notifyTransactionsListDataSetChanged();
+
 
             }
 

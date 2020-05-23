@@ -151,19 +151,19 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         pomocne1.clear();
 
         for (int i = 0; i < pomocne.size(); i++){
-            if (criteria1.matches("Individual Payment") && pomocne.get(i).getTypeString().matches("Individual Payment")){
+            if (criteria1.matches("Individual Payment") && pomocne.get(i).getTypeString().matches("Individual payment")){
                 pomocne1.add(pomocne.get(i));
             }
-            if (criteria1.matches("Regular Payment") && pomocne.get(i).getTypeString().matches("Regular Payment")){
+            if (criteria1.matches("Regular Payment") && pomocne.get(i).getTypeString().matches("Regular payment")){
                 pomocne1.add(pomocne.get(i));
             }
             if (criteria1.matches("Purchase") && pomocne.get(i).getTypeString().matches("Purchase")){
                 pomocne1.add(pomocne.get(i));
             }
-            if (criteria1.matches("Individual Income") && pomocne.get(i).getTypeString().matches("Individual Income")){
+            if (criteria1.matches("Individual Income") && pomocne.get(i).getTypeString().matches("Individual income")){
                 pomocne1.add(pomocne.get(i));
             }
-            if (criteria1.matches("Regular Income") && pomocne.get(i).getTypeString().matches("Regular Income")){
+            if (criteria1.matches("Regular Income") && pomocne.get(i).getTypeString().matches("Regular income")){
                 pomocne1.add(pomocne.get(i));
             }
             if (criteria1.matches("All")) pomocne1.add(pomocne.get(i));
