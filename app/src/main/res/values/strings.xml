@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Finance Tracker</string>
     <string name="api_id">b2a4cd97-f112-4cb8-87eb-ef51be2fb114</string>
+    <string name="root">http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com</string>
 
     <string-array name="sorting">
         <item>Not sorted</item>

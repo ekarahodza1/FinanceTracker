@@ -129,25 +129,18 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         ArrayList<Transaction> pomocne1 = new ArrayList<>(transactions.size());
         pomocne1.addAll(transactions);
 
-
+        LocalDate d = null;
         for (Transaction t: pomocne1) {
             if (t.getEndDate() != null) {
 
-                    if (current1.getMonthValue() >= t.getDate().getMonthValue()
-                            && current1.getMonthValue() <= t.getEndDate().getMonthValue()
-                            && current1.getYear() == t.getEndDate().getYear()){
+                d = t.getDate();
+                while(d.isBefore(t.getEndDate())){
+                    if(d.getMonthValue() == current1.getMonthValue()
+                            && current1.getYear() == d.getYear()){
                         pomocne.add(t);
                     }
-
- //               LocalDate d = t.getDate();
-//                while(d.isBefore(t.getEndDate())){
-//                    if(current1.getMonthValue() >= d.getMonthValue()
-//                        && current1.getMonthValue() <= t.getEndDate().getMonthValue()
-//                        && current1.getYear() == t.getEndDate().getYear()){
-//                        pomocne.add(t);
-//                    }
-//                    d.plusDays(t.getTransactionInterval());
-//                }
+                    d = d.minusDays(-t.getTransactionInterval());
+                }
             }
             else if (t.getDate().getMonthValue() == current1.getMonthValue()
                     && current1.getYear() == t.getDate().getYear()) pomocne.add(t);
@@ -280,10 +273,14 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         pomocne1 = transactions;
         for (Transaction t: pomocne1) {
             if (t.getEndDate() != null) {
-                if (current1.getMonthValue() >= t.getDate().getMonthValue()
-                        && current1.getMonthValue() <= t.getEndDate().getMonthValue()
-                        && current1.getYear() == t.getEndDate().getYear()){
-                    pomocne.add(t);
+
+                LocalDate d = t.getDate();
+                while(d.isBefore(t.getEndDate())){
+                    if(d.getMonthValue() == current1.getMonthValue()
+                            && current1.getYear() == d.getYear()){
+                        pomocne.add(t);
+                    }
+                    d = d.minusDays(-t.getTransactionInterval());
                 }
             }
             else if (t.getDate().getMonthValue() == current1.getMonthValue()

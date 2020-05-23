@@ -71,8 +71,11 @@ public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integ
     }
 
     private void getAccount(){
-        String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
-                + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114";
+
+        String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com"
+                + "/account/" + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114";
+
+        System.out.println(url1);
 
         try {
             URL url = new URL(url1);
@@ -102,8 +105,8 @@ public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integ
 
     private void postAccount(Account account) {
         try {
-            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
-                    + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114";
+            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com"
+                    + "/account/" + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114";
             URL url = new URL (querry);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
