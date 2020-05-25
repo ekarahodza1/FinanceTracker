@@ -277,6 +277,7 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onDone(ArrayList<Transaction> results) {
+        list.clear();
         list.addAll(results);
     }
 

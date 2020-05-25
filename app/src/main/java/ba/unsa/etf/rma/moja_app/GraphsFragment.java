@@ -36,13 +36,12 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
     private Button day;
     private Button week;
     private Button month;
-    //private FinanceInteractor interactor = new FinanceInteractor(getActivity());
-    //private FinancePresenter presenter = new FinancePresenter(this, getActivity());
     private ArrayList<Transaction> list;
     private GestureDetector gestureDetector;
     private IGraphPresenter graphPresenter = new GraphPresenter(getActivity());
     private OnSwipeChange onSwipeChange;
     private Account account;
+    private boolean weekClicked, dayClicked = false;
 
 
 
@@ -104,13 +103,15 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
+                if (!dayClicked && !weekClicked)
                 month.callOnClick();
             }
-        }, 5000);   //5 seconds
+        }, 3000);   //5 seconds
 
         day.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dayClicked = true;
                 list = graphPresenter.get();
                 ArrayList<BarEntry> mIncome = graphPresenter.getDayIncome();
                 ArrayList<BarEntry> mPayment = graphPresenter.getDayPayment();
@@ -142,6 +143,7 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
         week.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                weekClicked = true;
                 ArrayList<BarEntry> mIncome = graphPresenter.getWeekIncome();
                 ArrayList<BarEntry> mPayment = graphPresenter.getWeekPayment();
                 ArrayList<BarEntry> mAll = graphPresenter.getWeekAll();
