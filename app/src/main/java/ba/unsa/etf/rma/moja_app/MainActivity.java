@@ -152,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements
         arguments.putParcelable("new_account", a);
         TransactionListFragment transactionListFragment = new TransactionListFragment();
         transactionListFragment.setArguments(arguments);
-        System.out.println("slanje iz main activity");
         BudgetFragment budgetFragment = new BudgetFragment();
         budgetFragment.setArguments(arguments);
 
@@ -205,13 +204,12 @@ public class MainActivity extends AppCompatActivity implements
         TransactionDetailFragment detailFragment = new TransactionDetailFragment();
         listFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.transaction_list, detailFragment)
+                .replace(R.id.transaction_list, listFragment)
+                .addToBackStack(null)
                 .commit();
-        detailFragment.setArguments(arguments);
         if (twoPaneMode) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.transaction_list, listFragment)
-                    .addToBackStack(null)
+                    .replace(R.id.transaction_detail, detailFragment)
                     .commit();
         }
     }

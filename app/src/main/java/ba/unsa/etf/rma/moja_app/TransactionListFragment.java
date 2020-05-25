@@ -107,7 +107,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         }
         monthView = (TextView) fragmentView.findViewById(R.id.monthView);
         monthView.setText(month + ", " + year);
-        //financePresenter.filterMonth(current);
 
         notifyTransactionsListDataSetChanged();
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
@@ -143,9 +142,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                     }
 
                 monthView.setText(current.getMonth().toString() + " ," + current.getYear());
-                //spinnerTransactions.setSelection(0);
-                //sortSpinner.setSelection(0);
-                //financePresenter.filterMonth(current);
                 financePresenter.filter(clickedName, text, current);
             }
     });
@@ -158,9 +154,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                 }
 
                 monthView.setText(current.getMonth().toString() + " ," + current.getYear());
-                //spinnerTransactions.setSelection(0);
-               // sortSpinner.setSelection(0);
-                //financePresenter.filterMonth(current);
                 financePresenter.filter(clickedName, text, current);
             }
         });
@@ -171,7 +164,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         if (getArguments() != null && getArguments().containsKey("new_account")){
             account = getArguments().getParcelable("new_account");
             accountPresenter.setAccount(account);
-            System.out.println("setanje u list fragment");
         }
         else {
             account = accountPresenter.get();
@@ -199,7 +191,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                 else {
                     positionOfLastItem = -1;
                     transactionList.setSelector(R.color.white);
-                    Transaction t = new Transaction(null, null, 0, null, null, 0, null);
+                    Transaction t = new Transaction(-1, null, null, 0, -1, null, 0, null);
                     onItemClick.onNewClicked(t, account);
                 }
 

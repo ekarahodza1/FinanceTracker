@@ -32,7 +32,7 @@ public class ListItemPresenter implements IListItemPresenter {
     public boolean validateDate(LocalDate date1, LocalDate date2, int id) {
         if (date1 == null) return true;
         if ((id == 1 || id == 2) && date2 == null) return true;
-        if (date1.isAfter(date2)) return true;
+        if ((id == 1 || id == 2) && date1.isAfter(date2)) return true;
         return false;
     }
 

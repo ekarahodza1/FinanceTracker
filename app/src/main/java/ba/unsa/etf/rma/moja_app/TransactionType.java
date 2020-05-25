@@ -87,9 +87,7 @@ public class TransactionType {
 
 
     public int getTypeId(String typeString) {
-//        for (int i = 1; i < mapa.size(); i++){
-//            if (mapa.get(i).matches(imageType)) return i;
-//        }
+        if (typeString == null) return 0;
         if (typeString.matches("Regular payment")) return 1;
         else if (typeString.matches("Regular income")) return 2;
         else if (typeString.matches("Purchase")) return 3;
