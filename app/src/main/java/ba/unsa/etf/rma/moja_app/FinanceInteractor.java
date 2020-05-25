@@ -111,7 +111,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getTransactions(){
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; ; j++) {
 
             String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
                     + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114" + "/transactions?page=" + j;
@@ -123,6 +123,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
                 String result = convertStreamToString(in);
                 JSONObject jo = new JSONObject(result);
                 JSONArray results = jo.getJSONArray("transactions");
+                if (results.length() == 0) break;
 
                 for (int i = 0; i < results.length(); i++) {
                     JSONObject t = results.getJSONObject(i);
@@ -164,7 +165,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     private void postTransaction(Transaction t)  {
 
         try {
-            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions";
+            String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/" +
+                    "account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions";
             URL url = new URL (querry);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
             con.setRequestMethod("POST");
