@@ -262,12 +262,8 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         text  = parent.getItemAtPosition(position).toString();
-        //financePresenter.sortTransactions(text);
-       // if(!srt) {
-            financePresenter.filter(clickedName, text, current);
-            notifyTransactionsListDataSetChanged();
-      //  }
-
+        financePresenter.filter(clickedName, text, current);
+        notifyTransactionsListDataSetChanged();
     }
 
     @Override

@@ -430,9 +430,12 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
                         Transaction t = new Transaction(original.getId(), date1, mTitle, mAmount, id, mDescription, mInterval, date2);
 
+                        double newAmount;
+                        if (original.getTId() != 0 && Math.abs(original.getTId() - t.getTId()) % 2 == 1) newAmount = -mAmount;
 
-                        double newAmount = original.getAmount() - mAmount;
-                        if ((account.getBudget() + newAmount < -account.getTotalLimit()) && (id == 1 || id == 3 || id == 5)) {
+                        else newAmount = original.getAmount() - mAmount;
+
+                        if ((account.getBudget() + newAmount < account.getTotalLimit()) && (id == 1 || id == 3 || id == 5)) {
                             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                                     .setTitle("Alert!")
                                     .setMessage("Are you sure you want to go over the limit?")

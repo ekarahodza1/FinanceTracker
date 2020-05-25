@@ -115,6 +115,7 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
             }
         }
 
+
         for (int i = 0; i < 12; i++){
             data.add(new BarEntry(i+1, (float) months[i]));
         }

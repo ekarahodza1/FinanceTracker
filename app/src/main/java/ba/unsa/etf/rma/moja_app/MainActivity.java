@@ -203,8 +203,9 @@ public class MainActivity extends AppCompatActivity implements
         TransactionListFragment listFragment = new TransactionListFragment();
         TransactionDetailFragment detailFragment = new TransactionDetailFragment();
         listFragment.setArguments(arguments);
+        detailFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.transaction_list, listFragment)
+                .replace(R.id.transaction_list, detailFragment)
                 .addToBackStack(null)
                 .commit();
         if (twoPaneMode) {
