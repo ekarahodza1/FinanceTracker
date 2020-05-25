@@ -27,6 +27,15 @@ public class ListItemPresenter implements IListItemPresenter {
         return transaction;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public boolean validateDate(LocalDate date1, LocalDate date2, int id) {
+        if (date1 == null) return true;
+        if ((id == 1 || id == 2) && date2 == null) return true;
+        if (date1.isAfter(date2)) return true;
+        return false;
+    }
+
     @Override
     public boolean validateTitle(String title){
         if (title.length() >= 3 && title.length() <= 15) return true;
@@ -36,8 +45,6 @@ public class ListItemPresenter implements IListItemPresenter {
 
     @Override
     public boolean validateDescription(String description, String type){
-        if ((type.matches("Regular income") || type.matches("Individual income") || type.matches("Purchase")) &&
-        !description.matches("")) return false;
         return true;
     }
     @Override
