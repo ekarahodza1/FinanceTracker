@@ -111,10 +111,13 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getTransactions(){
+
+
         for (int j = 0; ; j++) {
 
             String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
                     + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114" + "/transactions?page=" + j;
+
 
             try {
                 URL url = new URL(url1);
@@ -144,6 +147,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
                     LocalDate d2 = null;
                     Integer id = t.getInt("id");
 
+
                     if (!endDate.matches("null")) {
                         d2 = LocalDate.parse(endDate, dateTimeFormatter);
                     }
@@ -159,7 +163,9 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
         }
+
     }
 
     private void postTransaction(Transaction t)  {

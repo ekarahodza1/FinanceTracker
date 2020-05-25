@@ -67,10 +67,10 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
                     || trans.getTypeString().matches("Individual payment")){
                 if (trans.getDate().getYear() == LocalDate.now().getYear()){
                     if (trans.getEndDate() == null){
-                        months[trans.getDate().getMonthValue() - 1] -= trans.getAmount();
+                        months[trans.getDate().getMonthValue() - 1] += trans.getAmount();
                     } else {
                         for (int j = trans.getDate().getMonthValue(); j <= trans.getEndDate().getMonthValue(); j++){
-                            months[j-1] -= trans.getAmount();
+                            months[j-1] += trans.getAmount();
                         }
                     }
                 }
@@ -91,14 +91,27 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
         t.addAll(list);
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
-                if (trans.getDate().getYear() == LocalDate.now().getYear()){
-                    if (trans.getEndDate() == null){
-                        months[trans.getDate().getMonthValue() - 1] += trans.getAmount();
+            if (trans.getTId() == 1 || trans.getTId() == 3 || trans.getTId() == 5) {
+                if (trans.getDate().getYear() == LocalDate.now().getYear()) {
+                    if (trans.getEndDate() == null) {
+                        months[trans.getDate().getMonthValue() - 1] -= trans.getAmount();
                     } else {
-                        for (int j = trans.getDate().getMonthValue(); j <= trans.getEndDate().getMonthValue(); j++){
-                            months[j-1] += trans.getAmount();
+                        for (int j = trans.getDate().getMonthValue(); j <= trans.getEndDate().getMonthValue(); j++) {
+                            months[j - 1] -= trans.getAmount();
                         }
                     }
+                }
+            }
+            else {
+                if (trans.getDate().getYear() == LocalDate.now().getYear()) {
+                    if (trans.getEndDate() == null) {
+                        months[trans.getDate().getMonthValue() - 1] += trans.getAmount();
+                    } else {
+                        for (int j = trans.getDate().getMonthValue(); j <= trans.getEndDate().getMonthValue(); j++) {
+                            months[j - 1] += trans.getAmount();
+                        }
+                    }
+                }
             }
         }
 
@@ -150,12 +163,12 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
                     || trans.getTypeString().matches("Individual payment")){
                 if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
                     int j = trans.getDate().getDayOfMonth() / 7;
-                    weeks[j] -= trans.getAmount();
+                    weeks[j] += trans.getAmount();
                 } else if (trans.getEndDate() != null
                         && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
                         && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()){
                     int j = trans.getDate().getDayOfMonth() / 7;
-                    weeks[j] -= trans.getAmount();
+                    weeks[j] += trans.getAmount();
                 }
             }
         }
@@ -174,7 +187,19 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
         t.addAll(list);
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
-                if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){
+            if (trans.getTId() == 1 || trans.getTId() == 3 || trans.getTId() == 5) {
+                if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()) {
+                    int j = trans.getDate().getDayOfMonth() / 7;
+                    weeks[j] -= trans.getAmount();
+                } else if (trans.getEndDate() != null
+                        && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()) {
+                    int j = trans.getDate().getDayOfMonth() / 7;
+                    weeks[j] -= trans.getAmount();
+                }
+            }
+            else {
+                if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()) {
                     int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] += trans.getAmount();
                 } else if (trans.getEndDate() != null
@@ -183,6 +208,7 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
                     int j = trans.getDate().getDayOfMonth() / 7;
                     weeks[j] += trans.getAmount();
                 }
+            }
 
         }
 
@@ -257,13 +283,26 @@ public class GraphPresenter implements IGraphPresenter,  FinanceInteractor.OnTra
         for (int i = 0; i < t.size(); i++){
             Transaction trans = t.get(i);
 
-                if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()){ ;
+            if (trans.getTId() == 1 || trans.getTId() == 3 || trans.getTId() == 5) {
+                if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()) {
+                    ;
+                    days[trans.getDate().getDayOfMonth() - 1] -= trans.getAmount();
+                } else if (trans.getEndDate() != null
+                        && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()) {
+                    days[trans.getDate().getDayOfMonth() - 1] -= trans.getAmount();
+                }
+            }
+            else {
+                if (trans.getDate().getMonthValue() == LocalDate.now().getMonthValue()) {
+                    ;
                     days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
                 } else if (trans.getEndDate() != null
                         && LocalDate.now().getMonthValue() <= trans.getEndDate().getMonthValue()
-                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()){
+                        && LocalDate.now().getMonthValue() >= trans.getDate().getMonthValue()) {
                     days[trans.getDate().getDayOfMonth() - 1] += trans.getAmount();
                 }
+            }
 
         }
 
