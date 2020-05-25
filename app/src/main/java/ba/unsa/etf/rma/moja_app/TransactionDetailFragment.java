@@ -57,7 +57,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private double budget;
     private boolean boja = false;
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
-    private Transaction trans, original;
+    private Transaction trans, original = null;
     private Account account;
     private IAccountPresenter accountPresenter = new AccountPresenter(this, getActivity());
     private DatePickerDialog.OnDateSetListener  mOnDateSetListener1;
@@ -155,7 +155,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
         type.setAdapter(adapter);
         type.setOnItemSelectedListener(this);
 
-            current = LocalDate.now();
+        current = LocalDate.now();
 
         if (trans.getTypeString() != null) {
             imageType = trans.getTypeString();
@@ -180,6 +180,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
             }
         }
 
+        if (original == null) original.setAmount(0);
 
 
 
@@ -281,6 +282,13 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                if (trans.getId() == 1 || trans.getId() == 3 || trans.getId() == 5) {
+                                    account.setBudget(account.getBudget() + trans.getAmount());
+                                }
+                                else {
+                                    account.setBudget(account.getBudget() - trans.getAmount());
+                                }
+                                accountPresenter.setAccount(account);
                                 onItemChange.onDeleteClicked(trans);
                             }
                         })
@@ -422,14 +430,16 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
                         Transaction t = new Transaction(original.getId(), date1, mTitle, mAmount, id, mDescription, mInterval, date2);
 
-                        if (account.getBudget() + mAmount < account.getTotalLimit()) {
+
+                        double newAmount = original.getAmount() - mAmount;
+                        if ((account.getBudget() + newAmount < -account.getTotalLimit()) && (id == 1 || id == 3 || id == 5)) {
                             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                                     .setTitle("Alert!")
                                     .setMessage("Are you sure you want to go over the limit?")
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            account.setBudget(account.getBudget() + mAmount);
+                                            account.setBudget(account.getBudget() + newAmount);
                                             accountPresenter.setAccount(account);
                                             if (dodavanje) onItemChange.onAddClicked(t);
                                             else onItemChange.onChangeClicked(original, t);
@@ -444,6 +454,13 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                                     }).show();
                         } else {
 
+                            if (id == 1 || id == 3 || id == 5) {
+                                account.setBudget(account.getBudget() + newAmount);
+                            }
+                            else {
+                                account.setBudget(account.getBudget() - newAmount);
+                            }
+                            accountPresenter.setAccount(account);
                             if (dodavanje) onItemChange.onAddClicked(t);
                             else onItemChange.onChangeClicked(original, t);
                         }
