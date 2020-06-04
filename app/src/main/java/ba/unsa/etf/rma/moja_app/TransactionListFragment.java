@@ -1,8 +1,11 @@
 package ba.unsa.etf.rma.moja_app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -31,6 +34,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
     private TextView limitView;
     private TextView globalAmountView;
+    private TextView connectionState;
     private Spinner sortSpinner;
     private ListView transactionList;
     private ArrayList<Transaction> mTransactionList;
@@ -111,6 +115,11 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         notifyTransactionsListDataSetChanged();
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
         rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
+
+        connectionState = fragmentView.findViewById(R.id.connection);
+
+        if (getPresenter().connected()) connectionState.setText("Online");
+        else connectionState.setText("Offline");
 
 
         spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

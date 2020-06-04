@@ -11,4 +11,5 @@ public interface IListItemPresenter {
     void setTransaction(Parcelable transaction);
     Transaction getTransaction();
     boolean validateDate(LocalDate date1, LocalDate date2, int id);
+    boolean connected();
 }
