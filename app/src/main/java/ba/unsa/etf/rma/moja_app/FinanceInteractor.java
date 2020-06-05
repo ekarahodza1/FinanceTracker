@@ -187,7 +187,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.ADD_TABLE;
         Cursor cursor      = database.rawQuery(selectQuery, null);
 
-        if (cursor != null){
+        if (cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
             do{
                 int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
@@ -223,7 +223,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.UPDATE_TABLE;
         Cursor cursor      = database.rawQuery(selectQuery, null);
 
-        if (cursor != null){
+        if (cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
             do{
                 int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.ID);
@@ -235,9 +235,13 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
                 int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.T_ID);
                 int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.AMOUNT);
 
+                String d1 = cursor.getString(endDate);
+                LocalDate d2 = null;
+                if (!d1.matches("null")) d2 = LocalDate.parse(d1);
+
                 niz.add(new Transaction(cursor.getInt(id), LocalDate.parse(cursor.getString(date)), cursor.getString(title),
                         cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
-                        cursor.getInt(transactionInterval), LocalDate.parse(cursor.getString(endDate))));
+                        cursor.getInt(transactionInterval), d2));
 
             } while(cursor.moveToNext());
         }
@@ -254,7 +258,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.DELETE_TABLE;
         Cursor cursor      = database.rawQuery(selectQuery, null);
 
-        if (cursor != null){
+        if (cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
             do{
                 int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_ID);

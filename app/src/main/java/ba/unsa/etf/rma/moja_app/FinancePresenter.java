@@ -306,17 +306,20 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             ArrayList<Transaction> delete = interactor.getDeleteTransactions(context);
 
             if (add.size() != 0) {
-                for (Transaction t : add) addTransaction(t);
+                for (int i = 0; i < add.size(); i++) {
+                    Transaction temp = add.get(i);
+                    addTransaction(temp);
+                }
                 interactor.deleteAddTable(context);
             }
-            if (update.size() != 0) {
-                for (Transaction t : update) changeTransaction(t);
-                interactor.deleteUpdateTable(context);
-            }
-            if (delete.size() != 0) {
-                for (Transaction t : delete) deleteTransaction(t);
-                interactor.deleteDeleteTable(context);
-            }
+//            if (update.size() != 0) {
+//                for (Transaction t : update) changeTransaction(t);
+//                interactor.deleteUpdateTable(context);
+//            }
+//            if (delete.size() != 0) {
+//                for (Transaction t : delete) deleteTransaction(t);
+//                interactor.deleteDeleteTable(context);
+//            }
         }
 
     }
@@ -327,6 +330,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         if (connected){
             map.put(1,t);
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
+            map.remove(1);
         }
         else {
             interactor.add(t, context);
