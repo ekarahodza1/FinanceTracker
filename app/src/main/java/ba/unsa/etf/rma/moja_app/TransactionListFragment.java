@@ -116,7 +116,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
         rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
 
-        connectionState = fragmentView.findViewById(R.id.connection);
 
         if (getPresenter().connected()) connectionState.setText("Online");
         else connectionState.setText("Offline");
