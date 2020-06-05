@@ -1,5 +1,11 @@
 package ba.unsa.etf.rma.moja_app;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 
@@ -30,6 +36,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
 
     private ArrayList<Transaction> transactions;
     private OnTransactionsAdd caller;
+    private FinanceDBOpenHelper financeDBOpenHelper;
+    private SQLiteDatabase database;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public FinanceInteractor(OnTransactionsAdd p) {
@@ -83,22 +91,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         return null;
     }
 
-
-    @Override
-    public ArrayList<Transaction> getT(){
-        return transactions;
-    }
-
-    public void add(Transaction t){
-
-        //postTransaction(t);
-    }
-
-    public void delete(Transaction t){
-        //deleteTransaction(t);
-
-    }
-
     @Override
     protected void onPostExecute(Void aVoid){
         super.onPostExecute(aVoid);
@@ -108,6 +100,81 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     public interface OnTransactionsAdd{
         public void onDone(ArrayList<Transaction> results);
     }
+
+    @Override
+    public ArrayList<Transaction> getT(){
+        return transactions;
+    }
+
+    @Override
+    public void add(Transaction t, Context context){
+
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        ContentValues values = new ContentValues();
+        values.put(FinanceDBOpenHelper.TRANSACTION_TITLE, t.getTitle());
+        values.put(FinanceDBOpenHelper.TRANSACTION_DATE, t.getDate().toString());
+        if (t.getEndDate() == null) values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, "null");
+        else values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, t.getEndDate().toString());
+        values.put(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION, t.getItemDescription());
+        values.put(FinanceDBOpenHelper.TRANSACTION_INTERVAL, t.getTransactionInterval());
+        values.put(FinanceDBOpenHelper.TYPE_ID, t.getTId());
+        values.put(FinanceDBOpenHelper.TRANSACTION_AMOUNT, t.getAmount());
+        database = financeDBOpenHelper.getWritableDatabase();
+        database.insert(FinanceDBOpenHelper.ADD_TABLE, null, values);
+
+        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.ADD_TABLE;
+        Cursor cursor      = database.rawQuery(selectQuery, null);
+
+        if (cursor != null){
+            cursor.moveToFirst();
+            do{
+            int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
+            int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DATE);
+            int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_END_DATE);
+            int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION);
+            int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_INTERVAL);
+            int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TYPE_ID);
+            int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_AMOUNT);
+
+            System.out.println(cursor.getString(title) + " " + cursor.getString(amount));
+
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+
+
+    }
+
+    @Override
+    public void delete(Transaction t, Context context){
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        ContentValues values = new ContentValues();
+        values.put(FinanceDBOpenHelper.TRANSACTION_ID, t.getId());
+        database = financeDBOpenHelper.getWritableDatabase();
+        database.insert(FinanceDBOpenHelper.DELETE_TABLE, null, values);
+
+    }
+
+    @Override
+    public void update(Transaction t, Context context){
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        ContentValues values = new ContentValues();
+        values.put(FinanceDBOpenHelper.ID, t.getId());
+        values.put(FinanceDBOpenHelper.TITLE, t.getTitle());
+        values.put(FinanceDBOpenHelper.DATE, t.getDate().toString());
+        if (t.getEndDate() == null) values.put(FinanceDBOpenHelper.END_DATE, "null");
+        else values.put(FinanceDBOpenHelper.END_DATE, t.getEndDate().toString());
+        values.put(FinanceDBOpenHelper.DESCRIPTION, t.getItemDescription());
+        values.put(FinanceDBOpenHelper.INTERVAL, t.getTransactionInterval());
+        values.put(FinanceDBOpenHelper.T_ID, t.getTId());
+        values.put(FinanceDBOpenHelper.AMOUNT, t.getAmount());
+        database = financeDBOpenHelper.getWritableDatabase();
+        database.insert(FinanceDBOpenHelper.UPDATE_TABLE, null, values);
+
+    }
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getTransactions(){

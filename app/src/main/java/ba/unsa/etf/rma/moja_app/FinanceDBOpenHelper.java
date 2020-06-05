@@ -19,7 +19,7 @@ public class FinanceDBOpenHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public static final String ADD_TABLE = "add";
+    public static final String ADD_TABLE = "temporary_A";
     public static final String TRANSACTION_TITLE = "title";
     public static final String TRANSACTION_DATE = "date";
     public static final String TRANSACTION_END_DATE = "endDate";
@@ -39,7 +39,7 @@ public class FinanceDBOpenHelper extends SQLiteOpenHelper {
 
     private static final String ADD_DROP = "DROP TABLE IF EXISTS " + ADD_TABLE;
 
-    public static final String UPDATE_TABLE = "update";
+    public static final String UPDATE_TABLE = "temporary_U";
     public static final String ID = "id";
     public static final String TITLE = "title";
     public static final String DATE = "date";
@@ -61,7 +61,7 @@ public class FinanceDBOpenHelper extends SQLiteOpenHelper {
 
     private static final String UPDATE_DROP = "DROP TABLE IF EXISTS " + UPDATE_TABLE;
 
-    public static final String DELETE_TABLE = "delete";
+    public static final String DELETE_TABLE = "temporary_D";
     public static final String TRANSACTION_ID = "id";
     private static final String DELETE_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + DELETE_TABLE + " ("

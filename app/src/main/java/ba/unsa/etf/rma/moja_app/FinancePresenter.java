@@ -295,9 +295,15 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void addTransaction(Transaction t){
-        map.put(1,t);
-        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
-        interactor.add(t);
+//        map.put(1,t);
+//        if (connected()){
+//            new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
+//        }
+//        else {
+//
+//        }
+
+        interactor.add(t, context);
         view.setTransactions(interactor.getT());
         view.notifyTransactionsListDataSetChanged();
 
@@ -307,7 +313,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     public void deleteTransaction(Transaction t){
         map.put(2,t);
         new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
-        interactor.delete(t);
+        //interactor.delete(t, context);
         view.setTransactions(interactor.getT());
         view.notifyTransactionsListDataSetChanged();
 
