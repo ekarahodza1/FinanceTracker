@@ -106,6 +106,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         return transactions;
     }
 
+
+    //add, delete, update stavljaju u bazu transakcije u istoimene tabele kao i metode
     @Override
     public void add(Transaction t, Context context){
 
@@ -174,6 +176,112 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     }
 
 
+    //getAddTransactions, getUpdateTransactions, getDeleteTransactions uzimaju iz baze transakcije iz ovih tabela
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public ArrayList<Transaction> getAddTransactions(Context context) {
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        database = financeDBOpenHelper.getWritableDatabase();
+        ArrayList<Transaction> niz = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.ADD_TABLE;
+        Cursor cursor      = database.rawQuery(selectQuery, null);
+
+        if (cursor != null){
+            cursor.moveToFirst();
+            do{
+                int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
+                int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DATE);
+                int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_END_DATE);
+                int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION);
+                int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_INTERVAL);
+                int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TYPE_ID);
+                int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_AMOUNT);
+
+                niz.add(new Transaction(-1, LocalDate.parse(cursor.getString(date)), cursor.getString(title),
+                        cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
+                        cursor.getInt(transactionInterval), LocalDate.parse(cursor.getString(endDate))));
+
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        return niz;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public ArrayList<Transaction> getUpdateTransactions(Context context) {
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        database = financeDBOpenHelper.getWritableDatabase();
+        ArrayList<Transaction> niz = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.UPDATE_TABLE;
+        Cursor cursor      = database.rawQuery(selectQuery, null);
+
+        if (cursor != null){
+            cursor.moveToFirst();
+            do{
+                int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.ID);
+                int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TITLE);
+                int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.DATE);
+                int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.END_DATE);
+                int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.DESCRIPTION);
+                int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.INTERVAL);
+                int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.T_ID);
+                int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.AMOUNT);
+
+                niz.add(new Transaction(cursor.getInt(id), LocalDate.parse(cursor.getString(date)), cursor.getString(title),
+                        cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
+                        cursor.getInt(transactionInterval), LocalDate.parse(cursor.getString(endDate))));
+
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        return niz;
+    }
+
+    @Override
+    public ArrayList<Transaction> getDeleteTransactions(Context context) {
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        database = financeDBOpenHelper.getWritableDatabase();
+        ArrayList<Transaction> niz = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.DELETE_TABLE;
+        Cursor cursor      = database.rawQuery(selectQuery, null);
+
+        if (cursor != null){
+            cursor.moveToFirst();
+            do{
+                int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_ID);
+
+                niz.add(new Transaction(cursor.getInt(id)));
+
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        return niz;
+    }
+
+    @Override
+    public void deleteAddTable(Context context) {
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        database = financeDBOpenHelper.getWritableDatabase();
+        database.delete(FinanceDBOpenHelper.ADD_TABLE, null, null);
+    }
+
+    @Override
+    public void deleteUpdateTable(Context context) {
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        database = financeDBOpenHelper.getWritableDatabase();
+        database.delete(FinanceDBOpenHelper.UPDATE_TABLE, null, null);
+    }
+
+    @Override
+    public void deleteDeleteTable(Context context) {
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        database = financeDBOpenHelper.getWritableDatabase();
+        database.delete(FinanceDBOpenHelper.DELETE_TABLE, null, null);
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)

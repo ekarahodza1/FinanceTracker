@@ -9,4 +9,16 @@ public interface IFinanceInteractor {
     void add(Transaction t, Context context);
     void delete(Transaction t, Context context);
     void update(Transaction t, Context context);
+
+    ArrayList<Transaction> getAddTransactions(Context context);
+
+    ArrayList<Transaction> getUpdateTransactions(Context context);
+
+    ArrayList<Transaction> getDeleteTransactions(Context context);
+
+    void deleteAddTable(Context context);
+
+    void deleteUpdateTable(Context context);
+
+    void deleteDeleteTable(Context context);
 }
