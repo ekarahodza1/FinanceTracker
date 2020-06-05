@@ -294,18 +294,27 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
     public void postChanges(){
-        ArrayList<Transaction> add = interactor.getAddTransactions(context);
-        ArrayList<Transaction> update = interactor.getUpdateTransactions(context);
-        ArrayList<Transaction> delete = interactor.getDeleteTransactions(context);
+        if (connected()) {
+            ArrayList<Transaction> add = interactor.getAddTransactions(context);
+            ArrayList<Transaction> update = interactor.getUpdateTransactions(context);
+            ArrayList<Transaction> delete = interactor.getDeleteTransactions(context);
 
-        for (Transaction t: add) addTransaction(t);
-        for (Transaction t: update) changeTransaction(t);
-        for (Transaction t: delete) deleteTransaction(t);
+            if (add.size() != 0) {
+                for (Transaction t : add) addTransaction(t);
+                interactor.deleteAddTable(context);
+            }
+            if (update.size() != 0) {
+                for (Transaction t : update) changeTransaction(t);
+                interactor.deleteUpdateTable(context);
+            }
+            if (delete.size() != 0) {
+                for (Transaction t : delete) deleteTransaction(t);
+                interactor.deleteDeleteTable(context);
+            }
+        }
 
-        interactor.deleteAddTable(context);
-        interactor.deleteUpdateTable(context);
-        interactor.deleteDeleteTable(context);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -145,6 +145,8 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
         else if (!dodavanje && !presenter.connected()) connection.setText("Offline izmjena");
 
 
+
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.type, android.R.layout.simple_spinner_item);
 

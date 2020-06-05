@@ -18,4 +18,6 @@ public interface IFinancePresenter {
     void addTransactions();
     boolean connected();
     void filter(String criteria1, String criteria2, LocalDate current1);
+
+    void postChanges();
 }

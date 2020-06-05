@@ -120,6 +120,8 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         if (getPresenter().connected()) connectionState.setText("Online");
         else connectionState.setText("Offline");
 
+        getPresenter().postChanges();
+
 
         spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
