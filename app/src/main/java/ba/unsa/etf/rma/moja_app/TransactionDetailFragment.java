@@ -40,6 +40,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private EditText amount;
     private TextView date;
     private TextView endDate;
+    private TextView connection;
     private EditText description;
     private EditText interval;
     private Spinner type;
@@ -135,6 +136,13 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
         }
 
         else return view;
+
+
+        connection = view.findViewById(R.id.connection);
+        if (dodavanje && presenter.connected()) connection.setText("Online dodavanje");
+        else if (dodavanje && !presenter.connected()) connection.setText("Offline dodavanje");
+        else if (!dodavanje && presenter.connected()) connection.setText("Online izmjena");
+        else if (!dodavanje && !presenter.connected()) connection.setText("Offline izmjena");
 
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -273,6 +281,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
 
         onItemChange = (OnItemChange) getActivity();
+        if (!presenter.connected()) delete.setText("Offline delete");
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
