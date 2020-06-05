@@ -37,32 +37,38 @@ public class TransactionType {
 
 
     private void jsonParse() {
-        String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/transactionTypes";
-        try {
-            URL url = new URL(url1);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            String result = convertStreamToString(in);
-            JSONObject jo = new JSONObject(result);
-            JSONArray results = jo.getJSONArray("rows");
+//        String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/transactionTypes";
+//        try {
+//            URL url = new URL(url1);
+//            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+//            String result = convertStreamToString(in);
+//            JSONObject jo = new JSONObject(result);
+//            JSONArray results = jo.getJSONArray("rows");
+//
+//            for (int i = 0; i < results.length(); i++) {
+//                JSONObject type = results.getJSONObject(i);
+//
+//                Integer id = type.getInt("id");
+//                String name = type.getString("name");
+//
+//                mapa.put(id, name);
+//
+//            }
+//
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-            for (int i = 0; i < results.length(); i++) {
-                JSONObject type = results.getJSONObject(i);
-
-                Integer id = type.getInt("id");
-                String name = type.getString("name");
-
-                mapa.put(id, name);
-
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        mapa.put(1, "Regular payment");
+        mapa.put(2, "Regular income");
+        mapa.put(3, "Purchase");
+        mapa.put(4, "Individual income");
+        mapa.put(5, "Individual payment");
 
     }
 

@@ -198,9 +198,14 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
                 int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TYPE_ID);
                 int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_AMOUNT);
 
+                String d1 = cursor.getString(endDate);
+                LocalDate d2 = null;
+                if (!d1.matches("null")) d2 = LocalDate.parse(d1);
+
+
                 niz.add(new Transaction(-1, LocalDate.parse(cursor.getString(date)), cursor.getString(title),
                         cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
-                        cursor.getInt(transactionInterval), LocalDate.parse(cursor.getString(endDate))));
+                        cursor.getInt(transactionInterval), d2));
 
             } while(cursor.moveToNext());
         }

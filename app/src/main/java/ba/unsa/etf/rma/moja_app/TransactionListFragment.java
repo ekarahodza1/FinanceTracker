@@ -34,7 +34,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
     private TextView limitView;
     private TextView globalAmountView;
-    private TextView connectionState;
     private Spinner sortSpinner;
     private ListView transactionList;
     private ArrayList<Transaction> mTransactionList;
@@ -56,8 +55,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private int positionOfLastItem = -1;
     private String clickedName = "All";
     private String text = "Not sorted";
-    private boolean sp = false;
-    private boolean srt = false;
 
     public IFinancePresenter getPresenter() {
         if (financePresenter == null) {
@@ -116,9 +113,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
         rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
 
-
-        if (getPresenter().connected()) connectionState.setText("Online");
-        else connectionState.setText("Offline");
 
         getPresenter().postChanges();
 

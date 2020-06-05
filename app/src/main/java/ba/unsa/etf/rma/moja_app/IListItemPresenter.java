@@ -1,5 +1,6 @@
 package ba.unsa.etf.rma.moja_app;
 
+import android.content.Context;
 import android.os.Parcelable;
 
 import java.time.LocalDate;
@@ -11,5 +12,5 @@ public interface IListItemPresenter {
     void setTransaction(Parcelable transaction);
     Transaction getTransaction();
     boolean validateDate(LocalDate date1, LocalDate date2, int id);
-    boolean connected();
+    boolean connected(Context context);
 }

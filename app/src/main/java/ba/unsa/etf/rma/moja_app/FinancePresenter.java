@@ -254,13 +254,17 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void addTransactions(){
-        map.put(0, new Transaction(-1));
-        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
+        if (connected()){
+            map.put(0, new Transaction(-1));
+            new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
+        }
+
 
     }
 
     @Override
-    public void refreshTransactions() {
+    public void refreshTransactions()
+    {
         view.setTransactions(transactions);
         view.notifyTransactionsListDataSetChanged();
     }
@@ -326,9 +330,11 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         }
         else {
             interactor.add(t, context);
+            transactions.add(t);
+            view.setTransactions(transactions);
+            view.notifyTransactionsListDataSetChanged();
         }
-        view.setTransactions(interactor.getT());
-        view.notifyTransactionsListDataSetChanged();
+
 
     }
 
@@ -357,10 +363,11 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         }
         else {
             interactor.update(t, context);
+            view.setTransactions(transactions);
+            view.notifyTransactionsListDataSetChanged();
         }
 
-        view.setTransactions(interactor.getT());
-        view.notifyTransactionsListDataSetChanged();
+
 
     }
 

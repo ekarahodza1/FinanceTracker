@@ -139,10 +139,10 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
 
         connection = view.findViewById(R.id.connection);
-        if (dodavanje && presenter.connected()) connection.setText("Online dodavanje");
-        else if (dodavanje && !presenter.connected()) connection.setText("Offline dodavanje");
-        else if (!dodavanje && presenter.connected()) connection.setText("Online izmjena");
-        else if (!dodavanje && !presenter.connected()) connection.setText("Offline izmjena");
+        if (dodavanje && presenter.connected(getActivity())) connection.setText("Online dodavanje");
+        else if (dodavanje && !presenter.connected(getActivity())) connection.setText("Offline dodavanje");
+        else if (!dodavanje && presenter.connected(getActivity())) connection.setText("Online izmjena");
+        else if (!dodavanje && !presenter.connected(getActivity())) connection.setText("Offline izmjena");
 
 
 
@@ -283,7 +283,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
 
         onItemChange = (OnItemChange) getActivity();
-        if (!presenter.connected()) delete.setText("Offline delete");
+        if (!presenter.connected(getActivity())) delete.setText("Offline delete");
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
