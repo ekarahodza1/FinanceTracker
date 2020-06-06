@@ -121,10 +121,12 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         values.put(FinanceDBOpenHelper.TRANSACTION_INTERVAL, t.getTransactionInterval());
         values.put(FinanceDBOpenHelper.TYPE_ID, t.getTId());
         values.put(FinanceDBOpenHelper.TRANSACTION_AMOUNT, t.getAmount());
-        database = financeDBOpenHelper.getWritableDatabase();
-        database.insert(FinanceDBOpenHelper.ADD_TABLE, null, values);
 
-        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.ADD_TABLE;
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
+        cr.insert(URI,values);
+
+        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
         Cursor cursor      = database.rawQuery(selectQuery, null);
 
         if (cursor != null){
@@ -147,33 +149,37 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
 
     }
 
-    @Override
-    public void delete(Transaction t, Context context){
-        financeDBOpenHelper = new FinanceDBOpenHelper(context);
-        ContentValues values = new ContentValues();
-        values.put(FinanceDBOpenHelper.TRANSACTION_ID, t.getId());
-        database = financeDBOpenHelper.getWritableDatabase();
-        database.insert(FinanceDBOpenHelper.DELETE_TABLE, null, values);
+//    @Override
+//    public void delete(Transaction t, Context context){
+//        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+//        ContentValues values = new ContentValues();
+//        values.put(FinanceDBOpenHelper.TRANSACTION_ID, t.getId());
+//        database = financeDBOpenHelper.getWritableDatabase();
+//        database.insert(FinanceDBOpenHelper.DELETE_TABLE, null, values);
+//
+//        ContentResolver cr = context.getApplicationContext().getContentResolver();
+//        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
+//        cr.delete(URI,values);
 
-    }
-
-    @Override
-    public void update(Transaction t, Context context){
-        financeDBOpenHelper = new FinanceDBOpenHelper(context);
-        ContentValues values = new ContentValues();
-        values.put(FinanceDBOpenHelper.ID, t.getId());
-        values.put(FinanceDBOpenHelper.TITLE, t.getTitle());
-        values.put(FinanceDBOpenHelper.DATE, t.getDate().toString());
-        if (t.getEndDate() == null) values.put(FinanceDBOpenHelper.END_DATE, "null");
-        else values.put(FinanceDBOpenHelper.END_DATE, t.getEndDate().toString());
-        values.put(FinanceDBOpenHelper.DESCRIPTION, t.getItemDescription());
-        values.put(FinanceDBOpenHelper.INTERVAL, t.getTransactionInterval());
-        values.put(FinanceDBOpenHelper.T_ID, t.getTId());
-        values.put(FinanceDBOpenHelper.AMOUNT, t.getAmount());
-        database = financeDBOpenHelper.getWritableDatabase();
-        database.insert(FinanceDBOpenHelper.UPDATE_TABLE, null, values);
-
-    }
+//    }
+//
+//    @Override
+//    public void update(Transaction t, Context context){
+//        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+//        ContentValues values = new ContentValues();
+//        values.put(FinanceDBOpenHelper.ID, t.getId());
+//        values.put(FinanceDBOpenHelper.TITLE, t.getTitle());
+//        values.put(FinanceDBOpenHelper.DATE, t.getDate().toString());
+//        if (t.getEndDate() == null) values.put(FinanceDBOpenHelper.END_DATE, "null");
+//        else values.put(FinanceDBOpenHelper.END_DATE, t.getEndDate().toString());
+//        values.put(FinanceDBOpenHelper.DESCRIPTION, t.getItemDescription());
+//        values.put(FinanceDBOpenHelper.INTERVAL, t.getTransactionInterval());
+//        values.put(FinanceDBOpenHelper.T_ID, t.getTId());
+//        values.put(FinanceDBOpenHelper.AMOUNT, t.getAmount());
+//        database = financeDBOpenHelper.getWritableDatabase();
+//        database.insert(FinanceDBOpenHelper.UPDATE_TABLE, null, values);
+//
+//    }
 
 
     //getAddTransactions, getUpdateTransactions, getDeleteTransactions uzimaju iz baze transakcije iz ovih tabela
@@ -184,7 +190,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         database = financeDBOpenHelper.getWritableDatabase();
         ArrayList<Transaction> niz = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.ADD_TABLE;
+        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
         Cursor cursor      = database.rawQuery(selectQuery, null);
 
         if (cursor != null && cursor.getCount() != 0){
@@ -213,84 +219,84 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         return niz;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public ArrayList<Transaction> getUpdateTransactions(Context context) {
-        financeDBOpenHelper = new FinanceDBOpenHelper(context);
-        database = financeDBOpenHelper.getWritableDatabase();
-        ArrayList<Transaction> niz = new ArrayList<>();
-
-        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.UPDATE_TABLE;
-        Cursor cursor      = database.rawQuery(selectQuery, null);
-
-        if (cursor != null && cursor.getCount() != 0){
-            cursor.moveToFirst();
-            do{
-                int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.ID);
-                int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TITLE);
-                int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.DATE);
-                int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.END_DATE);
-                int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.DESCRIPTION);
-                int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.INTERVAL);
-                int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.T_ID);
-                int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.AMOUNT);
-
-                String d1 = cursor.getString(endDate);
-                LocalDate d2 = null;
-                if (!d1.matches("null")) d2 = LocalDate.parse(d1);
-
-                niz.add(new Transaction(cursor.getInt(id), LocalDate.parse(cursor.getString(date)), cursor.getString(title),
-                        cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
-                        cursor.getInt(transactionInterval), d2));
-
-            } while(cursor.moveToNext());
-        }
-        cursor.close();
-        return niz;
-    }
-
-    @Override
-    public ArrayList<Transaction> getDeleteTransactions(Context context) {
-        financeDBOpenHelper = new FinanceDBOpenHelper(context);
-        database = financeDBOpenHelper.getWritableDatabase();
-        ArrayList<Transaction> niz = new ArrayList<>();
-
-        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.DELETE_TABLE;
-        Cursor cursor      = database.rawQuery(selectQuery, null);
-
-        if (cursor != null && cursor.getCount() != 0){
-            cursor.moveToFirst();
-            do{
-                int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_ID);
-
-                niz.add(new Transaction(cursor.getInt(id)));
-
-            } while(cursor.moveToNext());
-        }
-        cursor.close();
-        return niz;
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    @Override
+//    public ArrayList<Transaction> getUpdateTransactions(Context context) {
+//        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+//        database = financeDBOpenHelper.getWritableDatabase();
+//        ArrayList<Transaction> niz = new ArrayList<>();
+//
+//        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.UPDATE_TABLE;
+//        Cursor cursor      = database.rawQuery(selectQuery, null);
+//
+//        if (cursor != null && cursor.getCount() != 0){
+//            cursor.moveToFirst();
+//            do{
+//                int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.ID);
+//                int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TITLE);
+//                int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.DATE);
+//                int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.END_DATE);
+//                int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.DESCRIPTION);
+//                int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.INTERVAL);
+//                int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.T_ID);
+//                int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.AMOUNT);
+//
+//                String d1 = cursor.getString(endDate);
+//                LocalDate d2 = null;
+//                if (!d1.matches("null")) d2 = LocalDate.parse(d1);
+//
+//                niz.add(new Transaction(cursor.getInt(id), LocalDate.parse(cursor.getString(date)), cursor.getString(title),
+//                        cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
+//                        cursor.getInt(transactionInterval), d2));
+//
+//            } while(cursor.moveToNext());
+//        }
+//        cursor.close();
+//        return niz;
+//    }
+//
+//    @Override
+//    public ArrayList<Transaction> getDeleteTransactions(Context context) {
+//        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+//        database = financeDBOpenHelper.getWritableDatabase();
+//        ArrayList<Transaction> niz = new ArrayList<>();
+//
+//        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.DELETE_TABLE;
+//        Cursor cursor      = database.rawQuery(selectQuery, null);
+//
+//        if (cursor != null && cursor.getCount() != 0){
+//            cursor.moveToFirst();
+//            do{
+//                int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_ID);
+//
+//                niz.add(new Transaction(cursor.getInt(id)));
+//
+//            } while(cursor.moveToNext());
+//        }
+//        cursor.close();
+//        return niz;
+//    }
 
     @Override
     public void deleteAddTable(Context context) {
         financeDBOpenHelper = new FinanceDBOpenHelper(context);
         database = financeDBOpenHelper.getWritableDatabase();
-        database.delete(FinanceDBOpenHelper.ADD_TABLE, null, null);
+        database.delete(FinanceDBOpenHelper.TRANSACTION_TABLE, null, null);
     }
 
-    @Override
-    public void deleteUpdateTable(Context context) {
-        financeDBOpenHelper = new FinanceDBOpenHelper(context);
-        database = financeDBOpenHelper.getWritableDatabase();
-        database.delete(FinanceDBOpenHelper.UPDATE_TABLE, null, null);
-    }
-
-    @Override
-    public void deleteDeleteTable(Context context) {
-        financeDBOpenHelper = new FinanceDBOpenHelper(context);
-        database = financeDBOpenHelper.getWritableDatabase();
-        database.delete(FinanceDBOpenHelper.DELETE_TABLE, null, null);
-    }
+//    @Override
+//    public void deleteUpdateTable(Context context) {
+//        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+//        database = financeDBOpenHelper.getWritableDatabase();
+//        database.delete(FinanceDBOpenHelper.UPDATE_TABLE, null, null);
+//    }
+//
+//    @Override
+//    public void deleteDeleteTable(Context context) {
+//        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+//        database = financeDBOpenHelper.getWritableDatabase();
+//        database.delete(FinanceDBOpenHelper.DELETE_TABLE, null, null);
+ //   }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
