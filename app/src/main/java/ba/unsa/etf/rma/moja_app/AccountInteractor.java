@@ -3,6 +3,7 @@ package ba.unsa.etf.rma.moja_app;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integer, Void>  implements IAccountInteractor {
@@ -98,6 +100,31 @@ public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integ
         Uri URI = Uri.parse("content://rma.provider.account/elements");
         cr.insert(URI,values);
 
+    }
+
+    @Override
+    public Account getFromTable(Context context) {
+        Account a = new Account(0,0,0);
+
+        accountDBOpenHelper = new AccountDBOpenHelper(context);
+        database = accountDBOpenHelper.getWritableDatabase();
+        ArrayList<Transaction> niz = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + AccountDBOpenHelper.ACCOUNT_TABLE;
+        Cursor cursor      = database.rawQuery(selectQuery, null);
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+
+        if (cursor != null){
+            cursor.moveToFirst();
+            int budget = cursor.getColumnIndexOrThrow(AccountDBOpenHelper.BUDGET);
+            int monthLimit = cursor.getColumnIndexOrThrow(AccountDBOpenHelper.MONTH_LIMIT);
+            int totalLimit = cursor.getColumnIndexOrThrow(AccountDBOpenHelper.TOTAL_LIMIT);
+            a.setBudget(cursor.getDouble(budget));
+            a.setMonthLimit(cursor.getDouble(monthLimit));
+            a.setTotalLimit(cursor.getDouble(totalLimit));
+        }
+        cursor.close();
+        return a;
     }
 
     public interface OnAccountAdd{

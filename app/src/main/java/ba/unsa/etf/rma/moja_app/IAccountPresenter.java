@@ -8,4 +8,6 @@ public interface IAccountPresenter {
     public void setAccount(Parcelable a);
     void addAccount();
     public boolean connected();
+
+    void backToConnection();
 }

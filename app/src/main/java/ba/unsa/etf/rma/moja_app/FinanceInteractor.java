@@ -240,8 +240,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         database.delete(FinanceDBOpenHelper.TRANSACTION_TABLE, null, null);
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getTransactions(){
 

@@ -14,6 +14,7 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
     private Context context;
     private HashMap<String, Account> map = new HashMap<>();
     IAccountInteractor accountInteractor;
+    static boolean offline = false;
 
     public AccountPresenter(IFinanceView view, Context context) {
         this.account = new Account();
@@ -24,11 +25,21 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
 
     public Account get(){
 
-        return account;
+        Account a = accountInteractor.getFromTable(context);
+        return a;
     }
 
     public void setAccount(Parcelable a){
         this.account = (Account)a;
+    }
+
+    @Override
+    public void backToConnection(){
+        boolean connected = connected();
+        if (connected() && offline){
+            Account a = accountInteractor.getFromTable(context);
+            setAccount(a);
+        }
     }
 
     @Override
@@ -49,6 +60,9 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
             map.put("update", a);
             new AccountInteractor((AccountInteractor.OnAccountAdd)
                     this).execute(map);
+        }
+        else {
+            offline = true;
         }
         accountInteractor.updateTable(a, context);
         account = a;

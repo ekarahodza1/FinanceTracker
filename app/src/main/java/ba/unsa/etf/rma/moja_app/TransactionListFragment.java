@@ -109,9 +109,13 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
+
                 getPresenter().refreshTransactions();
+                //getAccountPresenter().backToConnection();
             }
         }, 3000);   //5 seconds
+
+        getAccountPresenter().backToConnection();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             current = LocalDate.now();
