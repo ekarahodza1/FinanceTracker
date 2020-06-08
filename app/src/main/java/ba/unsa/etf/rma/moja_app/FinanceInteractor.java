@@ -172,7 +172,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     @Override
     public void update(Transaction t, Context context){
         ContentResolver cr = context.getApplicationContext().getContentResolver();
-        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
+        Uri URI = Uri.parse("content://rma.provider.transactions/elements/#");
         ContentValues values = new ContentValues();
         values.put(FinanceDBOpenHelper.TRANSACTION_TITLE, t.getTitle());
         values.put(FinanceDBOpenHelper.TRANSACTION_DATE, t.getDate().toString());

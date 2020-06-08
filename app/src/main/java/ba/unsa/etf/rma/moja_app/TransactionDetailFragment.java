@@ -440,6 +440,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
 
                         Transaction t = new Transaction(original.getId(), date1, mTitle, mAmount, id, mDescription, mInterval, date2);
+                        t.setInternalId(original.getInternalId());
 
                         double newAmount;
                         if (original.getTId() != 0 && Math.abs(original.getTId() - t.getTId()) % 2 == 1) newAmount = -mAmount;
