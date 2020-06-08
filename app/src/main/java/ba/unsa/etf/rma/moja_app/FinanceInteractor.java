@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -159,17 +160,19 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
     @Override
     public void delete(Transaction t, Context context){
         ContentResolver cr = context.getApplicationContext().getContentResolver();
-        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
-        Cursor cursor = cr.query(URI, null, null, null, null);
-        int internalId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.INTERNAL_ID);
+        Uri URI = Uri.parse("content://rma.provider.transactions/elements/#");
+        int internalId = t.getInternalId();
         String where =  FinanceDBOpenHelper.INTERNAL_ID + " = " + internalId;
         cr.delete(URI,where, null);
-
+//        String selectQuery = "DELETE FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE + " WHERE "
+//                + FinanceDBOpenHelper.INTERNAL_ID + "=" + internalId;
+//        database.rawQuery(selectQuery, null);
     }
 
     @Override
     public void update(Transaction t, Context context){
-
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
         ContentValues values = new ContentValues();
         values.put(FinanceDBOpenHelper.TRANSACTION_TITLE, t.getTitle());
         values.put(FinanceDBOpenHelper.TRANSACTION_DATE, t.getDate().toString());
@@ -180,16 +183,10 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         values.put(FinanceDBOpenHelper.TYPE_ID, t.getTId());
         values.put(FinanceDBOpenHelper.TRANSACTION_AMOUNT, t.getAmount());
 
-        ContentResolver cr = context.getApplicationContext().getContentResolver();
-        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
-        Cursor cursor = cr.query(URI, null, null, null, null);
-        int internalId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.INTERNAL_ID);
-
-        values.put(FinanceDBOpenHelper.INTERNAL_ID, internalId);
+        int internalId = t.getInternalId();
+        //values.put(FinanceDBOpenHelper.INTERNAL_ID, internalId);
         String where =  FinanceDBOpenHelper.INTERNAL_ID + " = " + internalId;
-
         cr.update(URI, values, where, null);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -208,6 +205,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         if (cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
             do{
+                int internalID = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.INTERNAL_ID);
                 int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
                 int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DATE);
                 int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_END_DATE);
@@ -221,9 +219,11 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
                 if (!d1.matches("null")) d2 = LocalDate.parse(d1);
 
 
-                niz.add(new Transaction(-1, LocalDate.parse(cursor.getString(date)), cursor.getString(title),
+                Transaction t = new Transaction(-1, LocalDate.parse(cursor.getString(date)), cursor.getString(title),
                         cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
-                        cursor.getInt(transactionInterval), d2));
+                        cursor.getInt(transactionInterval), d2);
+                t.setInternalId(cursor.getInt(internalID));
+                niz.add(t);
 
             } while(cursor.moveToNext());
         }

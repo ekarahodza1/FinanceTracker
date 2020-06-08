@@ -29,6 +29,17 @@ public class Transaction implements Parcelable{
     private LocalDate endDate;
     private int image;
     private int id;
+    private int internalId;
+
+    public int getInternalId() {
+        return internalId;
+    }
+
+    public void setInternalId(int internalId) {
+        this.internalId = internalId;
+    }
+
+
 
 
     public Transaction(int id, LocalDate date, String title, double amount, int type,
