@@ -12,7 +12,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class MovieContentProvider extends ContentProvider {
+public class FinanceContentProvider extends ContentProvider {
 
     private static final int ALLROWS =1;
     private static final int ONEROW = 2;
