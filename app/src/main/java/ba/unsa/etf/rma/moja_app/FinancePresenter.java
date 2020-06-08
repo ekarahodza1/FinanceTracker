@@ -16,113 +16,11 @@ import java.util.HashMap;
 public class FinancePresenter implements IFinancePresenter, FinanceInteractor.OnTransactionsAdd {
     private static ArrayList<Transaction> transactions;
     private  ArrayList<Transaction> transactions1 = new ArrayList<>();
-    private HashMap<Integer, Transaction> map = new HashMap<Integer, Transaction>();
+
+    private HashMap<Integer,Transaction> map = new HashMap<Integer, Transaction>();
     private IFinanceView view;
     private IFinanceInteractor interactor;
     private Context context;
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-
-    @Override
-    public void sortTransactions(String criteria) {
-
-
-         if (criteria.matches( "Price - Descending")) {
-             Collections.sort(transactions, new Comparator<Transaction>() {
-                 @Override
-                 public int compare(Transaction o1, Transaction o2) {
-                     return (int) (o2.getAmount() - o1.getAmount());
-                 }
-             });
-         }
-         if (criteria.matches("Price - Ascending")) {
-             Collections.sort(transactions, new Comparator<Transaction>() {
-                 @Override
-                 public int compare(Transaction o1, Transaction o2) {
-                     return (int) (o1.getAmount() - o2.getAmount());
-                 }
-             });
-         }
-         if (criteria.matches("Title - Descending")) {
-             Collections.sort(transactions, new Comparator<Transaction>() {
-                 @Override
-                 public int compare(Transaction o1, Transaction o2) {
-                     return o1.getTitle().compareTo(o2.getTitle());
-                 }
-             });
-             Collections.reverse(transactions);
-         }
-         if (criteria.matches("Title - Ascending")) {
-             Collections.sort(transactions, new Comparator<Transaction>() {
-                 @Override
-                 public int compare(Transaction o1, Transaction o2) {
-                     return o1.getTitle().compareTo(o2.getTitle());
-                 }
-
-             });
-
-         }
-         if (criteria.matches("Date - Descending")) {
-             Collections.sort(transactions, new Comparator<Transaction>() {
-                 @Override
-                 public int compare(Transaction o1, Transaction o2) {
-                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                         return (int) (o1.getDate().compareTo(o2.getDate()));
-                     }
-                     return 0;
-                 }
-             });
-         }
-         if (criteria.matches("Date - Ascending")) {
-             Collections.sort(transactions, new Comparator<Transaction>() {
-                 @Override
-                 public int compare(Transaction o1, Transaction o2) {
-                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                         return (int) (o2.getDate().compareTo(o1.getDate()));
-                     }
-                     return 0;
-                 }
-             });
-         }
-         view.setTransactions(new ArrayList<Transaction>());
-         view.setTransactions(transactions);
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void filterTransactions(String criteria, LocalDate current){
-        ArrayList<Transaction> pomocne = new ArrayList<>();
-        if (criteria.matches("All")) {
-            filterMonth(current);
-            return;
-        }
-
-        filterMonth(current);
-
-        for (int i = 0; i < transactions.size(); i++){
-            if (criteria.matches("Individual Payment") && transactions.get(i).getTypeString().matches("Individual Payment")){
-                pomocne.add(transactions.get(i));
-            }
-            if (criteria.matches("Regular Payment") && transactions.get(i).getTypeString().matches("Regular Payment")){
-                pomocne.add(transactions.get(i));
-            }
-            if (criteria.matches("Purchase") && transactions.get(i).getTypeString().matches("Purchase")){
-                pomocne.add(transactions.get(i));
-            }
-            if (criteria.matches("Individual Income") && transactions.get(i).getTypeString().matches("Individual Income")){
-                pomocne.add(transactions.get(i));
-            }
-            if (criteria.matches("Regular Income") && transactions.get(i).getTypeString().matches("Regular Income")){
-                pomocne.add(transactions.get(i));
-            }
-        }
-        //transactions = pomocne;
-        view.setTransactions(pomocne);
-
-
-    }
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -258,8 +156,6 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             map.put(0, new Transaction(-1));
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
         }
-
-
     }
 
     @Override
@@ -302,8 +198,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     public void postChanges(){
         if (connected()) {
             ArrayList<Transaction> add = interactor.getAddTransactions(context);
-            ArrayList<Transaction> update = interactor.getUpdateTransactions(context);
-            ArrayList<Transaction> delete = interactor.getDeleteTransactions(context);
+         //   ArrayList<Transaction> update = interactor.getUpdateTransactions(context);
+          //  ArrayList<Transaction> delete = interactor.getDeleteTransactions(context);
 
             if (add.size() != 0) {
                 for (int i = 0; i < add.size(); i++) {
@@ -350,7 +246,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
         }
         else {
-            interactor.delete(t, context);
+            //interactor.delete(t, context);
         }
 
         view.setTransactions(interactor.getT());
@@ -366,7 +262,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
         }
         else {
-            interactor.update(t, context);
+            //interactor.update(t, context);
             view.setTransactions(transactions);
             view.notifyTransactionsListDataSetChanged();
         }

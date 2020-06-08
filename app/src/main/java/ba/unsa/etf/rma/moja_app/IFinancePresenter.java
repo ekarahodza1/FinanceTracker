@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 public interface IFinancePresenter {
     void refreshTransactions();
-    void filterTransactions(String clickedName, LocalDate l);
-    void sortTransactions(String text);
     void filterMonth(LocalDate current1);
     void deleteTransaction(Transaction t);
     void addTransaction(Transaction t);
@@ -18,6 +16,5 @@ public interface IFinancePresenter {
     void addTransactions();
     boolean connected();
     void filter(String criteria1, String criteria2, LocalDate current1);
-
     void postChanges();
 }
