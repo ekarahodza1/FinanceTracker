@@ -159,8 +159,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     }
 
     @Override
-    public void refreshTransactions()
-    {
+    public void refreshTransactions() {
         view.setTransactions(transactions);
         view.notifyTransactionsListDataSetChanged();
     }
@@ -197,27 +196,24 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     @Override
     public void postChanges(){
         if (connected()) {
-            ArrayList<Transaction> add = interactor.getAddTransactions(context);
-         //   ArrayList<Transaction> update = interactor.getUpdateTransactions(context);
-          //  ArrayList<Transaction> delete = interactor.getDeleteTransactions(context);
+            ArrayList<Transaction> add = interactor.getTransactionsFromTable(context);
 
             if (add.size() != 0) {
-                for (int i = 0; i < add.size(); i++) {
-                    Transaction temp = add.get(i);
-                    addTransaction(temp);
-                }
-                interactor.deleteAddTable(context);
+                if (add.size() == 1) addTransaction(add.get(0));
+                else addDBTransactions(add);
+
+                interactor.deleteTable(context);
             }
-//            if (update.size() != 0) {
-//                for (Transaction t : update) changeTransaction(t);
-//                interactor.deleteUpdateTable(context);
-//            }
-//            if (delete.size() != 0) {
-//                for (Transaction t : delete) deleteTransaction(t);
-//                interactor.deleteDeleteTable(context);
-//            }
         }
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void addDBTransactions(ArrayList<Transaction> add) {
+        for (int i = 0; i < add.size(); i++){
+            map.put(4 + i, add.get(i));
+        }
+        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
