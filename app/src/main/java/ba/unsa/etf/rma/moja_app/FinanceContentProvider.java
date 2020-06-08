@@ -74,7 +74,6 @@ public class FinanceContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-
         SQLiteDatabase database;
         try{
             database=mHelper.getWritableDatabase();
@@ -82,7 +81,6 @@ public class FinanceContentProvider extends ContentProvider {
             database=mHelper.getReadableDatabase();
         }
         long id = database.insert(FinanceDBOpenHelper.TRANSACTION_TABLE, null, values);
-        System.out.println("provider");
         return uri.buildUpon().appendPath(String.valueOf(id)).build();
     }
 

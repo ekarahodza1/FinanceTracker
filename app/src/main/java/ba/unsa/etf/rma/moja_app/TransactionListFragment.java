@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -98,6 +99,13 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         getPresenter().refreshTransactions();
         accountPresenter.addAccount();
 
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                getPresenter().refreshTransactions();
+            }
+        }, 3000);   //5 seconds
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             current = LocalDate.now();
         }
@@ -110,7 +118,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         monthView = (TextView) fragmentView.findViewById(R.id.monthView);
         monthView.setText(month + ", " + year);
 
-        notifyTransactionsListDataSetChanged();
+        //notifyTransactionsListDataSetChanged();
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
         rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
 

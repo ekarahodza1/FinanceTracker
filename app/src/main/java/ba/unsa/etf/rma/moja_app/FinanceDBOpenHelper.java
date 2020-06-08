@@ -35,7 +35,7 @@ public class FinanceDBOpenHelper extends SQLiteOpenHelper {
     public static final String TRANSACTION_INTERVAL = "transactionInterval";
     public static final String TYPE_ID = "TransactionTypeId";
     public static final String TRANSACTION_AMOUNT = "amount";
-    private static final String ADD_TABLE_CREATE =
+    public static final String ADD_TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + TRANSACTION_TABLE + " (" + INTERNAL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + ID + " INTEGER UNIQUE, "
                     + TRANSACTION_TITLE + " TEXT NOT NULL, "

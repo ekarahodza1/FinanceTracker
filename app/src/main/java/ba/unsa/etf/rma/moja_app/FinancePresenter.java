@@ -161,7 +161,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
     @Override
     public void refreshTransactions() {
-        view.setTransactions(transactions);
+        view.setTransactions(interactor.getTransactionsFromTable(context));
         view.notifyTransactionsListDataSetChanged();
     }
 
@@ -228,8 +228,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         else {
             kreirano = true;
             interactor.add(t, context);
-            transactions.add(t);
-            view.setTransactions(transactions);
+            transactions = interactor.getTransactionsFromTable(context);
+            view.setTransactions(interactor.getTransactionsFromTable(context));
             view.notifyTransactionsListDataSetChanged();
         }
 
@@ -247,8 +247,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             kreirano = true;
             interactor.delete(t, context);
         }
-
-        view.setTransactions(interactor.getT());
+        transactions = interactor.getTransactionsFromTable(context);
+        view.setTransactions(interactor.getTransactionsFromTable(context));
         view.notifyTransactionsListDataSetChanged();
 
     }
@@ -263,7 +263,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         else {
             kreirano = true;
             interactor.update(t, context);
-            view.setTransactions(transactions);
+            transactions = interactor.getTransactionsFromTable(context);
+            view.setTransactions(interactor.getTransactionsFromTable(context));
             view.notifyTransactionsListDataSetChanged();
         }
 

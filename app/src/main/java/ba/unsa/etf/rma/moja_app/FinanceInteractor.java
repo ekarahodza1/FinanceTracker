@@ -126,12 +126,13 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         values.put(FinanceDBOpenHelper.TRANSACTION_INTERVAL, t.getTransactionInterval());
         values.put(FinanceDBOpenHelper.TYPE_ID, t.getTId());
         values.put(FinanceDBOpenHelper.TRANSACTION_AMOUNT, t.getAmount());
-
+        database = financeDBOpenHelper.getWritableDatabase();
+        database.execSQL(FinanceDBOpenHelper.ADD_TABLE_CREATE);
         ContentResolver cr = context.getApplicationContext().getContentResolver();
         Uri URI = Uri.parse("content://rma.provider.transactions/elements");
         cr.insert(URI,values);
 
-        database = financeDBOpenHelper.getWritableDatabase();
+
 //        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
 //        Cursor cursor      = database.rawQuery(selectQuery, null);
 //
@@ -198,11 +199,11 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         database = financeDBOpenHelper.getWritableDatabase();
         ArrayList<Transaction> niz = new ArrayList<>();
 
-        //String selectQuery = "SELECT * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
-        //Cursor cursor      = database.rawQuery(selectQuery, null);
+        String selectQuery = "SELECT * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
+        Cursor cursor      = database.rawQuery(selectQuery, null);
         ContentResolver cr = context.getApplicationContext().getContentResolver();
-        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
-        Cursor cursor = cr.query(URI, null, null, null, null);
+//        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
+//        Cursor cursor = cr.query(URI, null, null, null, null);
 
         if (cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
