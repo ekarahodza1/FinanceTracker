@@ -13,11 +13,13 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
     private IFinanceView view;
     private Context context;
     private HashMap<String, Account> map = new HashMap<>();
+    IAccountInteractor accountInteractor;
 
     public AccountPresenter(IFinanceView view, Context context) {
         this.account = new Account();
         this.context = context;
         this.view = view;
+        this.accountInteractor = new AccountInteractor((AccountInteractor.OnAccountAdd)this);
     }
 
     public Account get(){
@@ -31,20 +33,30 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
 
     @Override
     public void addAccount() {
-        map.put("get", new Account(-1, 0, 0, 0));
-        new AccountInteractor((AccountInteractor.OnAccountAdd)
-                this).execute(map);
+        boolean connected = connected();
+        if (connected) {
+            map.put("get", new Account(-1, 0, 0, 0));
+            new AccountInteractor((AccountInteractor.OnAccountAdd)
+                    this).execute(map);
+        }
+        accountInteractor.addTable(account, context);
+
     }
 
     public void setAccount(Account a) {
-        map.put("update", a);
-        new AccountInteractor((AccountInteractor.OnAccountAdd)
+        boolean connected = connected();
+        if (connected) {
+            map.put("update", a);
+            new AccountInteractor((AccountInteractor.OnAccountAdd)
                     this).execute(map);
+        }
+        accountInteractor.updateTable(a, context);
+        account = a;
     }
 
     @Override
     public void onDone(Account result) {
-
+        accountInteractor.updateTable(account, context);
         account = result;
         view.setAccount(result);
     }

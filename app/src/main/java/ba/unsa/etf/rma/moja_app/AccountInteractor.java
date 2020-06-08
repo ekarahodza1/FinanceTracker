@@ -1,5 +1,10 @@
 package ba.unsa.etf.rma.moja_app;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -23,6 +28,8 @@ public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integ
 
     private OnAccountAdd caller;
     private Account account;
+    private AccountDBOpenHelper accountDBOpenHelper;
+    private SQLiteDatabase database;
 
     public AccountInteractor(OnAccountAdd p) {
         caller = p;
@@ -64,6 +71,33 @@ public class AccountInteractor extends AsyncTask<HashMap<String, Account>, Integ
     protected void onPostExecute(Void aVoid){
         super.onPostExecute(aVoid);
         caller.onDone(account);
+    }
+
+    @Override
+    public void updateTable(Account account, Context context) {
+
+        ContentValues values = new ContentValues();
+        values.put(AccountDBOpenHelper.BUDGET, account.getBudget());
+        values.put(AccountDBOpenHelper.MONTH_LIMIT, account.getMonthLimit());
+        values.put(AccountDBOpenHelper.TOTAL_LIMIT, account.getTotalLimit());
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        Uri URI = Uri.parse("content://rma.provider.account/elements");
+        cr.update(URI,values, null, null);
+    }
+
+    @Override
+    public void addTable(Account account, Context context) {
+        accountDBOpenHelper = new AccountDBOpenHelper(context);
+        ContentValues values = new ContentValues();
+        values.put(AccountDBOpenHelper.BUDGET, account.getBudget());
+        values.put(AccountDBOpenHelper.MONTH_LIMIT, account.getMonthLimit());
+        values.put(AccountDBOpenHelper.TOTAL_LIMIT, account.getTotalLimit());
+        database = accountDBOpenHelper.getWritableDatabase();
+        database.execSQL(AccountDBOpenHelper.TABLE_CREATE);
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        Uri URI = Uri.parse("content://rma.provider.account/elements");
+        cr.insert(URI,values);
+
     }
 
     public interface OnAccountAdd{

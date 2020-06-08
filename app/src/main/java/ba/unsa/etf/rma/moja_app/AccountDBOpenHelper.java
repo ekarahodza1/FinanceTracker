@@ -24,7 +24,7 @@ public class AccountDBOpenHelper extends SQLiteOpenHelper {
     public static final String BUDGET = "budget";
     public static final String MONTH_LIMIT = "monthLimit";
     public static final String TOTAL_LIMIT = "itemDescription";
-    private static final String TABLE_CREATE =
+    public static final String TABLE_CREATE =
             "CREATE TABLE IF NOT EXISTS " + ACCOUNT_TABLE + " (" + INTERNAL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + BUDGET + " REAL, "
                     + MONTH_LIMIT + " REAL, "

@@ -55,7 +55,7 @@ public class AccountContentProvider extends ContentProvider {
                 squery.appendWhere(FinanceDBOpenHelper.INTERNAL_ID+"="+idRow);
             default:break;
         }
-        squery.setTables(FinanceDBOpenHelper.TRANSACTION_TABLE);
+        squery.setTables(AccountDBOpenHelper.ACCOUNT_TABLE);
         Cursor cursor = squery.query(database,projection,selection,selectionArgs,groupby,having,sortOrder);
         return cursor;
     }
@@ -82,7 +82,7 @@ public class AccountContentProvider extends ContentProvider {
         }catch (SQLiteException e){
             database=mHelper.getReadableDatabase();
         }
-        long id = database.insert(FinanceDBOpenHelper.TRANSACTION_TABLE, null, values);
+        long id = database.insert(AccountDBOpenHelper.ACCOUNT_TABLE, null, values);
         return uri.buildUpon().appendPath(String.valueOf(id)).build();
     }
 
@@ -94,7 +94,7 @@ public class AccountContentProvider extends ContentProvider {
         }catch (SQLiteException e){
             database=mHelper.getReadableDatabase();
         }
-        int id = database.delete(FinanceDBOpenHelper.TRANSACTION_TABLE, selection, selectionArgs);
+        int id = database.delete(AccountDBOpenHelper.ACCOUNT_TABLE, selection, selectionArgs);
         return id;
     }
 
@@ -106,7 +106,7 @@ public class AccountContentProvider extends ContentProvider {
         }catch (SQLiteException e){
             database=mHelper.getReadableDatabase();
         }
-        int id = database.update(FinanceDBOpenHelper.TRANSACTION_TABLE, values, selection, selectionArgs);
+        int id = database.update(AccountDBOpenHelper.ACCOUNT_TABLE, values, selection, selectionArgs);
         return id;
     }
 }
