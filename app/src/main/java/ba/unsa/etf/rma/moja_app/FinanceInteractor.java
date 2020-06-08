@@ -131,25 +131,26 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         Uri URI = Uri.parse("content://rma.provider.transactions/elements");
         cr.insert(URI,values);
 
-        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
-        Cursor cursor      = database.rawQuery(selectQuery, null);
-
-        if (cursor != null){
-            cursor.moveToFirst();
-            do{
-            int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
-            int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DATE);
-            int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_END_DATE);
-            int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION);
-            int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_INTERVAL);
-            int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TYPE_ID);
-            int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_AMOUNT);
-
-            System.out.println(cursor.getString(title) + " " + cursor.getString(amount));
-
-            } while(cursor.moveToNext());
-        }
-        cursor.close();
+        database = financeDBOpenHelper.getWritableDatabase();
+//        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
+//        Cursor cursor      = database.rawQuery(selectQuery, null);
+//
+//        if (cursor != null){
+//            cursor.moveToFirst();
+//            do{
+//            int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
+//            int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DATE);
+//            int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_END_DATE);
+//            int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION);
+//            int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_INTERVAL);
+//            int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TYPE_ID);
+//            int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_AMOUNT);
+//
+//            System.out.println(cursor.getString(title) + " " + cursor.getString(amount));
+//
+//            } while(cursor.moveToNext());
+//        }
+//        cursor.close();
 
 
     }
@@ -197,8 +198,11 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         database = financeDBOpenHelper.getWritableDatabase();
         ArrayList<Transaction> niz = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
-        Cursor cursor      = database.rawQuery(selectQuery, null);
+        //String selectQuery = "SELECT * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
+        //Cursor cursor      = database.rawQuery(selectQuery, null);
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
+        Cursor cursor = cr.query(URI, null, null, null, null);
 
         if (cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();

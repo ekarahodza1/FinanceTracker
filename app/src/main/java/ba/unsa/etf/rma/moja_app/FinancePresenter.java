@@ -21,6 +21,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     private IFinanceView view;
     private IFinanceInteractor interactor;
     private Context context;
+    private boolean kreirano = false;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -195,7 +196,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void postChanges(){
-        if (connected()) {
+        if (connected() && kreirano) {
             ArrayList<Transaction> add = interactor.getTransactionsFromTable(context);
 
             if (add.size() != 0) {
@@ -225,6 +226,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             map.remove(1);
         }
         else {
+            kreirano = true;
             interactor.add(t, context);
             transactions.add(t);
             view.setTransactions(transactions);
@@ -242,7 +244,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
         }
         else {
-            //interactor.delete(t, context);
+            kreirano = true;
+            interactor.delete(t, context);
         }
 
         view.setTransactions(interactor.getT());
@@ -258,7 +261,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
         }
         else {
-            //interactor.update(t, context);
+            kreirano = true;
+            interactor.update(t, context);
             view.setTransactions(transactions);
             view.notifyTransactionsListDataSetChanged();
         }

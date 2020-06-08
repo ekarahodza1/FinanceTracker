@@ -41,6 +41,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private TextView monthView;
     private Button leftButton;
     private Button rightButton;
+    private Button baza;
     private LocalDate current = null;
     private Button add;
     private String month = null;
@@ -172,6 +173,15 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         else {
             account = accountPresenter.get();
         }
+
+        baza = fragmentView.findViewById(R.id.baza);
+        baza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dbmanager = new Intent(getActivity(), AndroidDatabaseManager.class);
+                startActivity(dbmanager);
+            }
+        });
 
 
         String s = ""; s += account.getTotalLimit();

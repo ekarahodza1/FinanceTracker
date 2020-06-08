@@ -1,6 +1,8 @@
 package ba.unsa.etf.rma.moja_app;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Parcelable;
 
 import java.util.HashMap;
@@ -45,5 +47,19 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
 
         account = result;
         view.setAccount(result);
+    }
+
+    @Override
+    public boolean connected() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        }
+        else
+            connected = false;
+        return connected;
     }
 }
