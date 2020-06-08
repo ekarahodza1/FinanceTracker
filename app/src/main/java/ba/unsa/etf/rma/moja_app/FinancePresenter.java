@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Handler;
 
 import androidx.annotation.RequiresApi;
 
@@ -21,7 +22,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     private IFinanceView view;
     private IFinanceInteractor interactor;
     private Context context;
-    private boolean kreirano = false;
+    private static boolean kreirano = false;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -157,11 +158,13 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             map.put(0, new Transaction(-1));
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute();
         }
+        else kreirano = true;
     }
 
     @Override
     public void refreshTransactions() {
-        view.setTransactions(interactor.getTransactionsFromTable(context));
+        if (connected()) view.setTransactions(transactions);
+        else view.setTransactions(interactor.getTransactionsFromTable(context));
         view.notifyTransactionsListDataSetChanged();
     }
 
@@ -200,9 +203,15 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             ArrayList<Transaction> add = interactor.getTransactionsFromTable(context);
 
             if (add.size() != 0) {
-                if (add.size() == 1) addTransaction(add.get(0));
+                if (add.size() == 1) {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            addTransaction(add.get(0));
+                        }
+                    }, 2000);
+                }
                 else addDBTransactions(add);
-
                 interactor.deleteTable(context);
             }
         }
@@ -278,7 +287,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         transactions = results;
         transactions1 = results;
         filterMonth(LocalDate.now());
-        //view.setTransactions(results);
+        if (connected()) view.setTransactions(results);
+        else view.setTransactions(interactor.getTransactionsFromTable(context));
         view.notifyTransactionsListDataSetChanged();
     }
 

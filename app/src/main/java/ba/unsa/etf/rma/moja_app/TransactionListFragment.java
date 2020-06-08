@@ -116,6 +116,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         }, 3000);   //5 seconds
 
         getAccountPresenter().backToConnection();
+        getPresenter().postChanges();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             current = LocalDate.now();
