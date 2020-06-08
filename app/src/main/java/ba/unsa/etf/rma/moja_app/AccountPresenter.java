@@ -56,7 +56,7 @@ public class AccountPresenter implements IAccountPresenter, AccountInteractor.On
 
     @Override
     public void onDone(Account result) {
-        accountInteractor.updateTable(account, context);
+        accountInteractor.updateTable(result, context);
         account = result;
         view.setAccount(result);
     }

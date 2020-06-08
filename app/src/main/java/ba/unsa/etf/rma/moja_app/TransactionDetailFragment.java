@@ -60,12 +60,17 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private IListItemPresenter presenter = new ListItemPresenter(getActivity());
     private Transaction trans, original = null;
     private Account account;
-    private IAccountPresenter accountPresenter = new AccountPresenter(this, getActivity());
+    private IAccountPresenter accountPresenter;
     private DatePickerDialog.OnDateSetListener  mOnDateSetListener1;
     private DatePickerDialog.OnDateSetListener  mOnDateSetListener2;
-
-
     private OnItemChange onItemChange;
+
+    public IAccountPresenter getAccountPresenter(){
+        if (accountPresenter == null){
+            accountPresenter = new AccountPresenter(this, getActivity());
+        }
+        return accountPresenter;
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -299,7 +304,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                                 else {
                                     account.setBudget(account.getBudget() - trans.getAmount());
                                 }
-                                accountPresenter.setAccount(account);
+                                getAccountPresenter().setAccount(account);
                                 onItemChange.onDeleteClicked(trans);
                             }
                         })
@@ -455,7 +460,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             account.setBudget(account.getBudget() + newAmount);
-                                            accountPresenter.setAccount(account);
+                                            getAccountPresenter().setAccount(account);
                                             if (dodavanje) onItemChange.onAddClicked(t);
                                             else onItemChange.onChangeClicked(original, t);
 
@@ -475,7 +480,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                             else {
                                 account.setBudget(account.getBudget() - newAmount);
                             }
-                            accountPresenter.setAccount(account);
+                            getAccountPresenter().setAccount(account);
                             if (dodavanje) onItemChange.onAddClicked(t);
                             else onItemChange.onChangeClicked(original, t);
                         }
