@@ -117,16 +117,16 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             }
         }, 2000);
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                getAccountPresenter().backToConnection();
-                getPresenter().postChanges();
-            }
-        }, 0, 3000);
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                getAccountPresenter().backToConnection();
+//                getPresenter().postChanges();
+//            }
+//        }, 0, 2000);
 
         getAccountPresenter().backToConnection();
         getPresenter().postChanges();

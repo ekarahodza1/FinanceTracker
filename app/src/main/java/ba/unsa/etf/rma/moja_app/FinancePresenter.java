@@ -198,7 +198,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void postChanges(){
+    public void postChanges() {
         if (connected() && kreirano) {
             ArrayList<Transaction> add = interactor.getTransactionsFromTable(context);
             ArrayList<Transaction> addList = new ArrayList<>();
@@ -209,31 +209,25 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             }
 
             if (addList.size() != 0) {
-                if (addList.size() == 1) {
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            addTransaction(addList.get(0));
-                        }
-                    }, 2000);
-                }
-                else addDBTransactions(addList);
-                interactor.deleteTable(context);
-            }
+                Transaction t = addList.get(0);
+                addTransaction(t);
+
+            } else addDBTransactions(addList);
+            interactor.deleteTable(context);
+
+
 
             if (deleteList.size() != 0){
-                if (deleteList.size() == 1){
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            deleteTransaction(deleteList.get(0));
-                        }
-                    }, 2000);
-                }
+                if (deleteList.size() == 1) deleteTransaction(deleteList.get(0));
                 else deleteDBTransactions(deleteList);
                 interactor.deleteTable(context);
                 }
+
+            add.clear();
+            addList.clear();
+            deleteList.clear();
             }
+
         }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -258,9 +252,10 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     public void addTransaction(Transaction t){
         boolean connected = connected();
         if (connected){
+            System.out.println(t.getTitle() + " " + t.getAmount() +  "    u metodi za dodavanje u presenteru");
             map.put(1,t);
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
-            map.remove(1);
+
         }
         else {
             kreirano = true;
@@ -282,7 +277,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         }
         else {
             if (t.getInternalId() == 0 && t.getId() != 0){
-                t.setInternalId(-1);
+
                 interactor.add(t, context);
             }
             else {
