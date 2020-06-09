@@ -79,21 +79,21 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
                 System.out.println("BRISANJE");
             } else if (maps[0].get(3) != null) {
                 updateTransaction(maps[0].get(3));
-                System.out.println("DOBAVLJANJE");
+                System.out.println("UPDATE");
             } else if (maps[0].get(4) != null) {
                 addAllOffline(maps[0]);
-                System.out.println("DOBAVLJANJE");
+                System.out.println("upisivanje vise");
+            } else if (maps[0].get(-1) != null) {
+                deleteAllOffline(maps[0]);
+                System.out.println("brisanje vise");
             }
 
-            else if (maps[0].get(0) != null) {
-
-                System.out.println("DOBAVLJANJE");
-            }
         }
         getTransactions();
 
         return null;
     }
+
 
 
 
@@ -134,26 +134,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         cr.insert(URI,values);
 
 
-//        String selectQuery = "SELECT  * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
-//        Cursor cursor      = database.rawQuery(selectQuery, null);
-//
-//        if (cursor != null){
-//            cursor.moveToFirst();
-//            do{
-//            int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
-//            int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DATE);
-//            int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_END_DATE);
-//            int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION);
-//            int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_INTERVAL);
-//            int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TYPE_ID);
-//            int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_AMOUNT);
-//
-//            System.out.println(cursor.getString(title) + " " + cursor.getString(amount));
-//
-//            } while(cursor.moveToNext());
-//        }
-//        cursor.close();
-
 
     }
 
@@ -164,9 +144,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         int internalId = t.getInternalId();
         String where =  FinanceDBOpenHelper.INTERNAL_ID + " = " + internalId;
         cr.delete(URI,where, null);
-//        String selectQuery = "DELETE FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE + " WHERE "
-//                + FinanceDBOpenHelper.INTERNAL_ID + "=" + internalId;
-//        database.rawQuery(selectQuery, null);
     }
 
     @Override
@@ -199,8 +176,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         String selectQuery = "SELECT * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
         Cursor cursor      = database.rawQuery(selectQuery, null);
         ContentResolver cr = context.getApplicationContext().getContentResolver();
-//        Uri URI = Uri.parse("content://rma.provider.transactions/elements");
-//        Cursor cursor = cr.query(URI, null, null, null, null);
 
         if (cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
@@ -467,6 +442,36 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void deleteAllOffline(HashMap<Integer, Transaction> map) {
+        for (int i = -1; map.get(i) != null; i--) {
+            Transaction t = map.get(i);
+            try {
+                String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/" +
+                        "account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions/" + t.getId();
+                URL url = new URL (querry);
+                HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                con.setRequestMethod("DELETE");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setDoOutput(true);
+
+                try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response.toString());
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

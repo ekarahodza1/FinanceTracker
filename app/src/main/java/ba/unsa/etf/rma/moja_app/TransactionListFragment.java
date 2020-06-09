@@ -29,6 +29,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TransactionListFragment extends Fragment implements IFinanceView,
         AdapterView.OnItemSelectedListener, GestureDetector.OnGestureListener {
@@ -111,9 +113,20 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             public void run() {
 
                 getPresenter().refreshTransactions();
-                //getAccountPresenter().backToConnection();
+
             }
-        }, 3000);   //5 seconds
+        }, 2000);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                getAccountPresenter().backToConnection();
+                getPresenter().postChanges();
+            }
+        }, 0, 3000);
 
         getAccountPresenter().backToConnection();
         getPresenter().postChanges();
