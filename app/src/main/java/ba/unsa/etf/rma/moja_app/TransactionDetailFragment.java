@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -292,30 +293,42 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
-                        .setTitle("Delete")
-                        .setMessage("Are you sure you want to delete transaction?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (trans.getId() == 1 || trans.getId() == 3 || trans.getId() == 5) {
-                                    account.setBudget(account.getBudget() + trans.getAmount());
+                if (presenter.connected(getActivity())) {
+                    AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
+                            .setTitle("Delete")
+                            .setMessage("Are you sure you want to delete transaction?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (trans.getId() == 1 || trans.getId() == 3 || trans.getId() == 5) {
+                                        account.setBudget(account.getBudget() + trans.getAmount());
+                                    } else {
+                                        account.setBudget(account.getBudget() - trans.getAmount());
+                                    }
+                                    getAccountPresenter().setAccount(account);
+                                    onItemChange.onDeleteClicked(trans);
                                 }
-                                else {
-                                    account.setBudget(account.getBudget() - trans.getAmount());
-                                }
-                                getAccountPresenter().setAccount(account);
-                                onItemChange.onDeleteClicked(trans);
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
 
-                            }
-                        })
-                        .show();
+                                }
+                            })
+                            .show();
+                }
+                else {
+                    delete.setText("undo");
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            getAccountPresenter().setAccount(account);
+                            onItemChange.onDeleteClicked(trans);
+                        }
+                    }, 5000);
+
+                }
                 }
             });
 
