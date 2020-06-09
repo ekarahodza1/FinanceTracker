@@ -30,6 +30,7 @@ public class Transaction implements Parcelable{
     private int image;
     private int id;
     private int internalId;
+    private String description;
 
     public int getInternalId() {
         return internalId;
@@ -39,8 +40,13 @@ public class Transaction implements Parcelable{
         this.internalId = internalId;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
-
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Transaction(int id, LocalDate date, String title, double amount, int type,
                        String itemDescription, int transactionInterval, LocalDate endDate) {

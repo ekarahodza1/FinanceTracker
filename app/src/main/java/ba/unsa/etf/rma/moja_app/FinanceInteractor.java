@@ -119,14 +119,17 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
 
         financeDBOpenHelper = new FinanceDBOpenHelper(context);
         ContentValues values = new ContentValues();
+        values.put(FinanceDBOpenHelper.ID, t.getId());
         values.put(FinanceDBOpenHelper.TRANSACTION_TITLE, t.getTitle());
         values.put(FinanceDBOpenHelper.TRANSACTION_DATE, t.getDate().toString());
         if (t.getEndDate() == null) values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, "null");
         else values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, t.getEndDate().toString());
         values.put(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION, t.getItemDescription());
+        values.put(FinanceDBOpenHelper.DESCRIPTION, "A/U");
         values.put(FinanceDBOpenHelper.TRANSACTION_INTERVAL, t.getTransactionInterval());
         values.put(FinanceDBOpenHelper.TYPE_ID, t.getTId());
         values.put(FinanceDBOpenHelper.TRANSACTION_AMOUNT, t.getAmount());
+
         database = financeDBOpenHelper.getWritableDatabase();
         database.execSQL(FinanceDBOpenHelper.ADD_TABLE_CREATE);
         ContentResolver cr = context.getApplicationContext().getContentResolver();
@@ -143,7 +146,26 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         Uri URI = Uri.parse("content://rma.provider.transactions/elements/#");
         int internalId = t.getInternalId();
         String where =  FinanceDBOpenHelper.INTERNAL_ID + " = " + internalId;
-        cr.delete(URI,where, null);
+
+        if (t.getInternalId() == 0 && t.getId() != 0) {
+            financeDBOpenHelper = new FinanceDBOpenHelper(context);
+            ContentValues values = new ContentValues();
+            values.put(FinanceDBOpenHelper.ID, t.getId());
+            values.put(FinanceDBOpenHelper.TRANSACTION_TITLE, t.getTitle());
+            values.put(FinanceDBOpenHelper.TRANSACTION_DATE, t.getDate().toString());
+            if (t.getEndDate() == null) values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, "null");
+            else values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, t.getEndDate().toString());
+            values.put(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION, t.getItemDescription());
+            values.put(FinanceDBOpenHelper.DESCRIPTION, "D");
+            values.put(FinanceDBOpenHelper.TRANSACTION_INTERVAL, t.getTransactionInterval());
+            values.put(FinanceDBOpenHelper.TYPE_ID, t.getTId());
+            values.put(FinanceDBOpenHelper.TRANSACTION_AMOUNT, t.getAmount());
+
+            database = financeDBOpenHelper.getWritableDatabase();
+            database.execSQL(FinanceDBOpenHelper.ADD_TABLE_CREATE);
+            cr.insert(URI,values);
+        }
+        else cr.delete(URI,where, null);
     }
 
     @Override
@@ -151,10 +173,12 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         ContentResolver cr = context.getApplicationContext().getContentResolver();
         Uri URI = Uri.parse("content://rma.provider.transactions/elements/#");
         ContentValues values = new ContentValues();
+        values.put(FinanceDBOpenHelper.ID, t.getId());
         values.put(FinanceDBOpenHelper.TRANSACTION_TITLE, t.getTitle());
         values.put(FinanceDBOpenHelper.TRANSACTION_DATE, t.getDate().toString());
         if (t.getEndDate() == null) values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, "null");
         else values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, t.getEndDate().toString());
+        values.put(FinanceDBOpenHelper.DESCRIPTION, "A/U");
         values.put(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION, t.getItemDescription());
         values.put(FinanceDBOpenHelper.TRANSACTION_INTERVAL, t.getTransactionInterval());
         values.put(FinanceDBOpenHelper.TYPE_ID, t.getTId());
@@ -180,6 +204,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         if (cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
             do{
+                int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.ID);
                 int internalID = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.INTERNAL_ID);
                 int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
                 int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DATE);
@@ -188,18 +213,63 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
                 int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_INTERVAL);
                 int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TYPE_ID);
                 int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_AMOUNT);
+                int description = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.DESCRIPTION);
 
                 String d1 = cursor.getString(endDate);
                 LocalDate d2 = null;
                 if (!d1.matches("null")) d2 = LocalDate.parse(d1);
 
 
-                Transaction t = new Transaction(-1, LocalDate.parse(cursor.getString(date)), cursor.getString(title),
+                Transaction t = new Transaction(cursor.getInt(id), LocalDate.parse(cursor.getString(date)), cursor.getString(title),
                         cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
                         cursor.getInt(transactionInterval), d2);
                 t.setInternalId(cursor.getInt(internalID));
-                niz.add(t);
+                t.setDescription(cursor.getString(description));
 
+                if (t.getDescription().matches("A/U")) niz.add(t);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        return niz;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public ArrayList<Transaction> getDeleteTransactionsFromTable(Context context) {
+        financeDBOpenHelper = new FinanceDBOpenHelper(context);
+        database = financeDBOpenHelper.getWritableDatabase();
+        ArrayList<Transaction> niz = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
+        Cursor cursor      = database.rawQuery(selectQuery, null);
+        ContentResolver cr = context.getApplicationContext().getContentResolver();
+
+        if (cursor != null && cursor.getCount() != 0){
+            cursor.moveToFirst();
+            do{
+                int id = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.ID);
+                int internalID = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.INTERNAL_ID);
+                int title = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_TITLE);
+                int date = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DATE);
+                int endDate = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_END_DATE);
+                int itemDescription = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION);
+                int transactionInterval = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_INTERVAL);
+                int typeId = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TYPE_ID);
+                int amount = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.TRANSACTION_AMOUNT);
+                int description = cursor.getColumnIndexOrThrow(FinanceDBOpenHelper.DESCRIPTION);
+
+                String d1 = cursor.getString(endDate);
+                LocalDate d2 = null;
+                if (!d1.matches("null")) d2 = LocalDate.parse(d1);
+
+
+                Transaction t = new Transaction(cursor.getInt(id), LocalDate.parse(cursor.getString(date)), cursor.getString(title),
+                        cursor.getInt(amount), cursor.getInt(typeId), cursor.getString(itemDescription),
+                        cursor.getInt(transactionInterval), d2);
+                t.setInternalId(cursor.getInt(internalID));
+                t.setDescription(cursor.getString(description));
+
+                if (t.getDescription().matches("D")) niz.add(t);
             } while(cursor.moveToNext());
         }
         cursor.close();

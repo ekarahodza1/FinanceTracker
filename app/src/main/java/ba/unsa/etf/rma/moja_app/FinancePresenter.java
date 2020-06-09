@@ -199,31 +199,28 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void postChanges() {
-        if (connected() && kreirano) {
-            ArrayList<Transaction> add = interactor.getTransactionsFromTable(context);
+        if (connected()) {
+
             ArrayList<Transaction> addList = new ArrayList<>();
             ArrayList<Transaction> deleteList = new ArrayList<>();
-            for (int i = 0; i < add.size(); i++) {
-                if (add.get(i).getInternalId() == -1) deleteList.add(add.get(i));
-                else addList.add(add.get(i));
-            }
+
+            addList.addAll(interactor.getTransactionsFromTable(context));
+            deleteList.addAll(interactor.getDeleteTransactionsFromTable(context));
 
             if (addList.size() != 0) {
                 Transaction t = addList.get(0);
                 addTransaction(t);
 
             } else addDBTransactions(addList);
-            interactor.deleteTable(context);
 
 
 
             if (deleteList.size() != 0){
                 if (deleteList.size() == 1) deleteTransaction(deleteList.get(0));
                 else deleteDBTransactions(deleteList);
-                interactor.deleteTable(context);
-                }
 
-            add.clear();
+                }
+            interactor.deleteTable(context);
             addList.clear();
             deleteList.clear();
             }
@@ -278,7 +275,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         else {
             if (t.getInternalId() == 0 && t.getId() != 0){
 
-                interactor.add(t, context);
+                //interactor.add(t, context);
+                interactor.delete(t, context);
             }
             else {
                 interactor.delete(t, context);
