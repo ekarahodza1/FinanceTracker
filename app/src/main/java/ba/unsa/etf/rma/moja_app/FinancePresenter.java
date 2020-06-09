@@ -208,10 +208,9 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             deleteList.addAll(interactor.getDeleteTransactionsFromTable(context));
 
             if (addList.size() != 0) {
-                Transaction t = addList.get(0);
-                addTransaction(t);
-
-            } else addDBTransactions(addList);
+                if (addList.size() == 1) addTransaction(addList.get(0));
+                else addDBTransactions(addList);
+            }
 
 
 

@@ -197,6 +197,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         database = financeDBOpenHelper.getWritableDatabase();
         ArrayList<Transaction> niz = new ArrayList<>();
 
+        database.execSQL(FinanceDBOpenHelper.ADD_TABLE_CREATE);
+
         String selectQuery = "SELECT * FROM " + FinanceDBOpenHelper.TRANSACTION_TABLE;
         Cursor cursor      = database.rawQuery(selectQuery, null);
         ContentResolver cr = context.getApplicationContext().getContentResolver();
