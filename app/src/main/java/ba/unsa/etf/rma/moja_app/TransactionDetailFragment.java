@@ -47,6 +47,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private Spinner type;
     private Button delete;
     private Button OK;
+    private Button back;
     private String mTitle = "";
     private double mAmount;
     private LocalDate date1;
@@ -65,6 +66,7 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
     private DatePickerDialog.OnDateSetListener  mOnDateSetListener1;
     private DatePickerDialog.OnDateSetListener  mOnDateSetListener2;
     private OnItemChange onItemChange;
+    private boolean izbrisano = false;
 
     public IAccountPresenter getAccountPresenter(){
         if (accountPresenter == null){
@@ -111,6 +113,8 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
         public void onDeleteClicked(Transaction t);
         public void onAddClicked(Transaction transaction);
         public void onChangeClicked(Transaction t1, Transaction t2);
+        public void onBackClicked();
+
     }
 
 
@@ -285,11 +289,9 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
             }
         };
 
-
-
-
         onItemChange = (OnItemChange) getActivity();
         if (!presenter.connected(getActivity())) delete.setText("Offline delete");
+
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -320,17 +322,33 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                 }
                 else {
                     delete.setText("undo");
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            getAccountPresenter().setAccount(account);
-                            onItemChange.onDeleteClicked(trans);
+                    izbrisano = true;
+                    delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                           izbrisano = false;
+                           delete.setText("offline delete");
                         }
-                    }, 5000);
+                    });
+
 
                 }
                 }
             });
+
+
+
+        back = view.findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (izbrisano){
+                    getAccountPresenter().setAccount(account);
+                    onItemChange.onDeleteClicked(trans);
+                }
+                else onItemChange.onBackClicked();
+            }
+        });
 
             title.addTextChangedListener(new TextWatcher() {
                 @Override

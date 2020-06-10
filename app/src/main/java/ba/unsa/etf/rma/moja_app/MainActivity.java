@@ -195,6 +195,22 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onBackClicked() {
+        TransactionListFragment listFragment = new TransactionListFragment();
+        TransactionDetailFragment detailFragment = new TransactionDetailFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.transaction_list, listFragment)
+                .addToBackStack(null)
+                .commit();
+        if (twoPaneMode) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.transaction_detail, detailFragment)
+                    .commit();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onNewClicked(Transaction transaction, Account account) {
 
         Bundle arguments = new Bundle();
