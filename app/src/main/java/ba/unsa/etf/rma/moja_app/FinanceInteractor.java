@@ -86,6 +86,9 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             } else if (maps[0].get(-1) != null) {
                 deleteAllOffline(maps[0]);
                 System.out.println("brisanje vise");
+            } else if (maps[0].get(100) != null) {
+                updateAllOffline(maps[0]);
+                System.out.println("update vise");
             }
 
         }
@@ -125,7 +128,8 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         if (t.getEndDate() == null) values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, "null");
         else values.put(FinanceDBOpenHelper.TRANSACTION_END_DATE, t.getEndDate().toString());
         values.put(FinanceDBOpenHelper.TRANSACTION_DESCRIPTION, t.getItemDescription());
-        values.put(FinanceDBOpenHelper.DESCRIPTION, "A/U");
+        if (t.getId() != 0) values.put(FinanceDBOpenHelper.DESCRIPTION, "U");
+        else values.put(FinanceDBOpenHelper.DESCRIPTION, "A/U");
         values.put(FinanceDBOpenHelper.TRANSACTION_INTERVAL, t.getTransactionInterval());
         values.put(FinanceDBOpenHelper.TYPE_ID, t.getTId());
         values.put(FinanceDBOpenHelper.TRANSACTION_AMOUNT, t.getAmount());
@@ -228,7 +232,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
                 t.setInternalId(cursor.getInt(internalID));
                 t.setDescription(cursor.getString(description));
 
-                if (t.getDescription().matches("A/U")) niz.add(t);
+                if (t.getDescription().matches("A/U") || t.getDescription().matches("U")) niz.add(t);
             } while(cursor.moveToNext());
         }
         cursor.close();
@@ -277,8 +281,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         cursor.close();
         return niz;
     }
-
-
 
     @Override
     public void deleteTable(Context context) {
@@ -544,6 +546,57 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateAllOffline(HashMap<Integer, Transaction> map) {
+        for (int i = 100; map.get(i) != null; i++) {
+            Transaction t = map.get(i);
+            try {
+                String querry = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com" +
+                        "/account/b2a4cd97-f112-4cb8-87eb-ef51be2fb114/transactions/" +
+                        t.getId();
+                URL url = new URL (querry);
+                System.out.println(querry);
+                HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type",  "application/json; charset=utf-8");
+                con.setRequestProperty("Accept", "application/json");
+                con.setDoOutput(true);
+
+                JSONObject obj = new JSONObject();
+                obj.put("date", t.getDate());
+                obj.put("title", t.getTitle());
+                obj.put("amount", t.getAmount());
+                obj.put("itemDescription", t.getItemDescription());
+                obj.put("transactionInterval", t.getTransactionInterval());
+                obj.put("endDate", t.getEndDate());
+                obj.put("TransactionTypeId", t.getTId());
+                String inputString = (obj).toString();
+
+                try(OutputStream os = con.getOutputStream()){
+                    byte[] input = inputString.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+                int code = con.getResponseCode();
+                System.out.println(code);
+
+                try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response.toString());
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }

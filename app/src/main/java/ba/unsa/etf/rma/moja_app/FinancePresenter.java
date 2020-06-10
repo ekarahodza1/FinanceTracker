@@ -225,22 +225,33 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
             ArrayList<Transaction> addList = new ArrayList<>();
             ArrayList<Transaction> deleteList = new ArrayList<>();
+            ArrayList<Transaction> updateList = new ArrayList<>();
 
             addList.addAll(interactor.getTransactionsFromTable(context));
             deleteList.addAll(interactor.getDeleteTransactionsFromTable(context));
+
+            for (int i = 0; i < addList.size(); i++){
+                Transaction t1 = addList.get(i);
+                if (t1.getDescription().matches("U")) {
+                    updateList.add(t1);
+                    addList.remove(t1);
+                }
+            }
 
             if (addList.size() != 0) {
                 if (addList.size() == 1) addTransaction(addList.get(0));
                 else addDBTransactions(addList);
             }
 
-
-
             if (deleteList.size() != 0){
                 if (deleteList.size() == 1) deleteTransaction(deleteList.get(0));
                 else deleteDBTransactions(deleteList);
-
                 }
+
+            if (updateList.size() != 0){
+                if (updateList.size() == 1) changeTransaction(updateList.get(0));
+                else updateDBTransactions(updateList);
+            }
             interactor.deleteTable(context);
             addList.clear();
             deleteList.clear();
@@ -248,6 +259,15 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             }
 
         }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updateDBTransactions(ArrayList<Transaction> updateList) {
+        for (int i = 0; i < updateList.size(); i++){
+            map.put(100 + i, updateList.get(i));
+        }
+        new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void deleteDBTransactions(ArrayList<Transaction> deleteList) {
@@ -317,9 +337,11 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         }
         else {
             kreirano = true;
-            interactor.update(t, context);
+            if (t.getInternalId() == 0) interactor.add(t, context);
+            else interactor.update(t, context);
             transactions = interactor.getTransactionsFromTable(context);
-            view.setTransactions(interactor.getTransactionsFromTable(context));
+            ArrayList<Transaction> results = filterMonth(LocalDate.now(), interactor.getTransactionsFromTable(context));
+            view.setTransactions(results);
             view.notifyTransactionsListDataSetChanged();
         }
 
@@ -333,9 +355,11 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         transactions = results;
         transactions1 = results;
         results = filterMonth(LocalDate.now());
+
         if (connected()) view.setTransactions(results);
         else {
             results = filterMonth(LocalDate.now(), interactor.getTransactionsFromTable(context));
+            transactions = results;
             view.setTransactions(results);
         }
         view.notifyTransactionsListDataSetChanged();
@@ -344,7 +368,8 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
 
 
     public ArrayList<Transaction> get() {
-        return transactions;
+        if (connected()) return transactions;
+        else return interactor.getTransactionsFromTable(context);
     }
 
     @Override
