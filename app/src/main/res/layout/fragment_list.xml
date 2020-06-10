@@ -138,10 +138,21 @@
         android:id="@+id/baza"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="4dp"
         android:text="baza"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.636"
         app:layout_constraintStart_toEndOf="@+id/globalAmountView"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:text="connect"
+        app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/limitView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

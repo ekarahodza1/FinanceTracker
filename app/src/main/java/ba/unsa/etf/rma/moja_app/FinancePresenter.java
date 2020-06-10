@@ -244,6 +244,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
             interactor.deleteTable(context);
             addList.clear();
             deleteList.clear();
+            addTransactions();
             }
 
         }
@@ -270,7 +271,6 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     public void addTransaction(Transaction t){
         boolean connected = connected();
         if (connected){
-            System.out.println(t.getTitle() + " " + t.getAmount() +  "    u metodi za dodavanje u presenteru");
             map.put(1,t);
             new FinanceInteractor((FinanceInteractor.OnTransactionsAdd)this).execute(map);
 
@@ -295,8 +295,6 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         }
         else {
             if (t.getInternalId() == 0 && t.getId() != 0){
-
-                //interactor.add(t, context);
                 interactor.delete(t, context);
             }
             else {

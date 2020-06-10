@@ -45,6 +45,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
     private Button leftButton;
     private Button rightButton;
     private Button baza;
+    private Button connect;
     private LocalDate current = null;
     private Button add;
     private String month = null;
@@ -117,16 +118,32 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             }
         }, 2000);
 
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                getAccountPresenter().backToConnection();
-//                getPresenter().postChanges();
-//            }
-//        }, 0, 2000);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+
+            }
+        }, 0, 2000);
+
+
+        connect = fragmentView.findViewById(R.id.connect);
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getPresenter().connected()){
+                    getAccountPresenter().backToConnection();
+                    getPresenter().postChanges();
+                    Toast.makeText(getActivity(), "You are now connected, please wait a few seconds", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getActivity(), "Check your connection, you may not be connected", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
 
         getAccountPresenter().backToConnection();
         getPresenter().postChanges();
