@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Handler;
 
 import androidx.annotation.RequiresApi;
 
@@ -168,11 +167,34 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
         view.notifyTransactionsListDataSetChanged();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private ArrayList<Transaction> filterMonth(LocalDate current1, ArrayList<Transaction> trans) {
+        ArrayList<Transaction> pomocne = new ArrayList<>();
+        ArrayList<Transaction> pomocne1 = new ArrayList<>();
+        pomocne1 = trans;
+        for (Transaction t: pomocne1) {
+            if (t.getEndDate() != null) {
 
+                LocalDate d = t.getDate();
+                while(d.isBefore(t.getEndDate())){
+                    if(d.getMonthValue() == current1.getMonthValue()
+                            && current1.getYear() == d.getYear()){
+                        pomocne.add(t);
+                    }
+                    d = d.minusDays(-t.getTransactionInterval());
+                }
+            }
+            else if (t.getDate().getMonthValue() == current1.getMonthValue()
+                    && current1.getYear() == t.getDate().getYear()) pomocne.add(t);
+
+        }
+        return pomocne;
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void filterMonth(LocalDate current1){
+    public ArrayList<Transaction> filterMonth(LocalDate current1){
         ArrayList<Transaction> pomocne = new ArrayList<>();
         ArrayList<Transaction> pomocne1 = new ArrayList<>();
         pomocne1 = transactions;
@@ -192,7 +214,7 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
                     && current1.getYear() == t.getDate().getYear()) pomocne.add(t);
 
         }
-        view.setTransactions(pomocne);
+        return pomocne;
     }
 
 
@@ -312,11 +334,16 @@ public class FinancePresenter implements IFinancePresenter, FinanceInteractor.On
     public void onDone(ArrayList<Transaction> results) {
         transactions = results;
         transactions1 = results;
-        filterMonth(LocalDate.now());
+        results = filterMonth(LocalDate.now());
         if (connected()) view.setTransactions(results);
-        else view.setTransactions(interactor.getTransactionsFromTable(context));
+        else {
+            results = filterMonth(LocalDate.now(), interactor.getTransactionsFromTable(context));
+            view.setTransactions(results);
+        }
         view.notifyTransactionsListDataSetChanged();
     }
+
+
 
     public ArrayList<Transaction> get() {
         return transactions;
