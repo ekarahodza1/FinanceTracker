@@ -328,6 +328,15 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                         public void onClick(View v) {
                            izbrisano = false;
                            delete.setText("offline delete");
+
+                           delete.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View v) {
+                                   izbrisano = true;
+                                   getAccountPresenter().setAccount(account);
+                                   onItemChange.onDeleteClicked(trans);
+                               }
+                           });
                         }
                     });
 
