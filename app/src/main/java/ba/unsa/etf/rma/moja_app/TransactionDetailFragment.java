@@ -117,8 +117,6 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.transaction_detail, container, false);
@@ -149,13 +147,10 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
 
         connection = view.findViewById(R.id.connection);
-        if (dodavanje && presenter.connected(getActivity())) connection.setText("Online dodavanje");
-        else if (dodavanje && !presenter.connected(getActivity())) connection.setText("Offline dodavanje");
-        else if (!dodavanje && presenter.connected(getActivity())) connection.setText("Online izmjena");
-        else if (!dodavanje && !presenter.connected(getActivity())) connection.setText("Offline izmjena");
-
-
-
+        if (dodavanje && presenter.connected(getActivity())) connection.setText("Online add");
+        else if (dodavanje && !presenter.connected(getActivity())) connection.setText("Offline add");
+        else if (!dodavanje && presenter.connected(getActivity())) connection.setText("Online change");
+        else if (!dodavanje && !presenter.connected(getActivity())) connection.setText("Offline change");
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.type, android.R.layout.simple_spinner_item);
@@ -202,8 +197,6 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
 
         if (original == null) original.setAmount(0);
 
-
-
         mTitle = trans.getTitle();
         mAmount = trans.getAmount();
         mDescription = trans.getItemDescription();
@@ -223,8 +216,6 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
         else date.setText("No date, click to enter");
         if (date2 != null) endDate.setText(date2.toString());
         else endDate.setText("No end date, click to enter");
-
-
 
         if (mTitle == null) {
             delete.setEnabled(false);
@@ -295,7 +286,6 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (presenter.connected(getActivity())) {
                     AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
                             .setTitle("Delete")
                             .setMessage("Are you sure you want to delete transaction?")
@@ -319,29 +309,6 @@ public class TransactionDetailFragment extends Fragment implements AdapterView.O
                                 }
                             })
                             .show();
-                }
-                else {
-                    delete.setText("undo");
-                    izbrisano = true;
-                    delete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                           izbrisano = false;
-                           delete.setText("offline delete");
-
-                           delete.setOnClickListener(new View.OnClickListener() {
-                               @Override
-                               public void onClick(View v) {
-                                   izbrisano = true;
-                                   getAccountPresenter().setAccount(account);
-                                   onItemChange.onDeleteClicked(trans);
-                               }
-                           });
-                        }
-                    });
-
-
-                }
                 }
             });
 

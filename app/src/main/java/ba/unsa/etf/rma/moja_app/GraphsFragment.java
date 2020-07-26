@@ -94,8 +94,6 @@ public class GraphsFragment extends Fragment implements GestureDetector.OnGestur
         income.setDescription(null);
         all.setDescription(null);
 
-        //income.invalidate();
-
         day = (Button)view.findViewById(R.id.days);
         week = (Button)view.findViewById(R.id.week);
         month = (Button)view.findViewById(R.id.month);

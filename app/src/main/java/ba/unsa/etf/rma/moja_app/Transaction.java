@@ -76,14 +76,7 @@ public class Transaction implements Parcelable{
         this.typeString = imageType;
         TransactionType t1 = new TransactionType();
         this.type_ = t1.getTypeId(imageType);
-
-
-
-
     }
-
-
-
 
     public Transaction(String type, int image) {
         this.typeString = type;
@@ -99,7 +92,6 @@ public class Transaction implements Parcelable{
         amount = in.readDouble();
         transactionInterval = in.readInt();
         typeString = in.readString();
-      //  type = in.readString();
         id = in.readInt();
     }
 
@@ -214,9 +206,6 @@ public class Transaction implements Parcelable{
 
     }
 
-
-
-
     @Override
     public int describeContents() {
         return 0;
@@ -233,9 +222,6 @@ public class Transaction implements Parcelable{
         dest.writeString(itemDescription);
         dest.writeDouble(amount);
         dest.writeInt(transactionInterval);
-       // dest.writeString(type.toString());
         dest.writeInt(id);
-
-
     }
 }

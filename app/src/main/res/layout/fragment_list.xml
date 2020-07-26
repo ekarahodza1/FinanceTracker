@@ -10,20 +10,22 @@
         android:layout_width="110dp"
         android:layout_height="35dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:text="Limit:"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.077" />
+        app:layout_constraintTop_toBottomOf="@+id/label1"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/label1"
         android:layout_width="110dp"
         android:layout_height="35dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:text="Global amount:"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,22 +38,28 @@
     <Spinner
         android:id="@+id/filterSpinner"
         android:layout_width="270dp"
-        android:layout_height="56dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.159" />
+        app:layout_constraintVertical_bias="0.163" />
 
     <Spinner
         android:id="@+id/sortSpinner"
         android:layout_width="270dp"
-        android:layout_height="56dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.425"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintVertical_bias="0.191" />
 
     <ListView
         android:id="@+id/transactionList"
@@ -66,28 +74,35 @@
 
     <Button
         android:id="@+id/leftButton"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
         android:layout_marginStart="44dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:text=" ← "
-        android:textSize="20dp"
+        android:textColor="#09375C"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
-        app:layout_constraintVertical_bias="0.627" />
+        app:layout_constraintVertical_bias="0.541" />
 
     <Button
         android:id="@+id/rightButton"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="24dp"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="52dp"
+        android:layout_marginBottom="16dp"
         android:text=" →"
-        android:textSize="20dp"
+        android:textColor="#09375C"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterSpinner"
-        app:layout_constraintVertical_bias="0.352" />
+        app:layout_constraintVertical_bias="0.083" />
 
     <TextView
         android:id="@+id/monthView"
@@ -96,6 +111,11 @@
         android:layout_marginStart="6dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="6dp"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#81575D65"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/sortSpinner"
         app:layout_constraintEnd_toStartOf="@+id/rightButton"
         app:layout_constraintHorizontal_bias="0.488"
@@ -105,13 +125,17 @@
 
     <Button
         android:id="@+id/buttonAdd"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="548dp"
+        android:background="#7DB0DA"
         android:text="Add transaction"
+        android:textAllCaps="true"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintHorizontal_bias="0.207"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -119,26 +143,34 @@
         android:id="@+id/globalAmountView"
         android:layout_width="110dp"
         android:layout_height="35dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/limitView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toEndOf="@+id/label1" />
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintStart_toEndOf="@+id/label1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/limitView"
         android:layout_width="110dp"
         android:layout_height="35dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.094"
-        app:layout_constraintStart_toEndOf="@+id/label2" />
+        app:layout_constraintStart_toEndOf="@+id/label2"
+        app:layout_constraintTop_toBottomOf="@id/globalAmountView"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/connect"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:backgroundTint="#7DB0DA"
         android:text="connect"
         app:layout_constraintBottom_toTopOf="@+id/filterSpinner"
         app:layout_constraintEnd_toEndOf="parent"

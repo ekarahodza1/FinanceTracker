@@ -23,8 +23,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AndroidDatabaseManager"></activity>
-
         <provider
             android:authorities="rma.provider.transactions"
             android:name=".FinanceContentProvider">

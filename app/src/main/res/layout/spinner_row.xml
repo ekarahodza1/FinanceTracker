@@ -4,8 +4,8 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="45dp"
-        android:layout_height="48dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/individual_payment" />
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_alignParentEnd="true"
 
         android:layout_marginStart="16dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="3dp"
 
         android:layout_marginEnd="81dp"
         android:layout_toEndOf="@+id/image_view"

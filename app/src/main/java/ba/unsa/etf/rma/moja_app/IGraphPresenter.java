@@ -16,8 +16,6 @@ public interface IGraphPresenter {
     public ArrayList<BarEntry> getDayIncome();
     public ArrayList<BarEntry> getDayPayment();
     public ArrayList<BarEntry> getDayAll();
-
     ArrayList<Transaction> get();
-
     void addTransactions();
 }

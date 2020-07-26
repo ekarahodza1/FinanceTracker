@@ -129,10 +129,6 @@ public class BudgetFragment extends Fragment implements GestureDetector.OnGestur
                 return true;
             }
         });
-
-
-
-
         return view;
     }
 

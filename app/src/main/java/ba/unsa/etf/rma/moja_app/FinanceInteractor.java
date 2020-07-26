@@ -97,9 +97,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         return null;
     }
 
-
-
-
     @Override
     protected void onPostExecute(Void aVoid){
         super.onPostExecute(aVoid);
@@ -139,9 +136,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         ContentResolver cr = context.getApplicationContext().getContentResolver();
         Uri URI = Uri.parse("content://rma.provider.transactions/elements");
         cr.insert(URI,values);
-
-
-
     }
 
     @Override
@@ -189,7 +183,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
         values.put(FinanceDBOpenHelper.TRANSACTION_AMOUNT, t.getAmount());
 
         int internalId = t.getInternalId();
-        //values.put(FinanceDBOpenHelper.INTERNAL_ID, internalId);
         String where =  FinanceDBOpenHelper.INTERNAL_ID + " = " + internalId;
         cr.update(URI, values, where, null);
     }
@@ -298,7 +291,6 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             String url1 = "http://rma20-app-rmaws.apps.us-west-1.starter.openshift-online.com/account/"
                     + "b2a4cd97-f112-4cb8-87eb-ef51be2fb114" + "/transactions?page=" + j;
 
-
             try {
                 URL url = new URL(url1);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -343,9 +335,7 @@ public class FinanceInteractor extends AsyncTask<HashMap<Integer, Transaction>, 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
     private void postTransaction(Transaction t)  {

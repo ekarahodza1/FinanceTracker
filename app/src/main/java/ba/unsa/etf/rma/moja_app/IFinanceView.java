@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public interface IFinanceView {
     void setTransactions(ArrayList<Transaction> transactions);
-
     void notifyTransactionsListDataSetChanged();
-
     void setAccount(Account result);
 }

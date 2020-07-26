@@ -127,7 +127,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             }
         }, 0, 2000);
 
-
         connect = fragmentView.findViewById(R.id.connect);
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +142,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             }
         });
 
-
         getAccountPresenter().backToConnection();
         getPresenter().postChanges();
 
@@ -157,15 +155,11 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
             year = current.getYear();
         }
         monthView = (TextView) fragmentView.findViewById(R.id.monthView);
-        monthView.setText(month + ", " + year);
-
-        //notifyTransactionsListDataSetChanged();
+        monthView.setText(month + "," + year);
         leftButton = (Button)fragmentView.findViewById(R.id.leftButton);
         rightButton = (Button)fragmentView.findViewById(R.id.rightButton);
 
-
         getPresenter().postChanges();
-
 
         spinnerTransactions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -248,10 +242,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
                     Transaction t = new Transaction(-1, null, null, 0, -1, null, 0, null);
                     onItemClick.onNewClicked(t, account);
                 }
-
-
             }
-
         });
 
 
@@ -270,10 +261,7 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
         }
 
         if (getArguments() != null && getArguments().containsKey("change1") && getArguments().containsKey("change2")) {
-            //trans = getArguments().getParcelable("change1");
-            //financePresenter.deleteTransaction(trans);
             trans = getArguments().getParcelable("change2");
-            //financePresenter.addTransaction(trans);
             financePresenter.changeTransaction(trans);
         }
 
@@ -296,10 +284,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
         return fragmentView;
         }
-
-        
-
-
 
     private void initList(){
         mTransactionList = new ArrayList<>();
@@ -328,7 +312,6 @@ public class TransactionListFragment extends Fragment implements IFinanceView,
 
     @Override
     public void setTransactions(ArrayList<Transaction> transactions) {
-        //onItemClick.onTransactionsAdded(transactions);
         listAdapter.setTransaction(transactions);
     }
 
